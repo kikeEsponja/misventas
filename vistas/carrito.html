@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css">
+    <link rel="stylesheet" href="../estilos/carrito.css">
+    <link rel="icon" href="../imagenes/shortcut.png">
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <title>carrito</title>
+
+</head>
+<body>
+    <header>
+        <!--<div id="carouselExampleSlidesOnly" class="carousel slide" data-bs-ride="carousel">
+            <div class="carousel-inner">
+                <div class="carousel-item active">
+                    <h3 class="d-block w-100 banner" alt="...">Si compras antes de la 1:00 pm recibes <span class="banner span">¡HOY!</span class="banner span"> tu producto<span class="banner span"> VER COBERTURA</span></h3>
+                </div>
+                <div class="carousel-item">
+                    <h3 class="d-block w-100 banner" alt="..."><span class="banner span">¡Sorprende esta Navidad con Hiraoka!</span> Encuentra los mejores descuentos en laptops, televisores y mucho más <span class="banner span">AQUÍ</span></h3>
+                </div>
+                <div class="carousel-item">
+                    <h3 class="d-block w-100 banner" alt="...">Si compras antes de la 1:00 pm recibes <span class="banner span">¡HOY!</span class="banner span"> tu producto<span class="banner span"> VER COBERTURA</span></h3>
+                </div>
+            </div>
+        </div>-->
+        <nav>
+            <!--<img src="../imagenes/logo-hiraoka-desktop.webp" alt="logo" class="logo" id="logo-back">
+            <button class="categs desaparecer_700"><i class="bi bi-list"></i> Categorías</button>
+            <div class="relative">
+                <input type="text" placeholder="Buscador" class="buscador">
+                <i class="bi bi-search absolute top-1/2 -translate-y-1/2 text-gray-400"></i>
+            </div>
+            <div class="contenedor_iconos">
+                <a href="./nuestras-tiendas.html"><i class="bi bi-person"></i><span class="desaparecer_700"> Nuestras tiendas</span></a>
+                <a href=""><i class="bi bi-journal-check"></i><span class="desaparecer_700"> Catálogo</span></a>
+            </div>-->
+        </nav>
+    </header>
+    <main class="carrito">
+        <!-- Button trigger modal -->
+        <!-- Modal
+        <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h1 class="modal-title fs-5" id="exampleModalLabel">Unos datos más!</h1>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body_first">
+                        <h2>Ingresa tus datos</h2>
+                        <form action="">
+                            <input class="form-control" type="text" placeholder="Nombre">
+                            <input class="form-control" type="text" placeholder="Apellido">
+                            <input class="form-control" type="text" placeholder="Dirección" required>
+                            <input class="form-control" type="text" placeholder="Ciudad">
+                            <input class="form-control" type="tel" placeholder="Teléfono" required id="telefono" value="">
+                        </form>
+                    </div>
+                    <div class="modal-footer">
+                        <div id="tel_req">Se requiere teléfono</div>
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal_2" id="continuar">Continuar</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="modal fade" id="exampleModal_2" tabindex="-1" aria-labelledby="exampleModalLabel_2" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h1 class="modal-title fs-5" id="exampleModalLabel">Ya casi es tuyo!</h1>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <h6>Escanear código</h6>
+                        <img src="../imagenes/qrcode.jpeg" class="qrcode">
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-success" data-bs-dismiss="modal">Confirmar</button>
+                        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal_3" id="continuar">Continuar</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="modal fade" id="exampleModal_3" tabindex="-1" aria-labelledby="exampleModalLabel_3" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h1 class="modal-title fs-5" id="exampleModalLabel">Listo!</h1>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body_first">
+                        <h6>Comunicarse con atención al cliente</h6>
+                        <a title="social-icon" target="_blank" href="https://wa.me/51935436672?text=Hola,%20estoy%20interesado%20en%20contactarte.">
+                            <i class="bi bi-whatsapp"></i>
+                        </a>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-success" data-bs-dismiss="modal" disabled>Listo!</button>
+                        <button type="button" class="btn btn-primary w-100 comprar" data-bs-toggle="modal" data-bs-target="#exampleModal">Comprar</button>
+                    </div>
+                </div>
+            </div>
+        </div>-->
+        <div>
+            <p class="letra_chica">Los productos de tu carro de compras pueden agotarse próximamente. <span class="desaparecer">Cómpralos pronto para que no te quedes sin ellos.</span></p>
+            <table border="1">
+                <thead>
+                    <tr>
+                        <th style="width: 25%;">Artículo</th>
+                        <th>Cantidad</th>
+                        <th>Precio</th>
+                        <th>Subtotal</th>
+                        <th>Acciones</th>
+                    </tr>
+                </thead>
+                <tbody id="carrito-contenido"></tbody>
+            </table>
+        </div>
+        <div class="contenedor_resumen">
+            <div id="resumen" class="resumen">
+                <h2>Resumen</h2>
+                <h6><span id="total_productos"></span> Productos</h6>
+                <div>
+                    <p>Subtotal: <span id="total_sub"></span></p>
+                    <h6>Total: <span id="total_total"></span></h6>
+                </div>
+                <button type="button" class="btn btn-danger w-100 comprar" data-bs-toggle="modal" data-bs-target="#exampleModal" id="comprar">Comprar</button>
+                <button class="btn btn-danger" id="vaciar">Vaciar carrito</button>
+            </div>
+        </div>
+    </main>
+    <footer>
+        <div></div>
+        <div class="logo"></div>
+    </footer>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js" integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI" crossorigin="anonymous"></script>
+	<script>
+        /*let inicio = document.getElementById('logo-back');
+        inicio.style.cursor = 'pointer';
+        inicio.addEventListener('click', () =>{
+            window.location.href = '../index.html';
+        });
+
+        let telefono = document.getElementById('telefono');
+        let continuar = document.getElementById('continuar');
+        continuar.setAttribute('disabled', true);
+        let telReq = document.getElementById('tel_req');
+        let invisible = telReq.style.display = 'none';
+
+        telefono.addEventListener('input', () =>{
+            const valor = telefono.value.trim();
+            if(valor !== '' && /^\d+$/.test(valor)){
+                continuar.removeAttribute('disabled', true);
+            }else{
+                //alert('teléfono requerido');
+                continuar.setAttribute('disabled', true);
+                
+                setTimeout(invisible, 3000);
+            }
+        });*/
+    </script>
+    <script src="../funcionalidades/carrito.js"></script>
+</body>
+</html>

@@ -1,0 +1,7 @@
+node_modules/
+servidor/
+.env
+package-lock.json
+package.json
+prueba.txt
+server.js

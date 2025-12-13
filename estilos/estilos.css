@@ -1,0 +1,370 @@
+@font-face{
+    font-family: 'Burgeois';
+    src:url('../fuentes/Bourgeois-Bold.otf')
+}
+* {
+	box-sizing: border-box;
+	font-family: 'Open Sans','Helvetica Neue',Helvetica,Arial,sans-serif;
+	font-weight: 10;
+}
+body { 
+  	margin: 0; 
+  	padding: 0;
+  	background: #efeff0;
+}
+header{
+  	/*background: #fd2b73;*/
+	/*background: #fff;*/
+	background: radial-gradient(circle,rgba(96, 87, 199, 1) 45%, rgba(83, 214, 237, 1) 92%);
+}
+.carousel{
+	position: fixed;
+	width: 100%;
+}
+.carousel-item{
+	background: #c72029;
+	height: 40px;
+}
+.banner{
+	font-size: 20px;
+	text-align: center;
+	font-weight: 400;
+	color: #fff;
+}
+.span{
+	color: #ff0;
+}
+.links{
+  	text-decoration: none;
+  	color:#fff;
+}
+.link_logo{
+  	/*background: aliceblue;*/
+  	width: 15%;
+	display: flex;
+}
+.link_logo > a{
+  	display: flex;
+  	justify-content: center;
+  	align-items: center;
+}
+.link_logo > a > img{
+	border-radius: 15px;
+  	width: 100%;
+}
+/*.agregar_al_carro_item{
+	border: none;
+  	border-radius: 30px;
+  	background: #fd223f;
+  	width: 80%;
+	height: 40px;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	color: #fff;
+	justify-self: center;
+}*/
+.mobile{
+	display: none;
+}
+.dropdown-menu{
+	display: none;
+}
+.desktop{
+  	width: 100%;
+  	display: flex;
+  	justify-content: space-around;
+  	align-items: center;
+  	height: 150px;
+}
+/*.marcas{
+  	color: #0433FF;
+  	font-size: 30px;
+}*/
+.grilla{
+  	display: flex;
+  	justify-content: center;
+  	align-items: center;
+  	flex-wrap: wrap;
+}
+.boton_mmgv, .participa_hamb{
+  	display: block;
+  	border-radius: 20px;
+  	width: 250px;
+	height: 525px;
+  	margin: 1%;
+  	text-decoration: none;
+  	text-align: center;
+  	background: #fff;
+}
+.boton_mmgv > a > img{
+  	width: 75%;
+	height: 200px;
+}
+.boton_mmgv > div{
+	display: flex;
+	justify-content: center;
+}
+.precio_online{
+	background: #fd223f;
+	color: #fff;
+	width: 35%;
+	border-radius: 5px;
+}
+.boton_mmgv > div > h2{
+	font-size: 25px;
+}
+.boton_mmgv > h4{
+	font-size: 20px;
+	color: #000;
+	height: 75px;
+}
+.campo_buscar{
+  	width: 350px;
+  	height: 40px;
+  	border-radius: 20px;
+}
+.buscar{
+  	background: #2250e9;
+  	color:#fff;
+  	width: 100px;
+  	height: 40px;
+}
+.participa{
+  	height: 50px;
+  	background: #fff;
+  	color: #000;
+}
+.participa_hamb{
+	width: 100%;
+	border: 0.5px solid black;
+}
+.buscador{
+  	display: flex;
+  	justify-content: space-around;
+  	align-items: center;
+}
+.buscador > div{
+  	display: flex;
+  	align-items: center;
+}
+footer{
+  	background: radial-gradient(circle,rgba(96, 87, 199, 1) 45%, rgba(83, 214, 237, 1) 92%);
+  	padding: 2%;
+}
+footer > div{
+  	margin: 1%;
+}
+.footer_contenedor{
+  	display: flex;
+  	justify-content: space-around;
+  	margin: 1%;
+  	color: #fff;
+}
+.modal-body_first > a{
+    font-size: 150px;
+    color: #25D366;
+    display: flex;
+    flex-direction: column;
+    text-align: center;
+}
+.redes{
+	width: 25%;
+	display: flex;
+	justify-content: space-between;
+}
+.bi{
+	font-size: 50px;
+	color:#fff;
+}
+.bi-whatsapp{
+	color: #25D366;
+	font-size: 50px;
+}
+.bi-cart{
+	font-size: 20px;
+}
+.texto_fijo{
+    display: flex;
+    flex-direction: column;
+    position: fixed;
+    top:85%;
+    right: 5px;
+}
+.texto_fijo > button > img{
+	width: 50px;
+	border-radius: 50%;
+}
+.texto_fijo > button{
+	background: transparent;
+	border: none;
+}
+@media(max-width: 1300px){
+	.boton_mmgv{
+    	width: 20%;
+  	}
+}
+@media(max-width: 1050px){
+	.banner{
+		font-size: 15px;
+	}
+	.product{
+		height: 500px;
+	}
+}
+@media(max-width: 1000px){
+	.product{
+		height: 480px;
+	}
+	.participa_hamb{
+		width: 80%;
+		height: 50px;
+	}
+	.precio_online{
+		width: 30%;
+	}
+}
+@media(max-width: 940px){
+	.boton_mmgv{
+		width: 23%;
+	}
+	.boton_mmgv > div > h2{
+		width: 70%;
+		font-size: 23px;
+	}
+	.boton_mmgv > div{
+		margin: 2%;
+	}
+	.boton_mmgv > h4{
+		font-size: 18px;
+		margin: 1%;
+	}
+}
+@media(max-width: 800px){
+	.banner{
+		font-size: 100%;
+	}
+	.mobile{
+		display: flex;
+		justify-content: space-around;
+		align-items: center;
+		height: 155px;
+	}
+	.boton_mobile{
+		font-size: 30px;
+		background: transparent;
+		width: 30%;
+	}
+	.participa{
+		width: 30%;
+		border: none;
+		font-size: 20px;
+	}
+  	.dropdown{
+    	display: flex;
+		justify-content: center;
+  	}
+	.dropdown > .show{
+		background: #fd2b73;
+		height: 30dvh;
+		display: flex;
+		justify-content: space-around;
+		flex-direction: column;
+	}
+	.dropdown li{
+		display: flex;
+		justify-content: center;
+	}
+  	.desktop{
+    	display: none;
+  	}
+	.escritorio{
+    	display: none;
+  	}
+	.boton_mmgv{
+		width: 30%;
+	}
+	.precio_online{
+		width: 35%;
+	}
+}
+@media(max-width: 700px){
+	.banner{
+		font-size: 90%;
+	}
+	.boton_mmgv{
+		width: 30%;
+	}
+	.boton_mmgv > h4{
+		margin-bottom: 1.5rem;
+	}
+}
+@media(max-width: 615px){
+	.product{
+		height: 470px;
+	}
+	.banner{
+		font-size: 80%;
+	}
+	.buscador{
+		flex-direction: column;
+	}
+	.boton_mmgv > div > h2{
+		font-size: 20px;
+	}
+	.precio_online{
+		font-size: 12px;
+	}
+}
+@media(max-width: 600px){
+	.product{
+		height: 460px;
+	}
+}
+@media(max-width: 550px){
+	.product {
+        height: 475px;
+    }
+	.boton_mmgv{
+		width: 40%;
+	}
+}
+@media(max-width: 450px){
+	.buscador div{
+		width: 90%;
+	}
+	.buscar{
+		width: 50%;
+	}
+	.link_logo{
+		width:100%;
+	}
+	footer > div{
+		display: flex;
+		flex-direction: column;
+	}
+	.footer_contenedor{
+		flex-direction: column;
+	}
+	.boton_mmgv{
+		width: 45%;
+	}
+}
+@media(max-width: 360px){
+	.product {
+        height: 470px;
+    }
+	.boton_mmgv > div{
+		flex-direction: column;
+		align-items: center;
+	}
+	.boton_mmgv{
+		width: 47%;
+	}
+	.link_logo{
+		width:75%;
+	}
+	.desaparecer{
+		display: none;
+	}
+}

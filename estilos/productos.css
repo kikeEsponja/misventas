@@ -1,0 +1,353 @@
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+body{
+    background: #f8f8f8;
+    color: #000;
+}
+header{
+    background: #fff;
+    height: 20dvh;
+}
+nav{
+    display:flex;
+    justify-content:space-between;
+    align-items: center;
+}
+.contenedor_iconos{
+    display: contents;
+}
+a{
+    text-decoration: none;
+    color: #000;
+}
+.categs{
+    width: 120px;
+    height: 40px;
+    border-radius: 20px;
+    background: transparent;
+    border: 1px solid #f00;
+}
+.relative{
+    width: 300px;
+    height: 40px;
+    border-radius: 4px;
+    border: 1px solid #000;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+.bi-search{
+    left:90%;
+}
+main{
+    padding: 2%;
+}
+.logo{
+    width: 15%;
+}
+.producto{
+    display: flex;
+    width: 100%;
+    justify-content: space-around;
+}
+.carousel{
+    background: gray;
+    border-radius: 10px;
+    width: 50%;
+    height: fit-content;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    justify-items: center;
+    overflow: hidden;
+}
+.carousel-inner{
+    width: 40%;
+}
+.carousel_small{
+    width: 25%;
+}
+.carousel_small-inner{
+    width: 100%;
+    height: fit-content;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    background: #fff;
+}
+.carousel_small-item{
+    margin: 15%;
+}
+.carousel_small-control-prev, .carousel_small-control-next{
+    position: absolute;
+    top: 0;
+    bottom: 40%;
+    left: 0px;
+    z-index: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 15%;
+    font-size: 20px;
+    padding: 0;
+    color: #fff;
+    text-align: center;
+    filter: var(--bs-carousel-control-icon-filter);
+    border: 0;
+    opacity: .5;
+    transition: opacity .15s ease;
+}
+.carousel_small-control-next{
+    left: 0px;
+    top:85%;
+}
+aside{
+    width: 35%;
+}
+.contenedor_precio_online{
+    display: flex;
+}
+.contenedor_precio_online > h1{
+    color: #fd223f;
+}
+.contenedor_redes{
+    display: flex;
+    justify-content: space-evenly;
+}
+.contenedor_redes > i{
+    margin: 1%;
+    font-size: 20px;
+}
+.precio_online{
+	background: #fd223f;
+	color: #fff;
+	width: 20%;
+	border-radius: 5px;
+    margin-right: 5%;
+}
+.disponibles{
+    width: 55%;
+    display: flex;
+    justify-items: flex-start;
+    border: 0.5px solid #000;
+    border-radius: 10px;
+}
+.caracteristicas{
+    background: #fff;
+    border-radius: 5px;
+    font-size: 12px;
+    list-style-type: square;
+}
+ul li::marker{
+    color: #f00;
+}
+.sumar-restar-carrito{
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+}
+.botones-suma-resta{
+    display: flex;
+    justify-content: center;
+}
+.botones-suma-resta > h4{
+    margin: 0;
+}
+.botones-suma-resta > button{
+    width: 50px;
+}
+/******************************************CARRITO***************************************************/
+.carrito{
+    display: flex;
+    justify-content: space-around;
+}
+.contenedor_grande{
+    background: #eee;
+    padding: 0 0 1% 0;
+}
+.contenedor_grande > h2{
+    background: #888;
+    border-radius: 10px 10px 0 0;
+    text-align: center;
+}
+.contenedor_ficha{
+    display: flex;
+    justify-content: space-evenly;
+}
+.ficha{
+    display: flex;
+    justify-content: space-evenly;
+    width: 100%; /* CAMBIAR A PIXELES PARA EFECTO WRAP*/
+}
+.contenedor_caracteristicas{
+    margin: 2%;
+    border: 1px solid #000;
+    width: 100%;
+}
+.contenedor_caracteristicas > div{
+    display: flex;
+    width: 100%;
+    justify-content: space-between;
+}
+.contenedor_caracteristicas > div > .clave, p{
+    width: 50%;
+}
+.contenedor_caracteristicas > div:nth-child(even), .contenedor_caracteristicas > div:nth-child(even){
+    background: #fff;
+}
+.mapa{
+    justify-self: center;
+    padding: 1%;
+}
+.galeria{
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+.galeria div{
+    display: flex;
+  	border: 2px solid white;
+  	border-radius: 0px 15px 0px 15px;
+  	width: 250px;
+  	margin: 1%;
+  	text-decoration: none;
+    justify-content: center;
+  	text-align: center;
+    align-items: center;
+  	color: #FD2B73;
+  	background: #fff;
+}
+@media(max-width: 1300px){
+	.desaparecer{
+        display: none;
+    }
+}
+@media(max-width: 1170px){
+	.desaparecer{
+        display: none;
+    }
+    aside{
+        width: 45%;
+    }
+    .agregar{
+        font-size: 0.9rem;
+    }
+    
+}
+@media(max-width: 1050px){
+    .carousel{
+        width: 55%;
+    }
+    .cantidad{
+        width: 25%;
+    }
+    header{
+        height: 25dvh;
+    }
+}
+@media(max-width: 960px){
+    .cantidad{
+        width: 20%;
+    }
+}
+@media(max-width: 900px){
+    .contenedor_iconos{
+        display:flex;
+        width: 50%;
+        justify-content: space-around;
+    }
+    .carousel{
+        width: 65%;
+    }
+    .desaparecer_700{
+        display: none;
+    }
+    .desaparecer{
+        display: block;
+    }
+    .cantidad, .agregar{
+        width: 30%;
+    }
+    .precio_online{
+        width: 25%;
+    }
+    .logo{
+        width: 20%;
+    }
+    .disponibles{
+        width: 100%;
+    }
+}
+@media(max-width: 800px){
+    .carousel{
+        width: 60%;
+    }
+    .producto{
+        flex-direction: column;
+        align-items: center;
+    }
+    .contenedor_precio_online{
+        justify-content: center;
+    }
+}
+@media(max-width: 700px){
+    .carousel, aside{
+        width: 80%;
+    }
+    .contenedor_caracteristicas{
+        margin: 1%;
+    }
+    .precio_online{
+        width: 20%;
+    }
+}
+@media(max-width: 600px){
+	nav{
+        flex-direction: column;
+    }
+    .contenedor_iconos{
+        display: flex;
+    }
+    .carousel, aside{
+        width: 80%;
+    }
+    .precio_online{
+        width: 25%;
+    }
+    .ficha{
+        flex-direction: column;
+        width: 90%;
+    }
+    .logo{
+        width: 25%;
+    }
+
+}
+@media(max-width: 500px){
+    .contenedor_caracteristicas > .clave, p{
+        width: 100%;
+    }
+}
+@media(max-width: 450px){
+    .logo{
+        width:50%;
+    }
+}
+@media(max-width: 400px){
+    header{
+        height:35dvh;
+    }
+}
+@media(max-width: 390px){
+    .precio_online{
+        width: 35%;
+    }
+}
+@media(max-width: 320px){
+    .relative{
+        width: 75%;
+    }
+}
