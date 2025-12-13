@@ -37,7 +37,7 @@ const lista = document.getElementById('lista-productos');
                 <p>Cantidad: ${prod.cantidad}</p>
                 <hr>
                 <!--<button class="add-car btn btn-primary agregar_al_carro_item" data-id="${prod._id}">Agregar al carro</button>-->
-                <button class="add-car btn btn-primary agregar_al_carro_item" data-id="${prod._id}">Comprar</button>
+                <button class="add-car btn btn-primary agregar_al_carro_item" data-id="${prod._id}" id="pagarMP">Comprar</button>
             </div>
             `;
         });

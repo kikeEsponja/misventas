@@ -67,6 +67,7 @@
         </div>-->
         
         <section class="grilla" id="lista-productos"></section>
+        <button id="pagarMP">comprar</button>
         <aside class="text-primary texto_fijo">
             <a title="social-icon" target="_blank" href="https://wa.me/1131844709?text=Hola,%20estoy%20interesado%20en%20contactarte.">
                 <i class="bi bi-whatsapp"></i>
@@ -147,5 +148,33 @@
         });*/
     </script>
     <script src="./funcionalidades/index.js"></script>
+    <script src="https://sdk.mercadopago.com/js/v2"></script>
+    <script>
+        const mp = new MercadoPago('APP_USR-11fd9648-96d3-4939-94d1-366a67e21f0b', {
+            locale: 'es-AR'
+        });
+
+        document.getElementById('pagarMP').addEventListener('click', async () =>{
+            //const res = await fetch('https://ventas-backend-wj4v.onrender.com/crear_preferencia', {
+            const res = await fetch('http://localhost:3000/crear_preferencia', {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({
+                    title: 'maquina',
+                    price: '1500',
+                    quantity: '1',
+                })
+            });
+        
+            const data = await res.json();
+        
+            mp.checkout({
+                preference: {
+                    id: data.id
+                },
+                autoOpen: true,
+            });
+        });
+    </script>
 </body>
 </html>
