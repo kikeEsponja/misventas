@@ -36,8 +36,8 @@ const lista = document.getElementById('lista-productos');
                 <p>Condición: ${prod.condicion}</p>
                 <p>Cantidad: ${prod.cantidad}</p>
                 <hr>
-                <!--<button class="add-car btn btn-primary agregar_al_carro_item" data-id="${prod._id}">Agregar al carro</button>-->
-                <button class="add-car btn btn-primary agregar_al_carro_item" data-id="${prod._id}" id="pagarMP">Comprar</button>
+                <button class="add-car btn btn-primary agregar_al_carro_item" data-id="${prod._id}">Agregar al carro</button>
+                <!--<button class="add-car btn btn-primary agregar_al_carro_item" data-id="${prod._id}" id="pagarMP">Comprar</button>-->
             </div>
             `;
         });
@@ -48,7 +48,7 @@ const lista = document.getElementById('lista-productos');
     localStorage.setItem('productos', JSON.stringify(productos));
 
     // descomentar para activar carrito
-    /*let carrito = JSON.parse(localStorage.getItem('carrito')) || [];
+    let carrito = JSON.parse(localStorage.getItem('carrito')) || [];
     let click = 0;
 
     document.addEventListener('click', e =>{
@@ -60,19 +60,29 @@ const lista = document.getElementById('lista-productos');
             const existente = carrito.find(p => p._id === id);
 
             if(existente){
-                existente.cantidad++;
+                if(existente.cantidad < producto.cantidad){
+                    existente.cantidad++;
+                }else{
+                    alert('Sin disponibilidad');
+                    return;
+                }
             }else{
-                carrito.push({...producto, cantidad: 1});
+                if(producto.cantidad > 0){
+                    carrito.push({...producto, cantidad: 1});
+                }else{
+                    alert('producto sin stock');
+                    return;
+                }
             }
 
             localStorage.setItem('carrito', JSON.stringify(carrito));
             alert('añadido');
             click = click + 1;
             let compras = document.getElementById('compras');
-            let mCompras = document.getElementById('m_compras');
-            let mComprasRight = document.getElementById('m_compras_right');
+            //let mCompras = document.getElementById('m_compras');
+            //let mComprasRight = document.getElementById('m_compras_right');
             compras.textContent = click;
-            mCompras.textContent = click;
-            mComprasRight.textContent = click;
+            //mCompras.textContent = click;
+            //mComprasRight.textContent = click;
         }
-    });*/
+    });

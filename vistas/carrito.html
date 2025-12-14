@@ -128,8 +128,9 @@
                     <p>Subtotal: <span id="total_sub"></span></p>
                     <h6>Total: <span id="total_total"></span></h6>
                 </div>
-                <button type="button" class="btn btn-danger w-100 comprar" data-bs-toggle="modal" data-bs-target="#exampleModal" id="comprar">Comprar</button>
+                <button class="btn btn-primary" id="pagarMP">Comprar</button>
                 <button class="btn btn-danger" id="vaciar">Vaciar carrito</button>
+                <button class="btn btn-warning" id="volver">Volver</button>
             </div>
         </div>
     </main>
@@ -163,6 +164,66 @@
             }
         });*/
     </script>
-    <script src="../funcionalidades/carrito.js"></script>
+    <script src="../funcionalidades/carrito.js" defer></script>
+    <script src="https://sdk.mercadopago.com/js/v2"></script>
+    <script>
+        /*const mp = new MercadoPago('APP_USR-11fd9648-96d3-4939-94d1-366a67e21f0b', {
+            locale: 'es-AR'
+        });
+
+        document.getElementById('pagarMP').addEventListener('click', async () =>{
+            const res = await fetch('https://ventas-backend-wj4v.onrender.com/crear_preferencia', {
+            //const res = await fetch('http://localhost:3000/crear_preferencia', {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({ carrito })
+            });
+        
+            const data = await res.json();
+        
+            mp.checkout({
+                preference: {
+                    id: data.id
+                },
+                autoOpen: true,
+            });
+        });*/
+        const botonPagar = document.getElementById('pagarMP');
+
+        botonPagar.addEventListener('click', async () => {
+            try {
+                const carrito = JSON.parse(localStorage.getItem('carrito')) || [];
+            
+                if (carrito.length === 0) {
+                    alert('El carrito está vacío');
+                    return;
+                }
+            
+                const res = await fetch('https://ventas-backend-wj4v.onrender.com/crear_preferencia', {
+                //const res = await fetch('http://localhost:3000/crear_preferencia', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ carrito })
+                });
+            
+                const data = await res.json();
+            
+                const mp = new MercadoPago('APP_USR-11fd9648-96d3-4939-94d1-366a67e21f0b', {
+                    locale: 'es-AR'
+                });
+            
+                mp.checkout({
+                    preference: {
+                        id: data.id
+                    },
+                    autoOpen: true
+                });
+            
+            } catch (error) {
+                console.error('Error al pagar:', error);
+                alert('Error al iniciar el pago');
+            }
+        });
+    </script>
 </body>
 </html>

@@ -32,8 +32,8 @@
                     </a>
                 </div>
                 <a href="" class="links">Productos Nuevos</a>
-                <a href="" class="links">Productos Usados</a>
-                <button class="boton_mmgv participa" id="carrito"><i class="bi bi-cart"></i> Carrito: <span id="compras"></span></button>-->
+                <a href="" class="links">Productos Usados</a>-->
+                <button class="boton_mmgv participa" id="carrito"><i class="bi bi-cart"></i> Carrito: <span id="compras"></span></button>
                 <h1 class="text-light">ARTÍCULOS EN VENTA</h1>
             </div>
         </nav>
@@ -67,7 +67,7 @@
         </div>-->
         
         <section class="grilla" id="lista-productos"></section>
-        <button id="pagarMP">comprar</button>
+        <!--<button id="pagarMP">comprar</button>-->
         <aside class="text-primary texto_fijo">
             <a title="social-icon" target="_blank" href="https://wa.me/1131844709?text=Hola,%20estoy%20interesado%20en%20contactarte.">
                 <i class="bi bi-whatsapp"></i>
@@ -132,12 +132,12 @@
     </footer>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js" integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI" crossorigin="anonymous"></script>
     <script>
-        /*let cart = document.getElementById('carrito');
+        let cart = document.getElementById('carrito');
         cart.addEventListener('click', () =>{
             window.location.href = './vistas/carrito.html';
         });
         
-        let mcart = document.getElementById('m_carrito');
+        /*let mcart = document.getElementById('m_carrito');
         mcart.addEventListener('click', () =>{
             window.location.href = './vistas/carrito.html';
         });
@@ -150,11 +150,11 @@
     <script src="./funcionalidades/index.js"></script>
     <script src="https://sdk.mercadopago.com/js/v2"></script>
     <script>
-        const mp = new MercadoPago('APP_USR-11fd9648-96d3-4939-94d1-366a67e21f0b', {
+        /*const mp = new MercadoPago('APP_USR-11fd9648-96d3-4939-94d1-366a67e21f0b', {
             locale: 'es-AR'
-        });
+        });*/
 
-        document.getElementById('pagarMP').addEventListener('click', async () =>{
+        /*document.getElementById('pagarMP').addEventListener('click', async () =>{
             const res = await fetch('https://ventas-backend-wj4v.onrender.com/crear_preferencia', {
             //const res = await fetch('http://localhost:3000/crear_preferencia', {
                 method: 'POST',
@@ -174,7 +174,7 @@
                 },
                 autoOpen: true,
             });
-        });
+        });*/
     </script>
 </body>
 </html>

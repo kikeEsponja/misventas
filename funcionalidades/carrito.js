@@ -1,15 +1,17 @@
+//import MercadoPagoConfig from "mercadopago";
+
 const contenedor = document.getElementById('carrito-contenido');
 let carrito = JSON.parse(localStorage.getItem('carrito')) || [];
 
 function formatoMoneda(num){
     return num.toLocaleString('es-AR', {
-        minimumFractionDigits: 3,
-        maximumFractionDigits: 3,
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2,
     });
 }
 
 function mostrarCarrito(){
-    let botonCompra = document.getElementById('comprar');
+    let botonCompra = document.getElementById('pagarMP');
     botonCompra.setAttribute('disabled', true);
     if(carrito.length === 0){
         contenedor.innerHTML = '<p>El carrito está vacío</p>';
@@ -17,7 +19,6 @@ function mostrarCarrito(){
     }else{
         botonCompra.removeAttribute('disabled');
     }
-
     let html = '';
 
     carrito.forEach(item =>{
@@ -39,7 +40,7 @@ function mostrarCarrito(){
 }
 
 function actualizarCarrito(){
-    //let carrito = JSON.parse(localStorage.getItem('carrito')) || [];
+    let carrito = JSON.parse(localStorage.getItem('carrito')) || [];
 
     const totalProductos = carrito.reduce((acc, item) => acc + item.cantidad, 0);
     const totalPrecio = carrito.reduce((acc, item) => acc + (item.cantidad * item.precio), 0);
@@ -72,3 +73,43 @@ document.getElementById('vaciar').addEventListener('click', () =>{
     mostrarCarrito();
     actualizarCarrito();
 });
+
+let volver = document.getElementById('volver');
+volver.addEventListener('click', () =>{
+    window.history.back();
+});
+
+/*const botonPagar = document.getElementById('pagarMP');
+
+botonPagar.addEventListener('click', async () => {
+    try{
+        const carrito = JSON.parse(localStorage.getItem('carrito')) || [];
+
+        if(carrito.length === 0){
+            alert('El carrito está vacío');
+            return;
+        }
+
+        const res = await fetch('https://ventas-backend-wj4v.onrender.com/crear_preferencia', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ carrito })
+        });
+
+        const data = await res.json();
+
+        const mp = new MercadoPago('APP_USR-11fd9648-96d3-4939-94d1-366a67e21f0b', {
+            locale: 'es-AR'
+        });
+
+        mp.checkout({
+            preference: {
+                id: data.id
+            },
+            autoOpen: true
+        });
+    } catch (error) {
+        console.error('Error al pagar:', error);
+        alert('Error al efectuar el pago');
+    }
+});*/
