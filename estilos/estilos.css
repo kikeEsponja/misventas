@@ -87,6 +87,11 @@ header{
   	align-items: center;
   	flex-wrap: wrap;
 }
+.card > a{
+	width: 18rem;
+	height: 50dvh;
+	display: flex;
+}
 .boton_mmgv, .participa_hamb{
   	display: block;
   	border-radius: 20px;

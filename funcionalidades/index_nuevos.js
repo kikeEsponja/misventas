@@ -1,29 +1,23 @@
-let detalles = document.getElementById('detalles');
-
+const lista = document.getElementById('lista-productos');
 window.addEventListener('pageshow', () => {
     cargarProductos();
 });
 
+let inicio = document.getElementById('inicio');
+inicio.addEventListener('click', ()=>{
+    window.location.href = '../../index.html';
+});
+
     let productos = [];
     
-    async function cargarProductos(id){
+    async function cargarProductos(){
         try{
             //const res = await fetch('http://localhost:3000/productos-usados');
-            const res = await fetch('https://ventas-backend-wj4v.onrender.com/productos-usados');
+            const res = await fetch('https://ventas-backend-wj4v.onrender.com/productos-nuevos');
             productos = await res.json();
-
-            const params = new URLSearchParams(window.location.search);
-            const id = params.get('id');
-
-            const producto = productos.find(p => p._id === id);
-
-            if(producto){
-                mostrarProductos(producto);
-            }else{
-                console.error('producto no encontrado');
-            }
+            mostrarProductos();
         }catch (error){
-            console.error('Error cargando producto: ', error);
+            console.error('Error cargando productos: ', error);
         }
     }
     
@@ -34,41 +28,31 @@ window.addEventListener('pageshow', () => {
         });
     }
     
-    function mostrarProductos(prod){
-        let html = `
+    function mostrarProductos(){
+        let html = "";
+    
+        productos.forEach(prod =>{
+            html += `
             <div class="boton_mmgv product">
+                <a href="${prod.direcc}?id=${prod._id}"><img src="${prod.imagen}"></a>
                 <h4>${prod.nombre}</h4>
                 <h5>Marca:</h5><p> ${prod.marca}</p>
                 <div>
-                    <h6 class="precio_online">PRECIO</h6>
+                    <!--<h6 class="precio_online">PRECIO</h6>-->
                     <h2> $ ${formatoMoneda(prod.precio)}</h2>
                 </div>
                 <p>Condición: ${prod.condicion}</p>
-                <p>Cantidad disponible: ${prod.cantidad}</p>
+                <p>Cantidad: ${prod.cantidad}</p>
                 <hr>
                 <button class="add-car btn btn-primary agregar_al_carro_item" data-id="${prod._id}">Agregar al carro</button>
-                <button class="btn btn-success agregar_al_carro_item" id="ir_carrito">Ir al carrito</button>
-                <button class="btn btn-warning" id="volver">Volver</button>
+                <!--<button class="add-car btn btn-primary agregar_al_carro_item" data-id="${prod._id}" id="pagarMP">Comprar</button>-->
             </div>
             `;
-        detalles.innerHTML = html;
-
-        let nombreProducto = document.getElementById('producto');
-        nombreProducto.textContent = prod.nombre;
-        
-        let irCarrito = document.getElementById('ir_carrito');
-        irCarrito.addEventListener('click', () =>{
-            window.location.href = '../carrito.html';
         });
-
-        let volver = document.getElementById('volver');
-        volver.addEventListener('click', () =>{
-            window.history.back();
-        });
+        lista.innerHTML = html;
     }
     
     cargarProductos();
-
     localStorage.setItem('productos', JSON.stringify(productos));
 
     // descomentar para activar carrito
@@ -101,19 +85,11 @@ window.addEventListener('pageshow', () => {
 
             localStorage.setItem('carrito', JSON.stringify(carrito));
             alert('añadido');
-            //let irCarrito = document.createElement('button');
-            //irCarrito.textContent = 'Ir al carrito';
-            //irCarrito.addEventListener('click', () =>{
-            //    window.location.href = '../carrito.html';
-            //});
-            //irCarrito.classList.add('btn');
-            //irCarrito.classList.add('btn-success');
-            //detalles.appendChild(irCarrito);
-            //click = click + 1;
-            //let compras = document.getElementById('compras');
+            click = click + 1;
+            let compras = document.getElementById('compras');
             //let mCompras = document.getElementById('m_compras');
             //let mComprasRight = document.getElementById('m_compras_right');
-            //compras.textContent = click;
+            compras.textContent = click;
             //mCompras.textContent = click;
             //mComprasRight.textContent = click;
         }

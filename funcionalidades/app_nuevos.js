@@ -9,7 +9,7 @@ window.addEventListener('pageshow', () => {
     async function cargarProductos(id){
         try{
             //const res = await fetch('http://localhost:3000/productos-usados');
-            const res = await fetch('https://ventas-backend-wj4v.onrender.com/productos-usados');
+            const res = await fetch('https://ventas-backend-wj4v.onrender.com/productos-nuevos');
             productos = await res.json();
 
             const params = new URLSearchParams(window.location.search);
