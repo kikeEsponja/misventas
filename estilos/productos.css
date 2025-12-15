@@ -220,6 +220,43 @@ ul li::marker{
   	color: #FD2B73;
   	background: #fff;
 }
+.bi-whatsapp{
+	color: #25D366;
+	font-size: 50px;
+}
+.texto_fijo{
+    display: flex;
+    flex-direction: column;
+    position: fixed;
+    top:85%;
+    right: 5px;
+}
+footer{
+  	background: radial-gradient(circle,rgba(96, 87, 199, 1) 45%, rgba(83, 214, 237, 1) 92%);
+  	padding: 2%;
+}
+footer > div{
+  	margin: 1%;
+}
+.footer_contenedor{
+  	display: flex;
+  	justify-content: space-around;
+  	margin: 1%;
+  	color: #fff;
+}
+.redes{
+	width: 25%;
+	display: flex;
+	justify-content: space-between;
+}
+.bi{
+	font-size: 50px;
+	color:#fff;
+}
+.bi-whatsapp{
+	color: #25D366;
+	font-size: 50px;
+}
 @media(max-width: 1300px){
 	.desaparecer{
         display: none;

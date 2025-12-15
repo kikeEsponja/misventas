@@ -1,4 +1,7 @@
 const lista = document.getElementById('lista-productos');
+window.addEventListener('pageshow', () => {
+    cargarProductos();
+});
 
     let productos = [];
     
