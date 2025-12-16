@@ -46,7 +46,7 @@ window.addEventListener('pageshow', () => {
                 <p>Condición: ${prod.condicion}</p>
                 <p>Cantidad disponible: ${prod.cantidad}</p>
                 <hr>
-                <button class="add-car btn btn-primary agregar_al_carro_item" data-id="${prod._id}">Agregar al carro</button>
+                <!--<button class="add-car btn btn-primary agregar_al_carro_item" data-id="${prod._id}">Agregar al carro</button>-->
                 <button class="btn btn-success agregar_al_carro_item" id="ir_carrito">Ir al carrito</button>
                 <button class="btn btn-warning" id="volver">Volver</button>
             </div>
