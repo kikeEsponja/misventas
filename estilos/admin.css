@@ -1,0 +1,32 @@
+form > div{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
+}
+form > div > input, select{
+	width: 50%;
+}
+footer{
+  	background: radial-gradient(circle,rgba(96, 87, 199, 1) 45%, rgba(83, 214, 237, 1) 92%);
+  	padding: 2%;
+}
+footer > div{
+  	margin: 1%;
+}
+.footer_contenedor{
+  	display: flex;
+  	justify-content: space-around;
+  	margin: 1%;
+  	color: #fff;
+}
+.redes{
+	width: 25%;
+	display: flex;
+	justify-content: space-between;
+}
+.bi{
+	font-size: 50px;
+	color:#fff;
+}

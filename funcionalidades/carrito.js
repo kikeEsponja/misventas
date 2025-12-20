@@ -11,14 +11,14 @@ function formatoMoneda(num){
 }
 
 function mostrarCarrito(){
-    let botonCompra = document.getElementById('pagarMP');
+    /*let botonCompra = document.getElementById('pagarMP');
     botonCompra.setAttribute('disabled', true);
     if(carrito.length === 0){
         contenedor.innerHTML = '<p>El carrito está vacío</p>';
         return;
     }else{
         botonCompra.removeAttribute('disabled');
-    }
+    }*/
     let html = '';
 
     carrito.forEach(item =>{
