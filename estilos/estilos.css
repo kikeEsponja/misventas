@@ -276,7 +276,8 @@ footer > div{
 		justify-content: center;
 	}
   	.desktop{
-    	display: none;
+    	flex-direction: column;
+		height: auto;
   	}
 	.escritorio{
     	display: none;
@@ -286,6 +287,9 @@ footer > div{
 	}
 	.precio_online{
 		width: 35%;
+	}
+	.redes{
+		width: 100%;
 	}
 }
 @media(max-width: 700px){
