@@ -9,12 +9,14 @@ inicio.addEventListener('click', ()=>{
 });
 
     let productos = [];
+    const loader = document.getElementById('loader');
     
     async function cargarProductos(){
         try{
             //const res = await fetch('http://localhost:3000/productos-usados');
             const res = await fetch('https://ventas-backend-wj4v.onrender.com/productos-usados');
             productos = await res.json();
+            loader.style.display = 'block';
             mostrarProductos();
         }catch (error){
             console.error('Error cargando productos: ', error);
@@ -29,6 +31,7 @@ inicio.addEventListener('click', ()=>{
     }
     
     function mostrarProductos(){
+        loader.style.display = 'none';
         let html = "";
     
         productos.forEach(prod =>{
