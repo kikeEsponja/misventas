@@ -58,6 +58,27 @@
         <img src="./imagenes/H16_-_Adelante_tu_navidad_mobile.png" alt="" class="mobile">-->
     </header>
     <main>
+    <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="exampleModalLabel">Modal title</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <h2>CONTRASEÑA!</h2>
+                    <form id="formulario">
+                        <input type="password" placeholder="contraseña" id="contras">
+                        <button type="submit" class="btn btn-primary">Ingresar</button>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    
+                </div>
+            </div>
+        </div>
+    </div>
         <!--<div class="buscador">
             <div>
                 <input type="text" class="campo_buscar" placeholder="Busca tu producto aquí">
@@ -140,15 +161,15 @@
                 <small>kikeEsponja: </small>
                 <small>element3999@gmail.com</small>
             </div>
-            <!--<button type="button" class="btn btn-danger" id="admin">Admin</button>-->
+            <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#exampleModal">Admin</button>
         </div>
     </footer>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js" integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI" crossorigin="anonymous"></script>
     <script>
-        let cart = document.getElementById('carrito');
+        /*let cart = document.getElementById('carrito');
         cart.addEventListener('click', () =>{
             window.location.href = './vistas/carrito.html';
-        });
+        });*/
         
         /*let mcart = document.getElementById('m_carrito');
         mcart.addEventListener('click', () =>{

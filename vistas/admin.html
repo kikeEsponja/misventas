@@ -8,6 +8,13 @@
     <link rel="stylesheet" href="../estilos/admin.css">
     <link rel="icon" href="../imagenes/shortcut.png">
     <title>Artículos</title>
+    <script>
+        const token = localStorage.getItem('token_admin');
+        if(!token){
+            alert('EEEK, fuera!');
+            window.location.href = '../index.html';
+        }
+    </script>
 </head>
 <body>
     <header class="bg-dark">
@@ -39,7 +46,7 @@
     </header>
     <main class="bg-secondary">
         <section>
-            <form method="POST" action="agregar">
+            <form method="POST" id="admin_formulario">
                 <h2>Agregar Producto</h2>
                 <div>
                     <label for="nombre">Nombre</label>
@@ -67,7 +74,7 @@
                 </div>
                 <div>
                     <label for="cond">Condición</label>
-                    <select title="condición" name="cond">
+                    <select title="condición" name="cond" id="cond">
                         <option value="nuevo">Nuevo</option>
                         <option value="usado">Usado</option>
                     </select>
@@ -75,6 +82,7 @@
                 <button class="btn btn-info" type="submit">Agregar</button>
             </form>
             <hr>
+
             <form method="POST" action="/modificar">
                 <h2>Modificar Producto</h2>
                 <div>
@@ -152,12 +160,6 @@
         </div>
     </footer>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js" integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI" crossorigin="anonymous"></script>
-    <script src="./funcionalidades/index.js"></script>
-    <script>
-        let salir = document.getElementById('salir');
-        salir.addEventListener('click', ()=>{
-            window.location.href = '../index.html';
-        })
-    </script>
+    <script src="../funcionalidades/index.js"></script>
 </body>
 </html>
