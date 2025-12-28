@@ -41,10 +41,9 @@ inicio.addEventListener('click', ()=>{
                 <h4>${prod.nombre}</h4>
                 <h5>Marca:</h5><p> ${prod.marca}</p>
                 <div>
-                    <!--<h6 class="precio_online">PRECIO</h6>-->
                     <h2> $ ${formatoMoneda(prod.precio)}</h2>
                 </div>
-                <p>Condición: ${prod.condicion}</p>
+                <p class="cond">Condición: ${prod.condicion}</p>
                 <p>Cantidad: ${prod.cantidad}</p>
                 <hr>
                 <button class="add-car btn btn-primary agregar_al_carro_item" data-id="${prod._id}">Agregar al carro</button>
@@ -53,6 +52,13 @@ inicio.addEventListener('click', ()=>{
             `;
         });
         lista.innerHTML = html;
+        let vendidos = document.querySelectorAll('.cond');
+        //vendido.classList.add('vendido');
+        vendidos.forEach(el => {
+            if(el.innerText.includes('VENDIDO')){
+                el.classList.add('vendido');
+            }
+        });
     }
     
     cargarProductos();
@@ -81,7 +87,7 @@ inicio.addEventListener('click', ()=>{
                 if(producto.cantidad > 0){
                     carrito.push({...producto, cantidad: 1});
                 }else{
-                    alert('producto sin stock');
+                    alert('Artículo agotado');
                     return;
                 }
             }

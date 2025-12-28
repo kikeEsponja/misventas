@@ -257,6 +257,9 @@ footer > div{
 	color: #25D366;
 	font-size: 50px;
 }
+.vendido{
+    color: #f00;
+}
 @media(max-width: 1300px){
 	.desaparecer{
         display: none;

@@ -204,6 +204,9 @@ footer > div{
 	background: transparent;
 	border: none;
 }
+.vendido{
+	color: #f00;
+}
 @media(max-width: 1300px){
 	.boton_mmgv{
     	width: 20%;
