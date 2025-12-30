@@ -206,6 +206,8 @@ footer > div{
 }
 .vendido{
 	color: #f00;
+	font-weight: 600;
+
 }
 @media(max-width: 1300px){
 	.boton_mmgv{
