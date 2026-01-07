@@ -20,7 +20,7 @@ async function cargarProductos(){
         const res = await fetch('https://ventas-backend-wj4v.onrender.com/productos-nuevos');
         productos = await res.json();
         
-        mostrarProductos();
+        mostrarProductos(productos);
     }catch (error){
         console.error('Error cargando productos: ', error);
     }finally{
