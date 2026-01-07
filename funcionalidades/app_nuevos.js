@@ -45,10 +45,15 @@ window.addEventListener('pageshow', () => {
                 </div>
                 <p>Condición: ${prod.condicion}</p>
                 <p>Cantidad disponible: ${prod.cantidad}</p>
+                <p>Ubicación: ${prod.ubicacion.localidad}</p>
+                <p>Calle: ${prod.ubicacion.calle + ' ' + prod.ubicacion.altura}</p>
                 <hr>
-                <!--<button class="add-car btn btn-primary agregar_al_carro_item" data-id="${prod._id}">Agregar al carro</button>-->
-                <button class="btn btn-success agregar_al_carro_item" id="ir_carrito">Ir al carrito</button>
-                <button class="btn btn-warning" id="volver">Volver</button>
+                <div class="agregar-wsp">
+                    <!--<button class="add-car btn btn-primary agregar_al_carro_item" data-id="${prod._id}">Agregar al carro</button>-->
+                    <button class="btn btn-success agregar_al_carro_item" id="ir_carrito">Ir al carrito</button>
+                    <button class="bi bi-whatsapp" id="contacto"></button>
+                    <button class="btn btn-warning" id="volver">Volver</button>
+                </div>
             </div>
             `;
         detalles.innerHTML = html;

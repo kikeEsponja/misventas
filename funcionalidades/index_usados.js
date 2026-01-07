@@ -35,30 +35,35 @@ inicio.addEventListener('click', ()=>{
         let html = "";
     
         productos.forEach(prod =>{
+            const esVendido = prod.condicion.toUpperCase().includes('VENDIDO');
+
             html += `
             <div class="boton_mmgv product">
                 <a href="${prod.direcc}?id=${prod._id}"><img src="${prod.imagen}"></a>
                 <h4>${prod.nombre}</h4>
-                <h5>Marca:</h5><p> ${prod.marca}</p>
-                <div>
+                <h5>Ubicación:</h5><p> ${prod.ubicacion.localidad}</p>
+                <div class="precio">
                     <h2> $ ${formatoMoneda(prod.precio)}</h2>
                 </div>
-                <p class="cond">Condición: ${prod.condicion}</p>
+                <p class="cond ${esVendido ? 'vendido' : ''}">Condición: ${prod.condicion}</p>
                 <p>Cantidad: ${prod.cantidad}</p>
                 <hr>
-                <button class="add-car btn btn-primary agregar_al_carro_item" data-id="${prod._id}">Agregar al carro</button>
-                <!--<button class="add-car btn btn-primary agregar_al_carro_item" data-id="${prod._id}" id="pagarMP">Comprar</button>-->
+                <div class="agregar-wsp">
+                    <button class="add-car agregar_al_carro_item bg-primary bi bi-cart" data-id="${prod._id}" ${esVendido ? 'disabled' : ''}></button>
+                    <a title="social-icon" target="_blank" href="${esVendido ? '#' : prod.vendedor}" class="${esVendido ? 'wsp-vend' : ''}"><i class="bi bi-whatsapp"></i></a>
+                    <!--<button class="add-car btn btn-primary agregar_al_carro_item" data-id="${prod._id}" id="pagarMP">Comprar</button>-->
+                </div>
             </div>
             `;
         });
         lista.innerHTML = html;
-        let vendidos = document.querySelectorAll('.cond');
+        /*let vendidos = document.querySelectorAll('.cond');
         //vendido.classList.add('vendido');
         vendidos.forEach(el => {
             if(el.innerText.includes('VENDIDO')){
                 el.classList.add('vendido');
             }
-        });
+        });*/
     }
     
     cargarProductos();

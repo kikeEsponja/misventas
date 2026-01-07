@@ -106,7 +106,7 @@ header{
   	width: 75%;
 	height: 200px;
 }
-.boton_mmgv > div{
+.boton_mmgv > .precio{
 	display: flex;
 	justify-content: center;
 }
@@ -184,7 +184,28 @@ footer > div{
 }
 .bi-whatsapp{
 	color: #25D366;
-	font-size: 50px;
+	font-size: 40px;
+}
+.wsp-vend{
+	pointer-events: none;
+	opacity: 0.3;
+	filter: grayscale(1);
+	cursor: not-allowed;
+}
+button:disabled{
+	opacity: 0.5;
+	cursor: not-allowed;
+}
+.add-car{
+	border-radius: 50%;
+	width: 40px;
+	height: 40px;
+}
+.agregar-wsp{
+	width: 100%;
+	display: flex;
+	align-items: center;
+	justify-content: space-evenly;
 }
 .bi-cart{
 	font-size: 20px;

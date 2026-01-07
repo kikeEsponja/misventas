@@ -255,7 +255,13 @@ footer > div{
 }
 .bi-whatsapp{
 	color: #25D366;
-	font-size: 50px;
+	font-size: 40px;
+}
+.agregar-wsp{
+	width: 100%;
+	display: flex;
+	align-items: center;
+	justify-content: space-evenly;
 }
 .vendido{
     color: #f00;

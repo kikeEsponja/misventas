@@ -9,10 +9,11 @@ inicio.addEventListener('click', ()=>{
 });
 
     let productos = [];
+    const loader = document.getElementById('loader');
     
     async function cargarProductos(){
         try{
-            //const res = await fetch('http://localhost:3000/productos-usados');
+            //const res = await fetch('http://localhost:3000/productos-nuevos');
             const res = await fetch('https://ventas-backend-wj4v.onrender.com/productos-nuevos');
             productos = await res.json();
             loader.style.display = 'block';
@@ -34,20 +35,25 @@ inicio.addEventListener('click', ()=>{
         let html = "";
     
         productos.forEach(prod =>{
+            const esVendido = prod.condicion.toUpperCase().includes('VENDIDO');
+
             html += `
             <div class="boton_mmgv product">
                 <a href="${prod.direcc}?id=${prod._id}"><img src="${prod.imagen}"></a>
                 <h4>${prod.nombre}</h4>
-                <h5>Marca:</h5><p> ${prod.marca}</p>
-                <div>
+                <h5>Ubicación:</h5><p> ${prod.ubicacion.localidad}</p>
+                <div class="precio">
                     <!--<h6 class="precio_online">PRECIO</h6>-->
                     <h2> $ ${formatoMoneda(prod.precio)}</h2>
                 </div>
-                <p>Condición: ${prod.condicion}</p>
+                <p class="cond ${esVendido ? 'vendido' : ''}">Condición: ${prod.condicion}</p>
                 <p>Cantidad: ${prod.cantidad}</p>
                 <hr>
-                <button class="add-car btn btn-primary agregar_al_carro_item" data-id="${prod._id}">Agregar al carro</button>
-                <!--<button class="add-car btn btn-primary agregar_al_carro_item" data-id="${prod._id}" id="pagarMP">Comprar</button>-->
+                <div class="agregar-wsp">
+                    <button class="add-car agregar_al_carro_item bg-primary bi bi-cart" data-id="${prod._id}" ${esVendido ? 'disabled' : ''}></button>
+                    <a title="social-icon" target="_blank" href="${esVendido ? '#' : prod.vendedor}" class="${esVendido ? 'wsp-vend' : ''}"><i class="bi bi-whatsapp"></i></a>
+                    <!--<button class="add-car btn btn-primary agregar_al_carro_item" data-id="${prod._id}" id="pagarMP">Comprar</button>-->
+                </div>
             </div>
             `;
         });
