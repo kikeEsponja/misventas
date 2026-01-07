@@ -1,8 +1,5 @@
 const listaContenedor = document.getElementById('contenedor-productos');
 const loader = document.getElementById('loader');
-const buscador = document.querySelector('#buscador');
-
-let productos = [];
 
 window.addEventListener('pageshow', () => {
     cargarProductos();
@@ -13,20 +10,17 @@ inicio.addEventListener('click', ()=>{
     window.location.href = '../../index.html';
 });
 
-    
+let productos = [];
+
     
 async function cargarProductos(){
     try{
-        loader.style.display = 'block';
         const res = await fetch('http://localhost:3000/productos-usados');
-        //const res = await fetch('https://ventas-backend-wj4v.onrender.com/productos-usados');
         productos = await res.json();
-
-        mostrarProductos(productos);
+        loader.style.display = 'block';
+        mostrarProductos();
     }catch (error){
         console.error('Error cargando productos: ', error);
-    }finally{
-        loader.style.display = 'none';
     }
 }
     
@@ -40,14 +34,10 @@ function formatoMoneda(num){
 const mostrarProductos = (listaArray) => {
     loader.style.display = 'none';
     let html = "";
-    if(listaArray.length === 0){
-        listaContenedor.innerHTML = '<h3>No se encontraron productos en esta zona</h3>';
-        return;
-    }
-    
+    const listaContenedor = document.querySelector('#contenedor-productos');
+
     listaArray.forEach(prod =>{
         const esVendido = prod.condicion.toUpperCase().includes('VENDIDO');
-
         html += `
         <div class="boton_mmgv product">
             <a href="${prod.direcc}?id=${prod._id}"><img src="${prod.imagen}"></a>
@@ -70,34 +60,27 @@ const mostrarProductos = (listaArray) => {
     listaContenedor.innerHTML = html;
 };
 
-    
+const buscador = document.querySelector('#buscador');
 
 buscador.addEventListener('keyup', () => {
     const valorBusqueda = buscador.value.toLowerCase();
-
-    const productosFiltrados = productos.filter(prod => {
+    const productosFiltrados = misProductos.filter(prod => {
         const localidad = prod.ubicacion.localidad.toLowerCase();
         return localidad.includes(valorBusqueda);
     });
-    
     mostrarProductos(productosFiltrados);
 });
     
 cargarProductos();
 localStorage.setItem('productos', JSON.stringify(productos));
-
-// descomentar para activar carrito
 let carrito = JSON.parse(localStorage.getItem('carrito')) || [];
 let click = 0;
 
 document.addEventListener('click', e =>{
     if(e.target.classList.contains('add-car')){
         const id = e.target.dataset.id;
-
         const producto = productos.find(p => p._id === id);
-
         const existente = carrito.find(p => p._id === id);
-
         if(existente){
             if(existente.cantidad < producto.cantidad){
                 existente.cantidad++;
@@ -113,15 +96,10 @@ document.addEventListener('click', e =>{
                 return;
             }
         }
-
         localStorage.setItem('carrito', JSON.stringify(carrito));
         alert('añadido');
         click = click + 1;
         let compras = document.getElementById('compras');
-        //let mCompras = document.getElementById('m_compras');
-        //let mComprasRight = document.getElementById('m_compras_right');
         compras.textContent = click;
-        //mCompras.textContent = click;
-        //mComprasRight.textContent = click;
     }
 });
