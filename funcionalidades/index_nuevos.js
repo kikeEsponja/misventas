@@ -51,11 +51,11 @@ const mostrarProductos = (listaArray) => {
             <a href="${prod.direcc}?id=${prod._id}"><img src="${prod.imagen}"></a>
             <h4>${prod.nombre}</h4>
             <h5>Ubicación:</h5><p> ${prod.ubicacion.localidad}</p>
-            <div class="precio">
+            <div class="precio bg-warning">
                 <!--<h6 class="precio_online">PRECIO</h6>-->
                 <h2> $ ${formatoMoneda(prod.precio)}</h2>
             </div>
-            <p class="cond ${esVendido ? 'vendido' : ''}">Condición: ${prod.condicion}</p>
+            <!--<p class="cond ${esVendido ? 'vendido' : ''}">Condición: ${prod.condicion}</p>-->
             <p>Cantidad: ${prod.cantidad}</p>
             <hr>
             <div class="agregar-wsp">
