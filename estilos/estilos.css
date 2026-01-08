@@ -103,8 +103,9 @@ header{
   	background: #fff;
 }
 .boton_mmgv > a > img{
-  	width: 75%;
+  	width: 85%;
 	height: 200px;
+	border-radius: 10px 10px 0 0;
 }
 .boton_mmgv > .precio{
 	display: flex;
