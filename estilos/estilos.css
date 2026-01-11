@@ -3,9 +3,14 @@
     src:url('../fuentes/Bourgeois-Bold.otf')
 }
 * {
+	margin: 0;
+	padding: 0;
 	box-sizing: border-box;
 	font-family: 'Open Sans','Helvetica Neue',Helvetica,Arial,sans-serif;
 	font-weight: 10;
+}
+p{
+	margin: 0;
 }
 body { 
   	margin: 0; 
@@ -87,7 +92,7 @@ header{
   	align-items: center;
   	flex-wrap: wrap;
 }
-.card > a{
+.card > button{
 	width: 18rem;
 	height: 50dvh;
 	display: flex;

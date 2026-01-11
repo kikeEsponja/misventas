@@ -5,27 +5,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
-    <link rel="stylesheet" href="../estilos/estilos.css">
-    <link rel="icon" href="../imagenes/shortcut.png">
+    <link rel="stylesheet" href="./estilos/estilos.css">
+    <link rel="icon" href="./imagenes/shortcut.png">
     <title>Artículos</title>
-            <style>
-        /* HTML: <div class="loader"></div> */
-.loader {
-  width: 50px;
-  --b: 8px; 
-  aspect-ratio: 1;
-  border-radius: 50%;
-  padding: 1px;
-  background: conic-gradient(#0000 10%,#f03355) content-box;
-  -webkit-mask:
-    repeating-conic-gradient(#0000 0deg,#000 1deg 20deg,#0000 21deg 36deg),
-    radial-gradient(farthest-side,#0000 calc(100% - var(--b) - 1px),#000 calc(100% - var(--b)));
-  -webkit-mask-composite: destination-in;
-          mask-composite: intersect;
-  animation:l4 1s infinite steps(10);
-}
-@keyframes l4 {to{transform: rotate(1turn)}}
-    </style>
 </head>
 <body>
     <header>
@@ -51,13 +33,11 @@
                 </div>
                 <a href="" class="links">Productos Nuevos</a>
                 <a href="" class="links">Productos Usados</a>-->
-                <button class="boton_mmgv participa" id="carrito"><i class="bi bi-cart text-danger"></i> Carrito: <span id="compras"></span></button>
                 <div class="volver text-center">
-                    <h1 class="text-light">ARTÍCULOS EN VENTA</h1>
-                    <button id="inicio" class="btn btn-warning">Ir a inicio</button>
-                    <input class="btn btn-light" style="cursor:text;" type="text" placeholder="Buscar por zona" id="buscador">
+                    <h1 class="text-light"> PUNTOMARKET </h1>
+                    <h2 id="pais_texto"></h2>
+                    <button class="btn btn-warning" id="inicio">Inicio</button>
                 </div>
-                <h2>NUEVOS</h2>
             </div>
         </nav>
         <!--<nav class="mobile">
@@ -82,24 +62,61 @@
         <img src="./imagenes/H16_-_Adelante_tu_navidad_mobile.png" alt="" class="mobile">-->
     </header>
     <main>
+    <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="exampleModalLabel">Si no eres el administrador, pulsa el botón "cerrar"</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+                </div>
+                <div class="modal-body">
+                    <h2>CONTRASEÑA!</h2>
+                    <form id="formulario">
+                        <input type="password" placeholder="contraseña" id="contras">
+                        <button type="submit" class="btn btn-primary">Ingresar</button>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                    
+                </div>
+            </div>
+        </div>
+    </div>
         <!--<div class="buscador">
             <div>
                 <input type="text" class="campo_buscar" placeholder="Busca tu producto aquí">
                 <button class="boton_mmgv buscar">Buscar</button> agregar las clases boton_mmgv y buscar para estilos personalizados
             </div>
         </div>-->
-        <section>
-            <!--<h4>Ubicación: GBA / Avellaneda - Calle Vicente Lopez</h4>-->
+        
+        <section class="grilla">
+            <div class="card">
+                <button class="tipo-btn" data-tipo="nuevos">
+                    <img src="./imagenes/nuevos.jpg" class="card-img-top" alt="Nuevos">
+                </button>
+                <p class="card-text text-center">PRODUCTOS NUEVOS</p>
+            </div>
+            <div class="card">
+                <button class="tipo-btn" data-tipo="usados">
+                    <img src="./imagenes/usados.webp" class="card-img-top" alt="Usados">
+                </button>
+                <p class="card-text text-center">PRODUCTOS USADOS</p>
+            </div>
+            <div class="card">
+                <button class="tipo-btn" data-tipo="servicios">
+                    <img src="./imagenes/servicios.avif" class="card-img-top" alt="Servicios">
+                </button>
+                <p class="card-text text-center">SERVICIOS</p>
+            </div>
         </section>
-        <div class="loader" id="loader"></div>
-        <section class="grilla" id="lista-productos"></section>
-        <section class="grilla" id="contenedor-productos"></section>
-        <!--<button id="pagarMP">comprar</button>-->
-        <aside class="text-primary texto_fijo">
+
+
+        <!--<aside class="text-primary texto_fijo">
             <a title="social-icon" target="_blank" href="https://wa.me/1131844709?text=Hola,%20estoy%20interesado%20en%20contactarte.">
                 <i class="bi bi-whatsapp"></i>
             </a>
-        </aside>
+        </aside>-->
     </main>
     <footer>
         <div>
@@ -154,15 +171,15 @@
                 <small>kikeEsponja: </small>
                 <small>element3999@gmail.com</small>
             </div>
-
+            <!--<button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#exampleModal">Admin</button>-->
         </div>
     </footer>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js" integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI" crossorigin="anonymous"></script>
     <script>
-        let cart = document.getElementById('carrito');
+        /*let cart = document.getElementById('carrito');
         cart.addEventListener('click', () =>{
-            window.location.href = './carrito.html';
-        });
+            window.location.href = './vistas/carrito.html';
+        });*/
         
         /*let mcart = document.getElementById('m_carrito');
         mcart.addEventListener('click', () =>{
@@ -174,7 +191,6 @@
             window.location.href = './vistas/carrito.html';
         });*/
     </script>
-    <script src="../funcionalidades/index_nuevos.js"></script>
     <script src="https://sdk.mercadopago.com/js/v2"></script>
     <script>
         /*const mp = new MercadoPago('APP_USR-11fd9648-96d3-4939-94d1-366a67e21f0b', {
@@ -202,6 +218,32 @@
                 autoOpen: true,
             });
         });*/
+        document.querySelectorAll('.tipo-btn').forEach(btn =>{
+            btn.addEventListener('click', () =>{
+                const tipo = btn.dataset.tipo;
+                localStorage.setItem('tipo', tipo);
+
+                window.location.href = './vistas/listado.html';
+            });
+        });
+
+        const pais = localStorage.getItem('pais');
+        if(!pais){
+            alert('EEEEEKK, Fuera!');
+            window.location.href = './index.html';
+        }
+
+        if(pais === 'AR'){
+            document.getElementById('pais_texto').textContent = 'ARGENTINA';
+        }else if(pais === 'VE'){
+            document.getElementById('pais_texto').textContent = 'VENEZUELA';
+        }else{
+            document.getElementById('pais_texto').textContent = 'ZONA DESCONOCIDA';
+        }
+
+        document.getElementById('inicio').addEventListener('click', () =>{
+            window.location.href = './index.html';
+        });
     </script>
 </body>
 </html>

@@ -25,6 +25,11 @@
           animation:l4 1s infinite steps(10);
         }
         @keyframes l4 {to{transform: rotate(1turn)}}
+
+        #top{
+            display: flex;
+            justify-self: center;
+        }
     </style>
 </head>
 <body>
@@ -53,12 +58,14 @@
                 <a href="" class="links">Productos Usados</a>-->
                 <button class="boton_mmgv participa" id="carrito"><i class="bi bi-cart text-danger"></i> Carrito: <span id="compras"></span></button>
                 <div class="volver text-center">
-                    <h1 class="text-light">ARTÍCULOS EN VENTA</h1>
-                    <button id="inicio" class="btn btn-warning">Ir a inicio</button>
+                    <h1 class="text-light" id="netmarket"> PUNTOMARKET </h1>
+                    <button id="volver" class="btn btn-warning">Volver</button>
                     <input class="btn btn-light" style="cursor:text;" type="text" placeholder="Buscar por zona" id="buscador">
                 </div>
-                
-                <h2>USADOS</h2>
+                <div class="volver text-center">
+                    <h2 id="titulo"></h2>
+                    <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#exampleModal">Tips</button>
+                </div>
             </div>
         </nav>
         <!--<nav class="mobile">
@@ -83,6 +90,24 @@
         <img src="./imagenes/H16_-_Adelante_tu_navidad_mobile.png" alt="" class="mobile">-->
     </header>
     <main>
+        <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h1 class="modal-title fs-5" id="exampleModalLabel">INSTRUCCIONES</h1>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+                    </div>
+                    <div class="modal-body">
+                        <h2>Usa whatsapp <i class="bi bi-whatsapp"></i></h2>
+                        <p>Cada artículo cuenta con un botón de whatsapp que conecta de forma directa con el anunciante.</p>
+                        <p>Al tocar el botón de whatsapp, se abre de forma automática la aplicación de mensajería whatsapp e inicia un chat con el anunciante.</p>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                    </div>
+                </div>
+            </div>
+        </div>
         <!--<div class="buscador">
             <div>
                 <input type="text" class="campo_buscar" placeholder="Busca tu producto aquí">
@@ -95,12 +120,14 @@
         <div class="loader" id="loader"></div>
         <section class="grilla" id="lista-productos"></section>
         <section class="grilla" id="contenedor-productos"></section>
+        <!--<section class="grilla" id="contenedor-productos"></section>--> <!-- colocar esta línea de nuevo si algo falla -->
         <!--<button id="pagarMP">comprar</button>-->
         <!--<aside class="text-primary texto_fijo">
             <a title="social-icon" target="_blank" href="https://wa.me/1131844709?text=Hola,%20estoy%20interesado%20en%20contactarte.">
                 <i class="bi bi-whatsapp"></i>
             </a>
         </aside>-->
+        <button type="button" class="btn btn-warning" id="top">Ir arriba</button>
     </main>
     <footer>
         <div>
@@ -165,6 +192,10 @@
             window.location.href = './carrito.html';
         });
         
+        let arriba = document.getElementById('top');
+        arriba.addEventListener('click', () =>{
+            window.location.href = '#netmarket';
+        });
         /*let mcart = document.getElementById('m_carrito');
         mcart.addEventListener('click', () =>{
             window.location.href = './vistas/carrito.html';
@@ -175,7 +206,7 @@
             window.location.href = './vistas/carrito.html';
         });*/
     </script>
-    <script src="../funcionalidades/index_usados.js"></script>
+    <script src="../funcionalidades/index_listado.js"></script>
     <script src="https://sdk.mercadopago.com/js/v2"></script>
     <script>
         /*const mp = new MercadoPago('APP_USR-11fd9648-96d3-4939-94d1-366a67e21f0b', {
@@ -202,7 +233,11 @@
                 },
                 autoOpen: true,
             });
-        });*/
+        });
+        if(!pais || !tipo){
+            alert('EEEEKK, Fuera!');
+            window.location.href = '../index.html';
+        }*/
     </script>
 </body>
 </html>

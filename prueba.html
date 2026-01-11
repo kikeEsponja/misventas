@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Artículos</title>
+
+</head>
+<body>
+    <main>
+        <section class="grilla">
+            <div class="card">
+                <div class="pais-btn" data-pais="ARGENTINA">
+                    <img src="./imagenes/banderas/ar.svg" alt="Argentina">
+                </div>
+                <p class="card-text text-center">Argentina</p>
+            </div>
+            <div class="card">
+                <div class="pais-btn" data-pais="VENEZUELA">
+                    <img src="./imagenes/banderas/ve.svg" alt="Venezuela">
+                </div>
+                <p class="card-text text-center">Venezuela</p>
+            </div>
+        </section>
+    </main>
+    <script>
+        document.querySelectorAll('.pais-btn').forEach(btn =>{
+            btn.addEventListener('click', () =>{
+                const pais = btn.dataset.pais;
+                localStorage.setItem('pais', pais);
+
+                window.location.href = './inicio.html';
+            });
+        });
+    </script>
+</body>
+</html>
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Artículos</title>
+</head>
+<body>
+    <main>
+        <section class="grilla">
+            <div class="card">
+                <button class="tipo-btn" data-tipo="nuevos">
+                    <img src="./imagenes/nuevos.jpg" class="card-img-top" alt="Nuevos">
+                </button>
+                <p class="card-text text-center">PRODUCTOS NUEVOS</p>
+            </div>
+            <div class="card">
+                <button class="tipo-btn" data-tipo="usados">
+                    <img src="./imagenes/usados.webp" class="card-img-top" alt="Usados">
+                </button>
+                <p class="card-text text-center">PRODUCTOS USADOS</p>
+            </div>
+            <div class="card">
+                <button class="tipo-btn" data-tipo="servicios">
+                    <img src="./imagenes/servicios.avif" class="card-img-top" alt="Servicios">
+                </button>
+                <p class="card-text text-center">SERVICIOS</p>
+            </div>
+        </section>
+    </main>
+    <script>
+        document.querySelectorAll('.tipo-btn').forEach(btn =>{
+            btn.addEventListener('click', () =>{
+                const tipo = btn.dataset.tipo;
+                localStorage.setItem('tipo', tipo);
+
+                window.location.href = './vistas/listado.html';
+            });
+        });
+
+        const pais = localStorage.getItem('pais');
+        if(!pais){
+            alert('EEEEEKK, Fuera!');
+            window.location.href = './index.html';
+        }
+
+        document.getElementById('pais_texto').textContent = `${pais}`;
+
+        document.getElementById('inicio').addEventListener('click', () =>{
+            window.location.href = './index.html';
+        });
+    </script>
+</body>
+</html>

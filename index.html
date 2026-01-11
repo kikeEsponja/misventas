@@ -8,6 +8,23 @@
     <link rel="stylesheet" href="./estilos/estilos.css">
     <link rel="icon" href="./imagenes/shortcut.png">
     <title>Artículos</title>
+    <style>
+        .card{
+            width: 200px;
+            height: 150px;
+            display: flex;
+            align-items: center;
+        }
+        .card > .pais-btn{
+            width: 150px;
+            height: 150px;
+            cursor: pointer;
+        }
+        .card > .pais-btn > img{
+            width: 100%;
+            height: 100px;
+        }
+    </style>
 </head>
 <body>
     <header>
@@ -33,7 +50,7 @@
                 </div>
                 <a href="" class="links">Productos Nuevos</a>
                 <a href="" class="links">Productos Usados</a>-->
-                <h1 class="text-light">ARTÍCULOS EN VENTA</h1>
+                <h1 class="text-light"> PUNTOMARKET </h1>
             </div>
         </nav>
         <!--<nav class="mobile">
@@ -79,28 +96,27 @@
             </div>
         </div>
     </div>
-        <!--<div class="buscador">
-            <div>
-                <input type="text" class="campo_buscar" placeholder="Busca tu producto aquí">
-                <button class="boton_mmgv buscar">Buscar</button> agregar las clases boton_mmgv y buscar para estilos personalizados
-            </div>
-        </div>-->
+    <!--<div class="buscador">
+        <div>
+            <input type="text" class="campo_buscar" placeholder="Busca tu producto aquí">
+            <button class="boton_mmgv buscar">Buscar</button> agregar las clases boton_mmgv y buscar para estilos personalizados
+        </div>
+    </div>-->
         
         <section class="grilla">
             <div class="card">
-                <a href="./vistas/nuevos.html">
-                    <img src="./imagenes/nuevos.jpg" class="card-img-top" alt="...">
-                </a>
-                <p class="card-text text-center">PRODUCTOS NUEVOS</p>
+                <div class="pais-btn" data-pais="AR">
+                    <img src="./imagenes/banderas/ar.svg" alt="Argentina">
+                </div>
+                <p class="card-text text-center">Argentina</p>
             </div>
-            <div class="card">
-                <a href="./vistas/usados.html">
-                    <img src="./imagenes/usados.webp" class="card-img-top" alt="...">
-                </a>
-                <p class="card-text text-center">PRODUCTOS USADOS</p>
-            </div>
+            <!--<div class="card">
+                <div class="pais-btn" data-pais="VE">
+                    <img src="./imagenes/banderas/ve.svg" alt="Venezuela">
+                </div>
+                <p class="card-text text-center">Venezuela</p>
+            </div>-->
         </section>
-
 
         <!--<aside class="text-primary texto_fijo">
             <a title="social-icon" target="_blank" href="https://wa.me/1131844709?text=Hola,%20estoy%20interesado%20en%20contactarte.">
@@ -181,7 +197,7 @@
             window.location.href = './vistas/carrito.html';
         });*/
     </script>
-    <script src="./funcionalidades/index.js"></script>
+    <!--<script src="./funcionalidades/index.js"></script>-->
     <script src="https://sdk.mercadopago.com/js/v2"></script>
     <script>
         /*const mp = new MercadoPago('APP_USR-11fd9648-96d3-4939-94d1-366a67e21f0b', {
@@ -209,6 +225,14 @@
                 autoOpen: true,
             });
         });*/
+        document.querySelectorAll('.pais-btn').forEach(btn =>{
+            btn.addEventListener('click', () =>{
+                const pais = btn.dataset.pais;
+                localStorage.setItem('pais', pais);
+
+                window.location.href = './inicio.html';
+            });
+        });
     </script>
 </body>
 </html>
