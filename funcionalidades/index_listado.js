@@ -118,7 +118,7 @@ function contactar(tel){
 
 async function registrarVisita(id, url){
     try{
-        const res = await fetch(`http://localhost:3000/productos-${tipo}/visita/${id}`, { method: 'POST' });
+        const res = await fetch(`https://ventas-backend-wj4v.onrender.com/productos-${tipo}/visita/${id}`, { method: 'POST' });
         const data = await res.json();
 
         if(data.ok){
