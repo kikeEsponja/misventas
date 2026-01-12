@@ -115,7 +115,7 @@ function filtrarProductos(){
         const coincideArt = nombre.includes(textoArt);
         const coincideZon = localidad.includes(textoZon);
 
-        (''.includes('') === true);
+        //(''.includes('') === true);
 
         return coincideArt && coincideZon;
     });
