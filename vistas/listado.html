@@ -56,11 +56,17 @@
                 </div>
                 <a href="" class="links">Productos Nuevos</a>
                 <a href="" class="links">Productos Usados</a>-->
-                <button class="boton_mmgv participa" id="carrito"><i class="bi bi-cart text-danger"></i> Carrito: <span id="compras"></span></button>
                 <div class="volver text-center">
-                    <h1 class="text-light" id="netmarket"> PUNTOMARKET </h1>
                     <button id="volver" class="btn btn-warning">Volver</button>
-                    <input class="btn btn-light" style="cursor:text;" type="text" placeholder="Buscar por zona" id="buscador">
+                    <button class="boton_mmgv participa" id="carrito"><i class="bi bi-cart text-danger"></i> Carrito: <span id="compras"></span></button>
+                    
+                </div>
+                <div class="volver text-center">
+                    <h1 class="text-light" id="netmarket" style="cursor:pointer;"> PUNTOMARKET </h1>
+                    
+                    <!--<input class="btn btn-light" style="cursor:text;" type="text" placeholder="Buscar" id="buscador">-->
+                    <input class="btn btn-light" style="cursor:text;" type="text" placeholder="Buscar por zona" id="buscador_zon">
+                    <input class="btn btn-light" style="cursor:text;" type="text" placeholder="Buscar por artículo" id="buscador_art">
                 </div>
                 <div class="volver text-center">
                     <h2 id="titulo"></h2>
@@ -99,8 +105,11 @@
                     </div>
                     <div class="modal-body">
                         <h2>Usa whatsapp <i class="bi bi-whatsapp"></i></h2>
-                        <p>Cada artículo cuenta con un botón de whatsapp que conecta de forma directa con el anunciante.</p>
-                        <p>Al tocar el botón de whatsapp, se abre de forma automática la aplicación de mensajería whatsapp e inicia un chat con el anunciante.</p>
+                        <ul>
+                            <li>Cada artículo cuenta con un botón de whatsapp que conecta de forma directa con el anunciante.</li>
+                            <li>Al tocar el botón de whatsapp, se abre de forma automática la aplicación de mensajería whatsapp e inicia un chat con el anunciante.</li>
+                            <li>Al tocar una imagen, se muestra el artículo con más detalles</li>
+                        </ul>
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
@@ -195,6 +204,11 @@
         let arriba = document.getElementById('top');
         arriba.addEventListener('click', () =>{
             window.location.href = '#netmarket';
+        });
+
+        let inicio = document.getElementById('netmarket');
+        inicio.addEventListener('click', () =>{
+            window.location.href = '../index.html';
         });
         /*let mcart = document.getElementById('m_carrito');
         mcart.addEventListener('click', () =>{
