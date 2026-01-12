@@ -79,7 +79,7 @@ const mostrarProductos = (listaArray) => {
         const esVendido = prod.condicion.toUpperCase().includes('VENDIDO');
  
         html += `
-        <div class="boton_mmgv product">
+        <div class="boton_mmgv">
             <a href="${prod.direcc}?id=${prod._id}" onclick="registrarVisita('${prod._id}', '${prod.direcc}?id=${prod._id}')"><img src="${prod.imagen}"></a>
             <h4>${prod.nombre}</h4>
             <h5>Ubicación: </h5><p>${prod.ubicacion.localidad}</p>
