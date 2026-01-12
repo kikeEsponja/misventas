@@ -18,11 +18,6 @@ const loader = document.getElementById('loader');
 const buscadorArt = document.querySelector('#buscador_art');
 const buscadorZon = document.querySelector('#buscador_zon');
 
-let volver = document.getElementById('volver');
-volver.addEventListener('click', ()=>{
-    window.history.back();
-});
-
 //document.getElementById('titulo').textContent = tipo === 'nuevos' ? 'NUEVOS' : 'USADOS';
 let titulo = document.getElementById('titulo');
 if(tipo === 'nuevos'){
