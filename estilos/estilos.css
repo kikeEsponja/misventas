@@ -262,7 +262,7 @@ button:disabled{
 	}
 	.boton_mmgv > div > h2{
 		width: 70%;
-		font-size: 23px;
+		font-size: 21px;
 	}
 	.boton_mmgv > div{
 		margin: 2%;
@@ -328,11 +328,11 @@ button:disabled{
 	.banner{
 		font-size: 90%;
 	}
-	.boton_mmgv{
-		width: 30%;
-	}
+	/*.boton_mmgv{
+		width: 25%;
+	}*/
 	.boton_mmgv > h4{
-		margin-bottom: 1.5rem;
+		/*margin-bottom: 1.5rem;*/
 	}
 }
 @media(max-width: 615px){
@@ -350,11 +350,6 @@ button:disabled{
 	}
 	.precio_online{
 		font-size: 12px;
-	}
-}
-@media(max-width: 685px){
-	.product{
-		height: 600px;
 	}
 }
 @media(max-width: 550px){
