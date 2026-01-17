@@ -323,6 +323,13 @@ button:disabled{
 	.redes{
 		width: 100%;
 	}
+	.card{
+		display: flex;	
+	}
+	.card > button{
+		width: 250px;
+		height: 250px;
+	}
 }
 @media(max-width: 700px){
 	.banner{
@@ -356,6 +363,10 @@ button:disabled{
 	.boton_mmgv{
 		width: 40%;
 	}
+	.card > button{
+		width: 200px;
+		height: 200px;
+	}
 }
 @media(max-width: 450px){
 	.buscador div{
@@ -378,6 +389,15 @@ button:disabled{
 		width: 45%;
 	}
 }
+@media(max-width: 420px){
+	.card > button{
+		width: 150px;
+		height: 150px;
+	}
+	.card-text{
+		font-size: 12px;
+	}
+}
 @media(max-width: 360px){
 	.boton_mmgv > div{
 		align-items: center;
@@ -390,5 +410,14 @@ button:disabled{
 	}
 	.desaparecer{
 		display: none;
+	}
+}
+@media(max-width: 300px){
+	.card > button{
+		width: 120px;
+		height: 120px;
+	}
+	.card-text{
+		font-size: 10px;
 	}
 }
