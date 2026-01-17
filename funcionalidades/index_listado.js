@@ -47,9 +47,13 @@ async function cargarProductos(){
 function formatoMoneda(num){
     let moneda = '';
     if(pais === 'AR'){
-        moneda = 'es-AR';
+        moneda = 'es-AR', 'ARS';
+    }else if(pais === 'VE'){
+        moneda = 'es-VE', 'BsF';
+    }else if(pais === 'BR'){
+        moneda = 'pt-BR', 'RS';
     }else{
-        moneda = 'es-VE'
+        moneda = '?';
     }
     return num.toLocaleString(moneda, {
         minimumFractionDigits: 2,
@@ -79,7 +83,7 @@ const mostrarProductos = (listaArray) => {
             <h4>${prod.nombre}</h4>
             <h5>Ubicación: </h5><p>${prod.ubicacion.localidad}</p>
             <div class="precio bg-warning">
-                <h2>$ ${formatoMoneda(prod.precio)}</h2>
+                <h2>${formatoMoneda(prod.precio)}</h2>
             </div>
             <p>Cantidad: ${prod.cantidad}</p>
             <small>Visitas: ${prod.visitas}</small>
