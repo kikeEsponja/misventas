@@ -1,78 +1,86 @@
 let detalles = document.getElementById('detalles');
+let item = document.getElementById('item');
 
 window.addEventListener('pageshow', () => {
     cargarProductos();
 });
 
-    let productos = [];
-    
-    async function cargarProductos(id){
-        try{
-            //const res = await fetch('http://localhost:3000/productos-usados');
-            const res = await fetch('https://ventas-backend-wj4v.onrender.com/productos-nuevos');
-            productos = await res.json();
+let productos = [];
+let imagen = [];
 
-            const params = new URLSearchParams(window.location.search);
-            const id = params.get('id');
+const params = new URLSearchParams(window.location.search);
+const id = params.get('id');
 
-            const producto = productos.find(p => p._id === id);
+async function cargarProductos(){
+    //const res = await fetch(`http://localhost:3000/productos-nuevos/${id}`);
+    const res = await fetch(`https://ventas-backend-wj4v.onrender.com/productos-nuevos/${id}`);
+    productos = await res.json();
 
-            if(producto){
-                mostrarProductos(producto);
-            }else{
-                console.error('producto no encontrado');
-            }
-        }catch (error){
-            console.error('Error cargando producto: ', error);
-        }
-    }
+    mostrarProductos(productos);
+    mostrarCarrusel(productos);
+}
+
+cargarProductos();
+
+/*function formatoMoneda(num){
+    return num.toLocaleString('es-AR', {
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2,
+    });
+}*/
     
-    function formatoMoneda(num){
-        return num.toLocaleString('es-AR', {
-            minimumFractionDigits: 2,
-            maximumFractionDigits: 2,
-        });
-    }
-    
-    function mostrarProductos(prod){
-        let html = `
-            <div class="boton_mmgv product">
-                <h4>${prod.nombre}</h4>
-                <h5>Marca:</h5><p> ${prod.marca}</p>
-                <div>
-                    <h6 class="precio_online">PRECIO</h6>
-                    <h2> $ ${formatoMoneda(prod.precio)}</h2>
-                </div>
-                <p>Condición: ${prod.condicion}</p>
-                <p>Cantidad disponible: ${prod.cantidad}</p>
-                <p>Ubicación: ${prod.ubicacion.localidad}</p>
-                <p>Calle: ${prod.ubicacion.calle + ' ' + prod.ubicacion.altura}</p>
-                <hr>
-                <div class="agregar-wsp">
-                    <!--<button class="add-car btn btn-primary agregar_al_carro_item" data-id="${prod._id}">Agregar al carro</button>-->
-                    <button class="btn btn-success agregar_al_carro_item" id="ir_carrito">Ir al carrito</button>
-                    <button class="bi bi-whatsapp" id="contacto"></button>
-                    <button class="btn btn-warning" id="volver">Volver</button>
-                </div>
+function mostrarProductos(prod){
+    let html = `
+        <div class="boton_mmgv product">
+            <h4>${prod.nombre}</h4>
+            <h5>Marca:</h5><p> ${prod.marca}</p>
+            <div>
+                <h6 class="precio_online">PRECIO</h6>
+                <h2>${prod.precio}</h2>
             </div>
-            `;
-        detalles.innerHTML = html;
+            <p>Condición: ${prod.condicion}</p>
+            <p>Cantidad disponible: ${prod.cantidad}</p>
+            <p>Ubicación: ${prod.ubicacion.localidad}</p>
+            <p>Calle: ${prod.ubicacion.calle + ' ' + prod.ubicacion.altura}</p>
+            <hr>
+            <div class="agregar-wsp">
+                <!--<button class="add-car btn btn-primary agregar_al_carro_item" data-id="${prod._id}">Agregar al carro</button>-->
+                <button class="btn btn-success agregar_al_carro_item" id="ir_carrito">Ir al carrito</button>
+                <button class="bi bi-whatsapp" id="contacto"></button>
+                <button class="btn btn-warning" id="volver">Volver</button>
+            </div>
+        </div>
+        `;
+    detalles.innerHTML = html;
 
-        let nombreProducto = document.getElementById('producto');
-        nombreProducto.textContent = prod.nombre;
-        
-        let irCarrito = document.getElementById('ir_carrito');
-        irCarrito.addEventListener('click', () =>{
-            window.location.href = '../carrito.html';
-        });
-
-        let volver = document.getElementById('volver');
-        volver.addEventListener('click', () =>{
-            window.history.back();
-        });
-    }
+    let nombreProducto = document.getElementById('producto');
+    nombreProducto.textContent = prod.nombre;
     
-    cargarProductos();
+    let irCarrito = document.getElementById('ir_carrito');
+    irCarrito.addEventListener('click', () =>{
+        window.location.href = '../carrito.html';
+    });
+    let volver = document.getElementById('volver');
+    volver.addEventListener('click', () =>{
+        window.history.back();
+    });
+}
+function mostrarCarrusel(prod){
+    if(!prod.imagen || prod.imagen.length === 0){
+        item.innerHTML = `<p>Sin imágenes</p>`;
+        return;
+    }
+
+    let itemHtml = '';
+    prod.imagen.forEach((img, index) =>{
+        itemHtml += `
+            <div class="carousel-item ${index === 0 ? 'active' : ''}">
+                <img src="${img}" class="d-block w-100" alt="${prod.nombre}">
+            </div>
+        `;
+    });
+    item.innerHTML = itemHtml;
+}
 
     localStorage.setItem('productos', JSON.stringify(productos));
 

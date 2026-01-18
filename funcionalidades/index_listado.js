@@ -44,7 +44,7 @@ async function cargarProductos(){
         productos = await res.json();
 
         mostrarProductos(productos);
-        //localStorage.setItem('productos', JSON.stringify(productos));
+        localStorage.setItem('productos', JSON.stringify(productos));
     }catch (error){
         console.error('Error cargando productos: ', error);
     }finally{
@@ -99,9 +99,17 @@ const mostrarProductos = (listaArray) => {
     listaArray.forEach(prod =>{
         const esVendido = prod.condicion.toUpperCase().includes('VENDIDO');
         const config = divisaPorPais[pais] || { locale : 'en-US', currency: 'USD'};
+
+        let imagenPortada = '';
+
+        if(Array.isArray(prod.imagen)){
+            imagenPortada = prod.imagen.length > 0 ? prod.imagen[0] : 'imgagenes/empty.webp';
+        }else{
+            imagenPortada = prod.imagen ? prod.imagen : 'imagenes/empty.webp';
+        }
         html += `
         <div class="boton_mmgv">
-            <a href="${prod.direcc}?id=${prod._id}" onclick="registrarVisita('${prod._id}', '${prod.direcc}?id=${prod._id}')"><img src="${prod.imagen}"></a>
+            <a href="${prod.direcc}?id=${prod._id}" onclick="registrarVisita('${prod._id}', '${prod.direcc}?id=${prod._id}')"><img src="${imagenPortada}" alt="${prod.nombre}"></a>
             <h4>${prod.nombre}</h4>
             <h5>Ubicación: </h5><p>${prod.ubicacion.localidad}</p>
             <div class="precio bg-warning">
@@ -178,8 +186,6 @@ buscadorArt.addEventListener('keyup', () =>{
 
     mostrarProductos(productosFiltradosArt);
 });*/
-
-localStorage.setItem('productos', JSON.stringify(productos));
 
 function contactar(tel){
     window.location.href = `https://wa.me/${tel}`;

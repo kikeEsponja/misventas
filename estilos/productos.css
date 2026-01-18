@@ -65,7 +65,8 @@ main{
     overflow: hidden;
 }
 .carousel-inner{
-
+    display: flex;
+    height: auto;
 }
 .carousel_small{
     width: 25%;
