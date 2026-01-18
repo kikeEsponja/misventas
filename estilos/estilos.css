@@ -213,6 +213,9 @@ button:disabled{
 	align-items: center;
 	justify-content: space-evenly;
 }
+.bg-danger{
+	width: 50%;
+}
 .bi-cart{
 	font-size: 20px;
 }
@@ -403,7 +406,19 @@ button:disabled{
 		align-items: center;
 	}
 	.boton_mmgv{
-		width: 80%;
+		width: 50%;
+		height: 500px;
+		margin: 0;
+		border: 1px solid #000;
+	}
+	.agregar-wsp{
+		flex-wrap: wrap;
+	}
+	.bg-danger{
+		width: 150px;
+	}
+	.boton_mmgv > a > img {
+    	height: 180px;
 	}
 	.link_logo{
 		width:75%;
