@@ -337,10 +337,10 @@ button:disabled{
 	}
 	/*.boton_mmgv{
 		width: 25%;
-	}*/
-	.boton_mmgv > h4{
-		/*margin-bottom: 1.5rem;*/
 	}
+	.boton_mmgv > h4{
+		margin-bottom: 1.5rem;
+	}*/
 }
 @media(max-width: 615px){
 	.product{

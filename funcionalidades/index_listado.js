@@ -1,5 +1,13 @@
 const pais = localStorage.getItem('pais');
 const tipo = localStorage.getItem('tipo');
+const divisaPorPais = {
+	'AR': { locale: 'es-Ar', currency: 'ARS' },
+	'CL': { locale: 'es-CL', currency: 'CLP' },
+	'US': { locale: 'en-US', currency: 'USD' },
+	'ES': { locale: 'es-ES', currency: 'EUR' },
+	'VE': { locale: 'es-VE', currency: 'Ves' },
+    'BR': { locale: 'pt-BR', currency: 'BRL'},
+}
 
 if(!pais || !tipo){
     alert('EEEEKK, Fuera!');
@@ -44,22 +52,36 @@ async function cargarProductos(){
     }
 }
 
-function formatoMoneda(num){
-    let moneda = '';
+function formatoMoneda(valor, codigoPais, codigoMoneda){
+    try{
+        if(typeof valor !== 'number' || isNaN(valor)){
+            throw new Error('El valor debe ser un número válido');
+        }
+        if(typeof codigoPais !== 'string' || typeof codigoMoneda !== 'string'){
+            throw new Error('los valores deben ser cadenas');
+        }
+
+        return new Intl.NumberFormat(codigoPais, {
+            style: 'currency',
+            currency: codigoMoneda
+        }).format(valor);
+    }catch(error){
+        console.error('Error al formatear moneda: ', error.message);
+        return null;
+    }
+}
+
+/*function divisa(num){
     if(pais === 'AR'){
         moneda = 'es-AR', 'ARS';
-    }else if(pais === 'VE'){
-        moneda = 'es-VE', 'BsF';
-    }else if(pais === 'BR'){
-        moneda = 'pt-BR', 'RS';
     }else{
-        moneda = '?';
+        moneda = 'es-VE', 'Ves';
     }
     return num.toLocaleString(moneda, {
         minimumFractionDigits: 2,
         maximumFractionDigits: 2,
     });
-}
+}*/
 
 const mostrarProductos = (listaArray) => {
     loader.style.display = 'none';
@@ -76,14 +98,14 @@ const mostrarProductos = (listaArray) => {
 
     listaArray.forEach(prod =>{
         const esVendido = prod.condicion.toUpperCase().includes('VENDIDO');
- 
+        const config = divisaPorPais[pais] || { locale : 'en-US', currency: 'USD'};
         html += `
         <div class="boton_mmgv">
             <a href="${prod.direcc}?id=${prod._id}" onclick="registrarVisita('${prod._id}', '${prod.direcc}?id=${prod._id}')"><img src="${prod.imagen}"></a>
             <h4>${prod.nombre}</h4>
             <h5>Ubicación: </h5><p>${prod.ubicacion.localidad}</p>
             <div class="precio bg-warning">
-                <h2>${formatoMoneda(prod.precio)}</h2>
+                <h2>${formatoMoneda(prod.precio, config.locale, config.currency)}</h2>
             </div>
             <p>Cantidad: ${prod.cantidad}</p>
             <small>Visitas: ${prod.visitas}</small>
