@@ -7,6 +7,7 @@ const divisaPorPais = {
 	'ES': { locale: 'es-ES', currency: 'EUR' },
 	'VE': { locale: 'es-VE', currency: 'Ves' },
     'BR': { locale: 'pt-BR', currency: 'BRL'},
+    'PE': { locale: 'es-PE', currency: 'PEN'},
 }
 
 if(!pais || !tipo){
