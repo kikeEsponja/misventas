@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="es">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Artículos</title>
+    </head>
+    <body>
+        <main>
+            <h1>Panel de administrador</h1>
+            <h2>Nuevo producto</h2>
+            <!-- PARTE NUEVA DE CREAR PRODUCTO-->
+            <input id="titulo" placeholder="Título">
+            <input id="precio" placeholder="Precio">
+            <textarea id="descripcion" placeholder="Breve descripción"></textarea>
+            <input id="imagen" placeholder="Ruta imagen">
+            <select id="estado">
+                <option value="nuevo">Nuevo</option>
+                <option value="usado">Usado</option>
+                <option value="servicio">Servicio</option>
+            </select>
+            <button onclick="crearProducto()">Guardar</button>
+            <button onclick="salir()">Salir</button>
+        </main>
+        <script>
+            async function crearProducto(){
+                await fetch("/vendedor/producto",{
+                    method:"POST",
+                    headers:{
+                        "Content-Type":"application/json",
+                        "Authorization": localStorage.getItem("token")
+                    },
+                    body: JSON.stringify({
+                        nombre:"producto test",
+                        precio:100,
+                        condicion:"nuevo",
+                        vendedor:"Nombre visible",
+                        imagen:["url imagen"]
+                    })
+                });
+            }
+
+            const token = localStorage.getItem("token");
+                if(!token){
+                location.href = "login.html";
+            }
+
+            async function crearProducto(){
+
+            const token = localStorage.getItem("token");
+
+            const res = await fetch("/productos",{
+                method:"POST",
+                headers:{
+                    "Content-Type":"application/json",
+                    "Authorization": token
+                },
+                body: JSON.stringify({
+                        titulo: titulo.value,
+                        precio: precio.value,
+                        descripcion: descripcion.value,
+                        imagen: imagen.value,
+                        estado: estado.value
+                    })
+                });
+
+                const data = await res.json();
+                alert("Producto creado");
+            }
+
+            async function misProductos(){
+
+            const token = localStorage.getItem("token");
+
+            const res = await fetch("/mis-productos",{
+                headers:{
+                    "Authorization": token
+                }
+            });
+
+            const productos = await res.json();
+                console.log(productos);
+            }
+
+            function salir(){
+                localStorage.removeItem("token");
+                location.href = "login.html";
+            }
+        </script>
+    </body>
+</html>

@@ -43,12 +43,18 @@
             </header>
 
             <form id="formRegistro">
-                <input id="nombre" placeholder="Nombre" required>
-                <input id="phone" placeholder="Teléfono" required>
+                <input id="ciudad" placeholder="Ciudad" required>
                 <input id="email" type="email" placeholder="Email" required>
+                <input id="nombre" placeholder="Nombre" required>
+                <input id="pais" placeholder="País" required>
+                <input id="phone" placeholder="Teléfono" required>
+                
                 <input id="password" type="password" placeholder="Contraseña" required>
                 <input id="password2" type="password" placeholder="Repetir contraseña" required>
                 <button>Registrarse</button>
+                <p>¿Ya tienes cuenta? Inicia sesión</p>
+                <button onclick="location.href='login.html'">Iniciar sesión</button>
+                <button onclick="location.href='listado.html'">Productos</button>
             </form>
 
         </main>
@@ -82,10 +88,13 @@
                     return;
                 }
 
-                const res = await fetch("/registro-vendedor",{
+                //const res = await fetch("http://localhost:3000/registro-vendedor",{
+                const res = await fetch("https://ventas-backend-wj4v.onrender.com/registro-vendedor",{
                     method:"POST",
                     headers:{ "Content-Type":"application/json" },
                         body: JSON.stringify({
+                        ciudad: ciudad.value,
+                        pais: pais.value,
                         nombre: nombre.value,
                         phone: phone.value,
                         email: email.value,
@@ -95,98 +104,7 @@
 
                 const data = await res.json();
                 alert(data.message || "Registro completado");
-            });
-        </script>
-    </body>
-</html>
-
-<!DOCTYPE html>
-<html lang="es">
-    <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css">
-        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
-        <link rel="stylesheet" href="./estilos/estilos.css">
-        <link rel="icon" href="./imagenes/shortcut.png">
-        <title>Artículos</title>
-        <style>
-            .card{
-                width: 200px;
-                height: 150px;
-                display: flex;
-                align-items: center;
-            }
-            .card > .pais-btn{
-                width: 150px;
-                height: 150px;
-                cursor: pointer;
-            }
-            .card > .pais-btn > img{
-                width: 100%;
-                height: 100px;
-            }
-            @media(max-width: 400px){
-                .card{
-                    width: 150px;
-                    height: 150px;
-                }
-            }
-        </style>
-    </head>
-    <body>
-        <header>
-            <nav>
-                <div class="desktop">
-                    <h1 class="text-light"> PUNTOMARKET </h1>
-                </div>
-            </nav>
-        </header>
-        <main>
-            <form id="formLogin">
-                <input id="email" type="email" placeholder="Email" required>
-                <input id="password" type="password" placeholder="Contraseña" required>
-                <button>Entrar</button>
-            </form>
-        </main>
-        <footer>
-            <div>
-                <div class="footer_contenedor">
-                    <div class="redes">
-                        <div>
-                            <a href="#"><i class="bi bi-facebook"></i></a>
-                        </div>
-                        <div>
-                            <a href="#"><i class="bi bi-instagram"></i></a>
-                        </div>
-                        <div>
-                            <a href="#"><i class="bi bi-youtube"></i></a>
-                        </div>
-                    </div>
-                </div>
-                <div class="text-center text-light">
-                    <small>kikeEsponja: </small>
-                    <small>element3999@gmail.com</small>
-                </div>
-            </div>
-        </footer>
-        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js" integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI" crossorigin="anonymous"></script>
-        <script>
-            document.getElementById("formLogin").addEventListener("submit", async function(e){
-                e.preventDefault();
-
-                const res = await fetch("/login-vendedor",{
-                    method:"POST",
-                    headers:{ "Content-Type":"application/json" },
-                    body: JSON.stringify({
-                        email: email.value,
-                        password: password.value
-                    })
-                });
-
-                const data = await res.json();
-                localStorage.setItem("token", data.token);
-                location.href="panel.html";
+                location.href="login.html";
             });
         </script>
     </body>
