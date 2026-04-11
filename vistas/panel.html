@@ -24,7 +24,7 @@
         </main>
         <script>
             async function crearProducto(){
-                await fetch("/vendedor/producto",{
+                await fetch("https://ventas-backend-wj4v.onrender.com/vendedor/producto",{
                     method:"POST",
                     headers:{
                         "Content-Type":"application/json",
@@ -49,7 +49,7 @@
 
             const token = localStorage.getItem("token");
 
-            const res = await fetch("/productos",{
+            const res = await fetch("https://ventas-backend-wj4v.onrender.com/productos",{
                 method:"POST",
                 headers:{
                     "Content-Type":"application/json",
@@ -72,7 +72,7 @@
 
             const token = localStorage.getItem("token");
 
-            const res = await fetch("/mis-productos",{
+            const res = await fetch("https://ventas-backend-wj4v.onrender.com/mis-productos",{
                 headers:{
                     "Authorization": token
                 }
