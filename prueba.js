@@ -1,54 +1,67 @@
-let detalles = document.getElementById('detalles');
-let item = document.getElementById('item');
+function crearRutas(tipo, Modelo){
+	app.get(`/${tipo}`, async (req, res) =>{
+		try{
+			const { pais } = req.query;
 
-window.addEventListener('pageshow', () => {
-    cargarProductos();
-});
+			let filtro = {};
 
-let productos = [];
-let imagen = [];
-    
-const params = new URLSearchParams(window.location.search);
-const id = params.get('id');
+			if(pais){
+				const vendedores = await Vendedor.find({ pais }).select('_id');
+				filtro.vendedorId = { $in: vendedores };
+			}
 
-async function cargarProductos(){
-    const res = await fetch(`http://localhost:3000/productos-usados/${id}`);
-    productos = await res.json();
+			const productos = await Modelo.find(filtro).sort({ fecha: -1 });
+			res.json(productos);
+			
+		}catch (error){
+			res.status(500).json({ error: `Error al obtener ${tipo}`});
+		}
+	});
 
-    mostrarProductos(productos);
-    mostrarCarrusel(productos);
-}
-    
-cargarProductos();
+	app.get(`/${tipo}/:id`, async (req, res) => {
+		try{
+			const producto = await Modelo.findById(req.params.id);
+			res.json(producto);
+		}catch(error){
+			console.error(`Error en /${tipo}:`, error);
+			res.status(500).json({ error: `Error al obtener ${tipo}`});
+		}
+	});
 
-function mostrarProductos(prod){
-    let html = `
-        <div class="boton_mmgv product">
-            <h4>${prod.nombre}</h4>
-            <div>
-                <h6 class="precio_online">PRECIO</h6>
-                <h2>${prod.precio}</h2>
-            </div>
-            <p>Ubicación: ${prod.ubicacion.localidad}</p>
-            <p>Calle: ${prod.ubicacion.calle + ' ' + prod.ubicacion.altura}</p>
-        </div>
-        `;
-    detalles.innerHTML = html;
-}
+	app.post("/productos", auth, async (req,res)=>{
+		const db = client.db("ventas");
+		const producto = {
+			titulo: req.body.titulo,
+			precio: req.body.precio,
+			descripcion: req.body.descripcion,
+			imagen: req.body.imagen,
+			estado: req.body.estado,
+			vendedorId: req.usuario.id
+		};
+		await db.collection("usados").insertOne(producto);
+		res.json({message:"producto creado"});
+	});
 
-function mostrarCarrusel(prod){
-    if(!prod.imagen || prod.imagen.length === 0){
-        item.innerHTML = `<p>Sin imágenes</p>`;
-        return;
-    }
+    app.post('/acceso', (req, res) => {
+        const { pass } = req.body;
 
-    let itemHtml = '';
-    prod.imagen.forEach((img, index) =>{
-        itemHtml += `
-            <div class="carousel-item ${index === 1 ? 'active' : ''}">
-                <img src="${img} "class='d-block w-100' alt="${prod.nombre}"}>
-            </div>
-        `;
+        if(pass === process.env.PASSWORD){
+			const token = jwt.sign({ admin: true }, process.env.FIRMA, { expiresIn: '1h' });
+
+            res.json({ ok:true, token });
+        }else{
+            res.status(401).json({ ok: false, mensaje: 'Password incorrecto' });
+        }
     });
-    item.innerHTML = itemHtml;
+
+	app.post(`/${tipo}/visita/:id`, async (req, res) => {
+		try{
+			const { id } = req.params;
+			const producto = await Modelo.findByIdAndUpdate(id, { $inc: { visitas: 1 } });
+			res.json({ ok: true, visitas: producto.visitas });
+		}catch(error){
+			console.error("Error al registrar visita:", error);
+			res.status(500).json({ error: "no se pudo registrar la visita" });
+		}
+	});
 }
