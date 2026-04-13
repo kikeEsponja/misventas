@@ -95,8 +95,8 @@
             document.getElementById("formLogin").addEventListener("submit", async function(e){
                 e.preventDefault();
 
-                //const res = await fetch("https://ventas-backend-wj4v.onrender.com/login-vendedor",{
-                const res = await fetch("http://localhost:3000/login-vendedor",{
+                const res = await fetch("https://ventas-backend-wj4v.onrender.com/login-vendedor",{
+                //const res = await fetch("http://localhost:3000/login-vendedor",{
                     method:"POST",
                     headers:{ "Content-Type":"application/json" },
                     body: JSON.stringify({

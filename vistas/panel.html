@@ -44,7 +44,8 @@
                 const endpoint = endpointMap[tipoSeleccionado];
                 //const direccion = `../vistas/${tipoSeleccionado}.html`;
                 //const res = await fetch("https://ventas-backend-wj4v.onrender.com/productos-usados",{
-                const res = await fetch(`http://localhost:3000/${endpoint}`, {
+                //const res = await fetch(`http://localhost:3000/${endpoint}`, {
+                const res = await fetch(`https://ventas-backend-wj4v.onrender.com/${endpoint}`, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
