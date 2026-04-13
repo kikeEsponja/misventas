@@ -14,7 +14,7 @@ function render(productos, tipo){
     let html = '';
 
     if(productos.length === 0){
-        lista.innerHTML = '<h3>No hay pendientes 😴</h3>';
+        lista.innerHTML = `<h3>No hay ${tipo} pendientes 😴</h3>`;
         return;
     }
 
