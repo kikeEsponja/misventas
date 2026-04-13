@@ -11,6 +11,8 @@
             <h2>Nuevo producto</h2>
             <!-- PARTE NUEVA DE CREAR PRODUCTO-->
             <input id="titulo" placeholder="Título">
+            <input id="marca" placeholder="Marca">
+            <input id="cantidad" placeholder="Ingrese cantidad disponible">
             <input id="precio" placeholder="Precio">
             <textarea id="descripcion" placeholder="Breve descripción"></textarea>
             <input id="imagen" placeholder="Ruta imagen">
@@ -19,60 +21,64 @@
                 <option value="usado">Usado</option>
                 <option value="servicio">Servicio</option>
             </select>
+            <input id="calle" placeholder="Calle">
+            <input id="localidad" placeholder="Localidad">
+            <input id="altura" placeholder="Altura">
             <button onclick="crearProducto()">Guardar</button>
             <button onclick="salir()">Salir</button>
         </main>
         <script>
             async function crearProducto(){
-                await fetch("https://ventas-backend-wj4v.onrender.com/vendedor/producto",{
-                    method:"POST",
-                    headers:{
-                        "Content-Type":"application/json",
-                        "Authorization": localStorage.getItem("token")
-                    },
-                    body: JSON.stringify({
-                        nombre:"producto test",
-                        precio:100,
-                        condicion:"nuevo",
-                        vendedor:"Nombre visible",
-                        imagen:["url imagen"]
-                    })
-                });
-            }
 
-            const token = localStorage.getItem("token");
-                if(!token){
-                location.href = "login.html";
-            }
+                const token = localStorage.getItem("token");
 
-            async function crearProducto(){
+                const tipoSeleccionado = estado.value;
 
-            const token = localStorage.getItem("token");
+                // Mapear a endpoint
+                const endpointMap = {
+                    nuevo: "productos-nuevos",
+                    usado: "productos-usados",
+                    servicio: "productos-servicios"
+                };
 
-            const res = await fetch("https://ventas-backend-wj4v.onrender.com/productos-usados",{
-                method:"POST",
-                headers:{
-                    "Content-Type":"application/json",
+                const endpoint = endpointMap[tipoSeleccionado];
+                //const direccion = `../vistas/${tipoSeleccionado}.html`;
+                //const res = await fetch("https://ventas-backend-wj4v.onrender.com/productos-usados",{
+                const res = await fetch(`http://localhost:3000/${endpoint}`, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
                     "Authorization": `Bearer ${token}`
                 },
                 body: JSON.stringify({
-                        titulo: titulo.value,
-                        precio: precio.value,
-                        descripcion: descripcion.value,
-                        imagen: imagen.value,
-                        estado: estado.value
-                    })
-                });
+                    nombre: titulo.value,
+                    marca: marca.value,
+                    cantidad: Number(cantidad.value),
+                    precio: Number(precio.value),
+                    condicion: tipoSeleccionado,
+                    imagen: [imagen.value],
+                    vendedor: "Nombre visible",
+                    descripcion: descripcion.value,
+                    ubicacion: {
+                        calle: calle.value,
+                        altura: altura.value,
+                        localidad: localidad.value
+                    },
+                    direcc: `../vistas/${tipoSeleccionado}.html`
+                })
+            });
 
                 const data = await res.json();
                 alert("Producto creado");
             }
 
-            async function misProductos(){
+            /*async function misProductos(){
 
             const token = localStorage.getItem("token");
 
-            const res = await fetch("https://ventas-backend-wj4v.onrender.com/mis-productos",{
+            //const res = await fetch("https://ventas-backend-wj4v.onrender.com/mis-productos",{
+            const res = await fetch("http://localhost:3000/mis-productos",{
+                method:"GET",
                 headers:{
                     "Authorization": `Bearer ${token}`
                 }
@@ -80,7 +86,7 @@
 
             const productos = await res.json();
                 console.log(productos);
-            }
+            }*/
 
             function salir(){
                 localStorage.removeItem("token");

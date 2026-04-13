@@ -1,4 +1,4 @@
-localStorage.getItem('productos', JSON.stringify(productos));
+localStorage.getItem('productos', JSON.stringify(producto));
 
 const params = new URLSearchParams(window.location.search);
 const id = params.get('id');

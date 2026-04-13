@@ -40,10 +40,11 @@ if(tipo === 'nuevos'){
 async function cargarProductos(){
     try{
         loader.style.display = 'block';
-        //const res = await fetch(`http://localhost:3000/productos-${tipo}?pais=${pais}`);
-        const res = await fetch(`https://ventas-backend-wj4v.onrender.com/productos-${tipo}?pais=${pais}`);
+        const res = await fetch(`http://localhost:3000/productos-${tipo}?pais=${pais}`);
+        //const res = await fetch(`https://ventas-backend-wj4v.onrender.com/productos-${tipo}?pais=${pais}`);
         productos = await res.json();
 
+        console.log("Productos cargados:", productos);
         mostrarProductos(productos);
         localStorage.setItem('productos', JSON.stringify(productos));
     }catch (error){
@@ -98,7 +99,7 @@ const mostrarProductos = (listaArray) => {
     }
 
     listaArray.forEach(prod =>{
-        const esVendido = prod.condicion.toUpperCase().includes('VENDIDO');
+        const esVendido = prod.condicion?.includes('VENDIDO'); //Quité el toLowerCase y lo reemplacé por un "?" porque algunos vendedores escriben "Vendido" con mayúscula inicial, y así cubrimos ambos casos. Si quieres ser aún más exhaustivo, podríamos usar una expresión regular para detectar "vendido" sin importar mayúsculas o minúsculas. Por ejemplo: /vendido/i.test(prod.condicion) que también detectaría "VENdido", "VENdIDO", etc. Pero creo que con el includes y el toUpperCase ya estamos bastante cubiertos para la mayoría de los casos comunes.
         const config = divisaPorPais[pais] || { locale : 'en-US', currency: 'USD'};
 
         let imagenPortada = '';
@@ -112,7 +113,7 @@ const mostrarProductos = (listaArray) => {
         <div class="boton_mmgv">
             <a href="${prod.direcc}?id=${prod._id}" onclick="registrarVisita('${prod._id}', '${prod.direcc}?id=${prod._id}')"><img src="${imagenPortada}" alt="${prod.nombre}"></a>
             <h4>${prod.nombre}</h4>
-            <h5>Ubicación: </h5><p>${prod.ubicacion.localidad}</p>
+            <h5>Ubicación: </h5><p>${prod.ubicacion?.localidad || 'Sin ubicación'}</p>
             <div class="precio bg-warning">
                 <h2>${formatoMoneda(prod.precio, config.locale, config.currency)}</h2>
             </div>
@@ -139,7 +140,7 @@ function filtrarProductos(){
     const textoZon = buscadorZon.value.toLowerCase();
 
     const productosFiltrados = productos.filter(prod =>{
-        const localidad = prod.ubicacion.localidad.toLowerCase();
+        const localidad = prod.ubicacion?.localidad?.toLowerCase() || 'sin ubicación';
         const nombre = prod.nombre.toLowerCase();
 
         const coincideArt = nombre.includes(textoArt);
@@ -194,7 +195,8 @@ function contactar(tel){
 
 async function registrarVisita(id, url){
     try{
-        const res = await fetch(`https://ventas-backend-wj4v.onrender.com/productos-${tipo}/visita/${id}`, { method: 'POST' });
+        //const res = await fetch(`https://ventas-backend-wj4v.onrender.com/productos-${tipo}/visita/${id}`, { method: 'POST' });
+        const res = await fetch(`http://localhost:3000/productos-${tipo}/visita/${id}`, { method: 'POST' });
         const data = await res.json();
 
         if(data.ok){

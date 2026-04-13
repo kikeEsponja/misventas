@@ -1,37 +1,58 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang="en">
     <head>
         <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>Artículos</title>
     </head>
     <body>
+        <header>
+            <div>
+                <div class="volver text-center">
+                        <button id="volver" class="btn btn-warning">Volver</button>
+                        <button class="btn btn-light" id="carrito"><i class="bi bi-cart text-danger"></i> Carrito: <span id="compras"></span></button>
+                    </div>
+                    <div class="volver text-center">
+                    <h1 class="text-light" id="netmarket" style="cursor:pointer;"> PUNTOMARKET </h1>
+                    
+                    <!--<input class="btn btn-light" style="cursor:text;" type="text" placeholder="Buscar" id="buscador">-->
+                    <input class="btn btn-light" style="cursor:text; margin: 1%" type="text" placeholder="Buscar por artículo" id="buscador_art">
+                    <input class="btn btn-light" style="cursor:text;" type="text" placeholder="Buscar por zona" id="buscador_zon">
+                </div>
+                <div class="volver text-center">
+                    <h2 id="titulo"></h2>
+                    <button type="button" class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#exampleModal_2">Vender</button>
+                    <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#exampleModal">Tips</button>
+                </div>
+            </div>
         <main>
-            <form id="formLogin">
-                <input id="email" type="email" placeholder="Email" required>
-                <input id="password" type="password" placeholder="Contraseña" required>
-                <button>Entrar</button>
-                <p>¿No tienes cuenta? Registrate</p>
-                <button onclick="location.href='registro.html'">Registrarse</button>
-                <button onclick="location.href='listado.html'">Productos</button>
-            </form>
+            <div class="loader" id="loader"></div>
+            <section class="grilla" id="lista-productos"></section>
+            <section class="grilla" id="contenedor-productos"></section>
+        </main>
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js" integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI" crossorigin="anonymous"></script>
         <script>
-            document.getElementById("formLogin").addEventListener("submit", async function(e){
-                e.preventDefault();
+        let cart = document.getElementById('carrito');
+        cart.addEventListener('click', () =>{
+            window.location.href = './carrito.html';
+        });
+        
+        let arriba = document.getElementById('top');
+        arriba.addEventListener('click', () =>{
+            window.location.href = '#netmarket';
+        });
 
-                //const res = await fetch("http://localhost:3000/login-vendedor",{
-                const res = await fetch("https://ventas-backend-wj4v.onrender.com/login-vendedor",{
-                    method:"POST",
-                    headers:{ "Content-Type":"application/json" },
-                    body: JSON.stringify({
-                        email: email.value,
-                        password: password.value
-                    })
-                });
+        let inicio = document.getElementById('netmarket');
+        inicio.addEventListener('click', () =>{
+            window.location.href = '../index.html';
+        });
 
-                const data = await res.json();
-                localStorage.setItem("token", data.token);
-                location.href="panel.html";
-            });
+        let volver = document.getElementById('volver');
+        volver.addEventListener('click', ()=>{
+            window.location.href = '../inicio.html';
+        });
         </script>
+        <script src="../funcionalidades/index_listado.js"></script>
+        <script src="https://sdk.mercadopago.com/js/v2"></script>
     </body>
 </html>
