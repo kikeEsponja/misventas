@@ -5,8 +5,8 @@ if(formulario){
 
         const contras = document.getElementById('contras').value;
         try{
-            const respuesta = await fetch('http://localhost:3000/acceso', {
-            //const respuesta = await fetch('https://ventas-backend-wj4v.onrender.com/acceso', {
+            //const respuesta = await fetch('http://localhost:3000/acceso', {
+            const respuesta = await fetch('https://ventas-backend-wj4v.onrender.com/acceso', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
@@ -45,8 +45,8 @@ if(adminFormulario){
         const condicion = document.getElementById('cond').value;
 
         try{
-            const agregar = await fetch('http://localhost:3000/admin/agregar-productos', {
-            //const agregar = await fetch('https://ventas-backend-wj4v.onrender.com/admin/agregar-productos', {
+            //const agregar = await fetch('http://localhost:3000/admin/agregar-productos', {
+            const agregar = await fetch('https://ventas-backend-wj4v.onrender.com/admin/agregar-productos', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',

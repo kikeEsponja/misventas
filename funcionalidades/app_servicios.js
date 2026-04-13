@@ -12,8 +12,8 @@ const params = new URLSearchParams(window.location.search);
 const id = params.get('id');
 
 async function cargarProductos(){
-    const res = await fetch(`http://localhost:3000/productos-servicios/${id}`);
-    //const res = await fetch(`https://ventas-backend-wj4v.onrender.com/productos-servicios${id}`);
+    //const res = await fetch(`http://localhost:3000/productos-servicios/${id}`);
+    const res = await fetch(`https://ventas-backend-wj4v.onrender.com/productos-servicios${id}`);
     productos = await res.json();
 
     mostrarProductos(productos);

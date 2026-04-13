@@ -40,8 +40,8 @@ if(tipo === 'nuevos'){
 async function cargarProductos(){
     try{
         loader.style.display = 'block';
-        const res = await fetch(`http://localhost:3000/productos-${tipo}?pais=${pais}`);
-        //const res = await fetch(`https://ventas-backend-wj4v.onrender.com/productos-${tipo}?pais=${pais}`);
+        //const res = await fetch(`http://localhost:3000/productos-${tipo}?pais=${pais}`);
+        const res = await fetch(`https://ventas-backend-wj4v.onrender.com/productos-${tipo}?pais=${pais}`);
         productos = await res.json();
 
         console.log("Productos cargados:", productos);
@@ -195,8 +195,8 @@ function contactar(tel){
 
 async function registrarVisita(id, url){
     try{
-        //const res = await fetch(`https://ventas-backend-wj4v.onrender.com/productos-${tipo}/visita/${id}`, { method: 'POST' });
-        const res = await fetch(`http://localhost:3000/productos-${tipo}/visita/${id}`, { method: 'POST' });
+        const res = await fetch(`https://ventas-backend-wj4v.onrender.com/productos-${tipo}/visita/${id}`, { method: 'POST' });
+        //const res = await fetch(`http://localhost:3000/productos-${tipo}/visita/${id}`, { method: 'POST' });
         const data = await res.json();
 
         if(data.ok){
