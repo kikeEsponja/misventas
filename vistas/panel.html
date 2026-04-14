@@ -297,9 +297,9 @@
                     fetch("https://ventas-backend-wj4v.onrender.com/productos-servicios", {
                     }).then(res => res.json())
                 ]).then(([usados, servicios, nuevos]) => {
-                    renderizarProductosAdmin(servicios, "servicio");
-                    renderizarProductosAdmin(usados, "usados");
                     renderizarProductosAdmin(nuevos, "nuevo");
+                    renderizarProductosAdmin(usados, "usados");
+                    renderizarProductosAdmin(servicios, "servicio");
                 }).catch(error => {
                     console.error("Error al cargar productos:", error);
                     alert("Hubo un error al cargar los productos. Intenta recargar la página.");
