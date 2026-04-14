@@ -16,6 +16,10 @@
             <input id="precio" placeholder="Precio">
             <textarea id="descripcion" placeholder="Breve descripción"></textarea>
             <input id="imagen" placeholder="Imagen" type="file">
+            <input id="imagen_2" placeholder="Imagen" type="file">
+            <input id="imagen_3" placeholder="Imagen" type="file">
+            <input id="imagen_4" placeholder="Imagen" type="file">
+            <input id="imagen_5" placeholder="Imagen" type="file">
             <select id="estado">
                 <option value="nuevo">Nuevo</option>
                 <option value="usado">Usado</option>
@@ -75,7 +79,7 @@
                             cantidad: Number(document.getElementById("cantidad").value),
                             precio: Number(document.getElementById("precio").value),
                             condicion: tipoSeleccionado,
-                            imagen: [urlImagen], // Guardamos la URL real, no el path local
+                            imagen: [urlImagen, urlImagen, urlImagen, urlImagen, urlImagen], // Guardamos la URL real, no el path local
                             vendedor: "Nombre visible",
                             descripcion: document.getElementById("descripcion").value,
                             ubicacion: {
