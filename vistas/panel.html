@@ -15,11 +15,7 @@
             <input id="cantidad" placeholder="Ingrese cantidad disponible">
             <input id="precio" placeholder="Precio">
             <textarea id="descripcion" placeholder="Breve descripción"></textarea>
-            <input id="imagen" placeholder="Imagen" type="file">
-            <input id="imagen_2" placeholder="Imagen" type="file">
-            <input id="imagen_3" placeholder="Imagen" type="file">
-            <input id="imagen_4" placeholder="Imagen" type="file">
-            <input id="imagen_5" placeholder="Imagen" type="file">
+            <input id="imagenes" placeholder="Imagen" type="file" multiple>
             <select id="estado">
                 <option value="nuevo">Nuevo</option>
                 <option value="usado">Usado</option>
@@ -32,7 +28,8 @@
             <button onclick="salir()">Salir</button>
         </main>
         <script>
-            async function crearProducto() {
+            // Nota: La función crearProducto ahora solo se encarga de recolectar los datos y llamar a subirImagenes para obtener las URLs, luego hace la petición final al backend.
+            /*async function crearProducto() {
                 const token = localStorage.getItem("token");
                 const fileInput = document.getElementById("imagen");
             
@@ -56,51 +53,6 @@
                 
                     const dataImg = await resImg.json();
                     const urlImagen = dataImg.url; // Asumiendo que el backend devuelve { url: "..." }
-                    //agregar segunda imagen
-                    const fileInput2 = document.getElementById("imagen_2");
-                    if (fileInput2.files.length > 0) {
-                        formData.append("imagen_2", fileInput2.files[0]);
-                        const resImg2 = await fetch("https://ventas-backend-wj4v.onrender.com/subir-imagen", {
-                            method: "POST",
-                            body: formData
-                        });
-                        const dataImg2 = await resImg2.json();
-                        const urlImagen2 = dataImg2.url;
-                    }
-                    // Si quieres agregar más imágenes, repite el proceso para cada una y guarda sus URLs.
-                    // agregar tercera imagen
-                    const fileInput3 = document.getElementById("imagen_3");
-                    if (fileInput3.files.length > 0) {
-                        formData.append("imagen_3", fileInput3.files[0]);
-                        const resImg3 = await fetch("https://ventas-backend-wj4v.onrender.com/subir-imagen", {
-                            method: "POST",
-                            body: formData
-                        });
-                        const dataImg3 = await resImg3.json();
-                        const urlImagen3 = dataImg3.url;
-                    }
-                    // agregar cuarta imagen
-                    const fileInput4 = document.getElementById("imagen_4");
-                    if (fileInput4.files.length > 0) {
-                        formData.append("imagen_4", fileInput4.files[0]);
-                        const resImg4 = await fetch("https://ventas-backend-wj4v.onrender.com/subir-imagen", {
-                            method: "POST",
-                            body: formData
-                        });
-                        const dataImg4 = await resImg4.json();
-                        const urlImagen4 = dataImg4.url;
-                    }
-                    // agregar quinta imagen
-                    const fileInput5 = document.getElementById("imagen_5");
-                    if (fileInput5.files.length > 0) {
-                        formData.append("imagen_5", fileInput5.files[0]);
-                        const resImg5 = await fetch("https://ventas-backend-wj4v.onrender.com/subir-imagen", {
-                            method: "POST",
-                            body: formData
-                        });
-                        const dataImg5 = await resImg5.json();
-                        const urlImagen5 = dataImg5.url;
-                    }
                 
                     // 3. Determinar el endpoint según el estado
                     const tipoSeleccionado = document.getElementById("estado").value;
@@ -124,7 +76,7 @@
                             cantidad: Number(document.getElementById("cantidad").value),
                             precio: Number(document.getElementById("precio").value),
                             condicion: tipoSeleccionado,
-                            imagen: [urlImagen, urlImagen2], // Guardamos la URL real, no el path local
+                            imagen: [url1, url2, url3, url4, url5], // Guardamos la URL real, no el path local
                             vendedor: "Nombre visible",
                             descripcion: document.getElementById("descripcion").value,
                             ubicacion: {
@@ -146,6 +98,71 @@
                     console.error("Error en el proceso:", error);
                     alert("Hubo un fallo en la conexión");
                 }
+            }*/
+
+            // Nueva versión de crearProducto que maneja múltiples imágenes y es más modular.
+            async function crearProducto(){
+
+                const token = localStorage.getItem("token");
+                const tipoSeleccionado = estado.value;
+
+                const endpointMap = {
+                    nuevo: "productos-nuevos",
+                    usado: "productos-usados",
+                    servicio: "productos-servicios"
+                };
+            
+                const endpoint = endpointMap[tipoSeleccionado];
+            
+                const files = document.getElementById("imagenes").files;
+            
+                if(files.length === 0){
+                    alert("Sube al menos una imagen, artista 🎨");
+                    return;
+                }
+
+                // 🔥 subir imágenes
+                const urlsImagenes = await subirImagenes(files);
+
+                const res = await fetch(`https://ventas-backend-wj4v.onrender.com/${endpoint}`, {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                        "Authorization": `Bearer ${token}`
+                    },
+                    body: JSON.stringify({
+                        nombre: titulo.value,
+                        marca: marca.value,
+                        cantidad: Number(cantidad.value),
+                        precio: Number(precio.value),
+                        condicion: tipoSeleccionado,
+                        imagen: urlsImagenes, // 👈 BOOM 💥
+                        vendedor: "Nombre visible",
+                        direcc: `../vistas/usado/${tipoSeleccionado}.html`
+                    })
+                });
+
+                const data = await res.json();
+                alert("Producto creado con estilo 😎");
+            }
+
+            async function subirImagenes(files){
+                const urls = [];
+
+                for(let file of files){
+                    const formData = new FormData();
+                    formData.append("imagen", file);
+                
+                    const res = await fetch("https://ventas-backend-wj4v.onrender.com/subir-imagen", {
+                        method: "POST",
+                        body: formData
+                    });
+                
+                    const data = await res.json();
+                    urls.push(data.url);
+                }
+            
+                return urls;
             }
 
             function salir() {
