@@ -27,6 +27,7 @@
             <button onclick="crearProducto()">Guardar</button>
             <button onclick="salir()">Salir</button>
         </main>
+        <div id="contenedor-productos"></div>
         <script>
             // Nota: La función crearProducto ahora solo se encarga de recolectar los datos y llamar a subirImagenes para obtener las URLs, luego hace la petición final al backend.
             /*async function crearProducto() {
@@ -104,7 +105,8 @@
             async function crearProducto(){
 
                 const token = localStorage.getItem("token");
-                const tipoSeleccionado = estado.value;
+                //const tipoSeleccionado = estado.value; 
+                const tipoSeleccionado = document.getElementById("estado").value;
 
                 const endpointMap = {
                     nuevo: "productos-nuevos",
@@ -192,7 +194,8 @@
                 });
             }
 
-            html += `
+            //bloque flotante
+            /*html += `
             <div>
                 <h3>${prod.nombre}</h3>
                 <p>Stock: ${prod.cantidad}</p>
@@ -203,7 +206,7 @@
                     💸 Vender
                 </button>
             </div>
-            `;
+            `;*/
 
             async function vender(id, stockActual){
 
@@ -223,11 +226,15 @@
                 await fetch(`https://ventas-backend-wj4v.onrender.com/vender/${id}`, {
                 //await fetch(`http://localhost:3000/vender/${id}`, {
                     method: "PUT",
-                    headers: { "Content-Type": "application/json" },
+                    headers: { 
+                        "Content-Type": "application/json",
+                        "Authorization": `Bearer ${localStorage.getItem("token")}`
+                    },
                     body: JSON.stringify({ cantidadVendida: cantidadVenta })
                 });
             
                 alert("Venta registrada 💸");
+                location.reload();
             }
 
             async function marcarVendido(tipo, id) {
@@ -268,6 +275,15 @@
                     alert("Cantidad no válida");
                 }
             }
+
+            async function cargarMisProductos(){
+                const res = await fetch("https://ventas-backend-wj4v.onrender.com/productos-usados");
+                const data = await res.json();
+
+                renderizarProductosAdmin(data, "productos-usados");
+            }
+
+            cargarMisProductos();
 
             function salir() {
                 localStorage.removeItem("token");
