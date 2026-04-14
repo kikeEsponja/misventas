@@ -291,13 +291,10 @@
 
                 Promise.all([
                     fetch("https://ventas-backend-wj4v.onrender.com/productos-nuevos", {
-                        headers: { "Authorization": `Bearer ${token}` }
                     }).then(res => res.json()),
                     fetch("https://ventas-backend-wj4v.onrender.com/productos-usados", {
-                        headers: { "Authorization": `Bearer ${token}` }
                     }).then(res => res.json()),
                     fetch("https://ventas-backend-wj4v.onrender.com/productos-servicios", {
-                        headers: { "Authorization": `Bearer ${token}` }
                     }).then(res => res.json())
                 ]).then(([nuevos, usados, servicios]) => {
                     renderizarProductosAdmin(nuevos, "nuevo");
