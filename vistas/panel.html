@@ -192,6 +192,44 @@
                 });
             }
 
+            html += `
+            <div>
+                <h3>${prod.nombre}</h3>
+                <p>Stock: ${prod.cantidad}</p>
+
+                <input type="number" min="1" max="${prod.cantidad}" id="venta-${prod._id}" value="1">
+
+                <button onclick="vender('${prod._id}', ${prod.cantidad})">
+                    💸 Vender
+                </button>
+            </div>
+            `;
+
+            async function vender(id, stockActual){
+
+                const input = document.getElementById(`venta-${id}`);
+                const cantidadVenta = Number(input.value);
+
+                if(cantidadVenta <= 0){
+                    alert("No puedes vender 0 😑");
+                    return;
+                }
+            
+                if(cantidadVenta > stockActual){
+                    alert("Te estás pasando, crack 😏");
+                    return;
+                }
+            
+                await fetch(`https://ventas-backend-wj4v.onrender.com/vender/${id}`, {
+                //await fetch(`http://localhost:3000/vender/${id}`, {
+                    method: "PUT",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ cantidadVendida: cantidadVenta })
+                });
+            
+                alert("Venta registrada 💸");
+            }
+
             async function marcarVendido(tipo, id) {
                 const token = localStorage.getItem("token");
                 const confirmar = confirm("¿Seguro que quieres marcarlo como vendido? Esto lo quitará de la vista pública.");
