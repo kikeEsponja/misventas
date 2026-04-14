@@ -1,3 +1,10 @@
+const token = localStorage.getItem("token");
+
+if(!token){
+    alert("No autorizado, Estebandido no eres tú 😏");
+    window.location.href = "admin_login.html";
+}
+
 const lista = document.getElementById('lista');
 
 async function cargarPendientes(){
