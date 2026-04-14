@@ -286,7 +286,7 @@
                 const endpoints = ["productos-nuevos", "productos-usados", "productos-servicios"];
 
                 Promise.all(endpoints.map(endpoint => 
-                    fetch(`https://ventas-backend-wj4v.onrender.com/${endpoint}/mis-productos`, {
+                    fetch(`https://ventas-backend-wj4v.onrender.com/${endpoint}`, {
                         headers: { "Authorization": `Bearer ${token}` }
                     }).then(res => res.json())
                 )).then(([nuevos, usados, servicios]) => {
