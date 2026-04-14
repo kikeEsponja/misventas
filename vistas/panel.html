@@ -168,38 +168,66 @@
             }
 
             // Función para mostrar los productos (debes llamarla al cargar la página)
-            async function renderizarProductosAdmin(productos, tipo) {
-                const contenedor = document.getElementById("contenedor-productos");
-                contenedor.innerHTML = "";
+// panel.html
+async function renderizarProductosAdmin(productos, tipo, limpiar = false) {
+    const contenedor = document.getElementById("contenedor-productos");
+    
+    // Solo borramos si explícitamente lo pedimos (usualmente en la primera carga)
+    if (limpiar) {
+        contenedor.innerHTML = "";
+    }
 
-                productos.forEach(prod => {
-                    const estaAgotado = prod.cantidad === 0;
+    productos.forEach(prod => {
+        const estaAgotado = prod.cantidad === 0;
+        // Usamos += para ir sumando los bloques de productos
+        contenedor.innerHTML += `
+            <div class="producto-card" style="border: 1px solid #ccc; padding: 10px; margin: 10px;">
+                <h3>${prod.nombre} (${tipo})</h3>
+                <p>Stock actual: ${prod.cantidad}</p>
+                ${estaAgotado ? `
+                    <div style="background: #fff3f3; padding: 10px; border-radius: 5px;">
+                        <p style="color:red;">⚠️ <strong>¡PRODUCTO AGOTADO!</strong></p>
+                        <button onclick="marcarVendido('${tipo}', '${prod._id}')">Vendido</button>
+                        <button onclick="reponerStock('${tipo}', '${prod._id}')">Reponer</button>
+                    </div>
+                ` : `
+                    <p style="color: green;">✅ Disponible</p>
+                    <input type="number" id="venta-${prod._id}" value="1" min="1" max="${prod.cantidad}">
+                    <button onclick="vender('${tipo}', '${prod._id}', ${prod.cantidad})">💸 Vender</button>
+                `}
+            </div>
+        `;
+    });
+}
 
-                    contenedor.innerHTML += `
-                        <div class="producto-card" style="border: 1px solid #ccc; padding: 15px; margin: 10px; border-radius: 8px;">
-                            <h3>${prod.nombre}</h3>
-                            <p><strong>Stock actual:</strong> ${prod.cantidad}</p>
+function cargarProductosAdmin() {
+    const token = localStorage.getItem("token");
+    if (!token) {
+        location.href = "login.html";
+        return;
+    }
 
-                            ${estaAgotado ? `
-                                <div style="background: #fff3f3; padding: 10px; border-radius: 5px; border: 1px solid #ffcccc;">
-                                    <p style="color:red;">⚠️ <strong>¡PRODUCTO AGOTADO!</strong></p>
-                                    <button onclick="marcarVendido('${tipo}', '${prod._id}')" style="background: #ff4444; color: white; padding: 5px 10px; cursor: pointer;">Dar de baja (Vendido)</button>
-                                    <button onclick="reponerStock('${tipo}', '${prod._id}')" style="background: #44bb44; color: white; padding: 5px 10px; cursor: pointer;">Reponer Stock</button>
-                                </div>
-                            ` : `
-                                <div style="background: #f0f9ff; padding: 10px; border-radius: 5px; border: 1px solid #bae6fd;">
-                                    <p style="color: #0369a1;">✅ Disponible</p>
-                                    <label>Cantidad a descontar:</label>
-                                    <input type="number" min="1" max="${prod.cantidad}" id="venta-${prod._id}" value="1" style="width: 50px;">
-                                    <button onclick="vender('${tipo}', '${prod._id}', ${prod.cantidad})" style="background: #0ea5e9; color: white; border: none; padding: 5px 10px; border-radius: 4px; cursor: pointer;">
-                                        💸 Registrar Venta
-                                    </button>
-                                </div>
-                            `}
-                        </div>
-                    `;
-                });
-            }
+    // El contenedor se limpia una sola vez al inicio del proceso
+    document.getElementById("contenedor-productos").innerHTML = "Cargando productos...";
+
+    Promise.all([
+        fetch("https://ventas-backend-wj4v.onrender.com/productos-nuevos").then(res => res.json()), // Indice 0
+        fetch("https://ventas-backend-wj4v.onrender.com/productos-usados").then(res => res.json()),  // Indice 1
+        fetch("https://ventas-backend-wj4v.onrender.com/productos-servicios").then(res => res.json()) // Indice 2
+    ]).then(([nuevos, usados, servicios]) => {
+        // Limpiamos el mensaje de "Cargando..."
+        const contenedor = document.getElementById("contenedor-productos");
+        contenedor.innerHTML = "";
+
+        // Renderizamos uno tras otro sin limpiar el contenedor entre llamadas
+        renderizarProductosAdmin(nuevos, "productos-nuevos", false);
+        renderizarProductosAdmin(usados, "productos-usados", false);
+        renderizarProductosAdmin(servicios, "productos-servicios", false);
+        
+    }).catch(error => {
+        console.error("Error al cargar productos:", error);
+    });
+}
 
             //bloque flotante
             /*html += `
