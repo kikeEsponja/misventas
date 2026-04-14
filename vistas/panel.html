@@ -281,7 +281,7 @@
             }
 
             //creamos una función para cargar los productos al iniciar la página que renderice los tres tipos de productos (nuevos, usados y servicios) y los muestre en el panel de administrador. Esta función se llamará al cargar la página.
-            /*function cargarProductosAdmin() {
+            function cargarProductosAdmin() {
                 const token = localStorage.getItem("token");
                 if (!token) {
                     alert("Debes iniciar sesión para acceder al panel de administrador");
@@ -296,7 +296,7 @@
                     }).then(res => res.json()),
                     //fetch("https://ventas-backend-wj4v.onrender.com/productos-servicios", {
                     //}).then(res => res.json())
-                ]).then(([nuevos, usados, servicios]) => {
+                ]).then(([usados]) => {
                     //renderizarProductosAdmin(servicios, "servicio");
                     renderizarProductosAdmin(usados, "usados");
                     //renderizarProductosAdmin(nuevos, "nuevo");
@@ -306,9 +306,7 @@
                 });
             }
 
-            cargarProductosAdmin();*/
-
-            renderizarProductosAdmin();
+            cargarProductosAdmin();
 
             function salir() {
                 localStorage.removeItem("token");
