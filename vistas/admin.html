@@ -15,9 +15,15 @@
         </select>
 
         <button onclick="cargarPendientes()">Cargar pendientes</button>
+        <button onclick="salir()">Salir</button>
 
         <div id="lista"></div>
 
         <script src="../funcionalidades/admin.js"></script>
+        <script>
+            function salir() {
+                window.location.href = '../index.html';
+            }
+        </script>
     </body>
 </html>
