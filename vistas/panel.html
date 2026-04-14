@@ -146,7 +146,7 @@
                 });
 
                 const data = await res.json();
-                alert("Producto creado con estilo 😎");
+                alert("Producto creado con éxito 😎");
             }
 
             async function subirImagenes(files){
@@ -281,29 +281,8 @@
             }
 
             //creamos una función para cargar los productos al iniciar la página que renderice los tres tipos de productos (nuevos, usados y servicios) y los muestre en el panel de administrador. Esta función se llamará al cargar la página.
-            function cargarProductosAdmin() {
-                const token = localStorage.getItem("token");
-                if (!token) {
-                    alert("Debes iniciar sesión para acceder al panel de administrador");
-                    location.href = "login.html";
-                    return;
-                }
-
-                Promise.all([
-                    fetch("https://ventas-backend-wj4v.onrender.com/productos-nuevos", {
-                    }).then(res => res.json()),
-                    fetch("https://ventas-backend-wj4v.onrender.com/productos-usados", {
-                    }).then(res => res.json()),
-                    fetch("https://ventas-backend-wj4v.onrender.com/productos-servicios", {
-                    }).then(res => res.json())
-                ]).then(([nuevos, usados, servicios]) => {
-                    renderizarProductosAdmin(nuevos, "nuevo");
-                    renderizarProductosAdmin(servicios, "servicio");
-                    renderizarProductosAdmin(usados, "usado");
-                }).catch(error => {
-                    console.error("Error al cargar productos:", error);
-                    alert("Hubo un error al cargar los productos. Intenta recargar la página.");
-                });
+            function cargarProductosVendedor(productos, tipo) {
+                renderizarProductosAdmin(productos, tipo);
             }
 
             cargarProductosAdmin();
