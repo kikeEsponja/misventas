@@ -136,6 +136,7 @@
                         cantidad: Number(cantidad.value),
                         precio: Number(precio.value),
                         condicion: tipoSeleccionado,
+                        estado: "disponible",
                         imagen: urlsImagenes, // 👈 BOOM 💥
                         vendedor: "Nombre visible",
                         direcc: `../vistas/${tipoSeleccionado}.html`
@@ -161,8 +162,47 @@
                     const data = await res.json();
                     urls.push(data.url);
                 }
-            
                 return urls;
+            }
+
+            //await fetch(`http://localhost:3000/marcar-vendido/${id}`, { method: "PUT" });
+            await fetch(`https://ventas-backend-wj4v.onrender.com/marcar-vendido/${id}`, { method: "PUT" });
+            if(prod.cantidad === 0){
+                // mostrar aviso
+                alert("Producto agotado");
+
+                html += `
+                <div>
+                    <h3>${prod.nombre}</h3>
+                
+                    ${prod.cantidad === 0 ? `
+                        <p style="color:red;">⚠️ Sin stock</p>
+                        <button onclick="marcarVendido('${prod._id}')">Marcar como vendido</button>
+                        <button onclick="reponer('${prod._id}')">Reponer stock</button>
+                    ` : ''}
+                
+                </div>
+                `;
+            }
+
+            async function marcarVendido(id){
+                await fetch(`http://localhost:3000/marcar-vendido/${id}`, {
+                    method: "PUT"
+                });
+            
+                alert("Producto marcado como vendido 😎");
+            }
+
+            async function reponer(id){
+                const nuevaCantidad = prompt("¿Cuánto stock agregas?");
+                        
+                await fetch(`http://localhost:3000/reponer/${id}`, {
+                    method: "PUT",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ cantidad: nuevaCantidad })
+                });
+            
+                alert("Stock actualizado 💪");
             }
 
             function salir() {
