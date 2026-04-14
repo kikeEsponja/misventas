@@ -280,20 +280,34 @@
                 }
             }
 
-            async function cargarMisProductos(){
-                const res = await fetch("https://ventas-backend-wj4v.onrender.com/productos-usados");
-                const res2 = await fetch("https://ventas-backend-wj4v.onrender.com/productos-nuevos");
-                const res3 = await fetch("https://ventas-backend-wj4v.onrender.com/productos-servicios");
-                const data = await res.json();
-                const data2 = await res2.json();
-                const data3 = await res3.json();
+            //creamos una función para cargar los productos al iniciar la página que renderice los tres tipos de productos (nuevos, usados y servicios) y los muestre en el panel de administrador. Esta función se llamará al cargar la página.
+            function cargarProductosAdmin() {
+                const token = localStorage.getItem("token");
+                if (!token) {
+                    alert("Debes iniciar sesión para acceder al panel de administrador");
+                    location.href = "login.html";
+                    return;
+                }
 
-                renderizarProductosAdmin(data, "productos-usados");
-                renderizarProductosAdmin(data2, "productos-nuevos");
-                renderizarProductosAdmin(data3, "productos-servicios");
+                Promise.all([
+                    fetch("https://ventas-backend-wj4v.onrender.com/productos-nuevos", {
+                        headers: { "Authorization": `Bearer ${token}` }
+                    }).then(res => res.json()),
+                    fetch("https://ventas-backend-wj4v.onrender.com/productos-usados", {
+                        headers: { "Authorization": `Bearer ${token}` }
+                    }).then(res => res.json()),
+                    fetch("https://ventas-backend-wj4v.onrender.com/productos-servicios", {
+                        headers: { "Authorization": `Bearer ${token}` }
+                    }).then(res => res.json())
+                ]).then(([nuevos, usados, servicios]) => {
+                    renderizarProductosAdmin(nuevos, "nuevo");
+                    renderizarProductosAdmin(usados, "usado");
+                    renderizarProductosAdmin(servicios, "servicio");
+                }).catch(error => {
+                    console.error("Error al cargar productos:", error);
+                    alert("Hubo un error al cargar los productos. Intenta recargar la página.");
+                });
             }
-
-            cargarMisProductos();
 
             function salir() {
                 localStorage.removeItem("token");
