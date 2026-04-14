@@ -281,10 +281,10 @@
             }
 
             async function cargarMisProductos(){
-                const res = await fetch("https://ventas-backend-wj4v.onrender.com/productos-nuevos");
+                const res = await fetch(`https://ventas-backend-wj4v.onrender.com/${tipoSeleccionado}`);
                 const data = await res.json();
 
-                renderizarProductosAdmin(data, "productos-nuevos");
+                renderizarProductosAdmin(data, tipoSeleccionado);
             }
 
             cargarMisProductos();
