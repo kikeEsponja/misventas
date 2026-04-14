@@ -298,8 +298,8 @@
                     }).then(res => res.json())
                 ]).then(([nuevos, usados, servicios]) => {
                     renderizarProductosAdmin(nuevos, "nuevo");
-                    renderizarProductosAdmin(usados, "usado");
                     renderizarProductosAdmin(servicios, "servicio");
+                    renderizarProductosAdmin(usados, "usado");
                 }).catch(error => {
                     console.error("Error al cargar productos:", error);
                     alert("Hubo un error al cargar los productos. Intenta recargar la página.");
