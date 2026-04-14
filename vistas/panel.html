@@ -15,7 +15,7 @@
             <input id="cantidad" placeholder="Ingrese cantidad disponible">
             <input id="precio" placeholder="Precio">
             <textarea id="descripcion" placeholder="Breve descripción"></textarea>
-            <input id="imagen" placeholder="Ruta imagen">
+            <input id="imagen" placeholder="Imagen" type="file">
             <select id="estado">
                 <option value="nuevo">Nuevo</option>
                 <option value="usado">Usado</option>
@@ -28,68 +28,78 @@
             <button onclick="salir()">Salir</button>
         </main>
         <script>
-            async function crearProducto(){
-
+            async function crearProducto() {
                 const token = localStorage.getItem("token");
-
-                const tipoSeleccionado = estado.value;
-
-                // Mapear a endpoint
-                const endpointMap = {
-                    nuevo: "productos-nuevos",
-                    usado: "productos-usados",
-                    servicio: "productos-servicios"
-                };
-
-                const endpoint = endpointMap[tipoSeleccionado];
-                //const direccion = `../vistas/${tipoSeleccionado}.html`;
-                //const res = await fetch("https://ventas-backend-wj4v.onrender.com/productos-usados",{
-                //const res = await fetch(`http://localhost:3000/${endpoint}`, {
-                const res = await fetch(`https://ventas-backend-wj4v.onrender.com/${endpoint}`, {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                    "Authorization": `Bearer ${token}`
-                },
-                body: JSON.stringify({
-                    nombre: titulo.value,
-                    marca: marca.value,
-                    cantidad: Number(cantidad.value),
-                    precio: Number(precio.value),
-                    condicion: tipoSeleccionado,
-                    imagen: [imagen.value],
-                    vendedor: "Nombre visible",
-                    descripcion: descripcion.value,
-                    ubicacion: {
-                        calle: calle.value,
-                        altura: altura.value,
-                        localidad: localidad.value
-                    },
-                    direcc: `../vistas/${tipoSeleccionado}.html`
-                })
-            });
-
-                const data = await res.json();
-                alert("Producto creado");
+                const fileInput = document.getElementById("imagen");
+            
+                // 1. Validar que se haya seleccionado una imagen
+                if (fileInput.files.length === 0) {
+                    alert("Por favor, selecciona una imagen");
+                    return;
+                }
+            
+                try {
+                    // 2. Primero subimos la imagen para obtener la URL
+                    const formData = new FormData();
+                    formData.append("imagen", fileInput.files[0]);
+                
+                    const resImg = await fetch("https://ventas-backend-wj4v.onrender.com/subir-imagen", {
+                        method: "POST",
+                        body: formData
+                        // Nota: No incluyas Content-Type en los headers al usar FormData, 
+                        // el navegador lo hace automáticamente con el boundary correcto.
+                    });
+                
+                    const dataImg = await resImg.json();
+                    const urlImagen = dataImg.url; // Asumiendo que el backend devuelve { url: "..." }
+                
+                    // 3. Determinar el endpoint según el estado
+                    const tipoSeleccionado = document.getElementById("estado").value;
+                    const endpointMap = {
+                        nuevo: "productos-nuevos",
+                        usado: "productos-usados",
+                        servicio: "productos-servicios"
+                    };
+                    const endpoint = endpointMap[tipoSeleccionado];
+                
+                    // 4. Crear el producto con la URL de la imagen recibida
+                    const res = await fetch(`https://ventas-backend-wj4v.onrender.com/${endpoint}`, {
+                        method: "POST",
+                        headers: {
+                            "Content-Type": "application/json",
+                            "Authorization": `Bearer ${token}`
+                        },
+                        body: JSON.stringify({
+                            nombre: document.getElementById("titulo").value,
+                            marca: document.getElementById("marca").value,
+                            cantidad: Number(document.getElementById("cantidad").value),
+                            precio: Number(document.getElementById("precio").value),
+                            condicion: tipoSeleccionado,
+                            imagen: [urlImagen], // Guardamos la URL real, no el path local
+                            vendedor: "Nombre visible",
+                            descripcion: document.getElementById("descripcion").value,
+                            ubicacion: {
+                                calle: document.getElementById("calle").value,
+                                altura: document.getElementById("altura").value,
+                                localidad: document.getElementById("localidad").value
+                            },
+                            direcc: `../vistas/${tipoSeleccionado}.html`
+                        })
+                    });
+                
+                    if (res.ok) {
+                        alert("Producto creado exitosamente");
+                    } else {
+                        alert("Error al crear el producto");
+                    }
+                
+                } catch (error) {
+                    console.error("Error en el proceso:", error);
+                    alert("Hubo un fallo en la conexión");
+                }
             }
 
-            /*async function misProductos(){
-
-            const token = localStorage.getItem("token");
-
-            //const res = await fetch("https://ventas-backend-wj4v.onrender.com/mis-productos",{
-            const res = await fetch("http://localhost:3000/mis-productos",{
-                method:"GET",
-                headers:{
-                    "Authorization": `Bearer ${token}`
-                }
-            });
-
-            const productos = await res.json();
-                console.log(productos);
-            }*/
-
-            function salir(){
+            function salir() {
                 localStorage.removeItem("token");
                 location.href = "login.html";
             }
