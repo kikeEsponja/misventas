@@ -282,7 +282,21 @@
 
             //creamos una función para cargar los productos al iniciar la página que renderice los tres tipos de productos (nuevos, usados y servicios) y los muestre en el panel de administrador. Esta función se llamará al cargar la página.
             function cargarProductosVendedor(productos, tipo) {
-                renderizarProductosAdmin(productos, tipo);
+                const token = localStorage.getItem("token");
+                const endpoints = ["productos-nuevos", "productos-usados", "productos-servicios"];
+
+                Promise.all(endpoints.map(endpoint => 
+                    fetch(`https://ventas-backend-wj4v.onrender.com/${endpoint}/mis-productos`, {
+                        headers: { "Authorization": `Bearer ${token}` }
+                    }).then(res => res.json())
+                )).then(([nuevos, usados, servicios]) => {
+                    renderizarProductosAdmin(nuevos, "nuevo");
+                    renderizarProductosAdmin(usados, "usado");
+                    renderizarProductosAdmin(servicios, "servicio");
+                }).catch(err => {
+                    console.error("Error al cargar productos:", err);
+                    alert("No se pudieron cargar los productos. Intenta recargar la página.");
+                });
             }
 
             cargarProductosVendedor();
