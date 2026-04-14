@@ -165,44 +165,70 @@
                 return urls;
             }
 
-            //await fetch(`http://localhost:3000/marcar-vendido/${id}`, { method: "PUT" });
-            await fetch(`https://ventas-backend-wj4v.onrender.com/marcar-vendido/${id}`, { method: "PUT" });
-            if(prod.cantidad === 0){
-                // mostrar aviso
-                alert("Producto agotado");
+            // Función para mostrar los productos (debes llamarla al cargar la página)
+            async function renderizarProductosAdmin(productos, tipo) {
+                const contenedor = document.getElementById("contenedor-productos"); // Asegúrate de tener este ID en tu HTML
+                contenedor.innerHTML = "";
+            
+                productos.forEach(prod => {
+                    const estaAgotado = prod.cantidad === 0;
 
-                html += `
-                <div>
-                    <h3>${prod.nombre}</h3>
-                
-                    ${prod.cantidad === 0 ? `
-                        <p style="color:red;">⚠️ Sin stock</p>
-                        <button onclick="marcarVendido('${prod._id}')">Marcar como vendido</button>
-                        <button onclick="reponer('${prod._id}')">Reponer stock</button>
-                    ` : ''}
-                
-                </div>
-                `;
+                    contenedor.innerHTML += `
+                        <div class="producto-card" style="border: 1px solid #ccc; padding: 10px; margin: 10px;">
+                            <h3>${prod.nombre}</h3>
+                            <p>Stock actual: ${prod.cantidad}</p>
+
+                            ${estaAgotado ? `
+                                <div style="background: #fff3f3; padding: 10px; border-radius: 5px;">
+                                    <p style="color:red;">⚠️ <strong>¡PRODUCTO AGOTADO!</strong></p>
+                                    <button onclick="marcarVendido('${tipo}', '${prod._id}')" style="background: #ff4444; color: white;">Vendido (Eliminar)</button>
+                                    <button onclick="reponerStock('${tipo}', '${prod._id}')" style="background: #44bb44; color: white;">Reponer Stock</button>
+                                </div>
+                            ` : `
+                                <p style="color: green;">✅ Disponible</p>
+                            `}
+                        </div>
+                    `;
+                });
             }
 
-            async function marcarVendido(id){
-                await fetch(`http://localhost:3000/marcar-vendido/${id}`, {
-                    method: "PUT"
-                });
-            
-                alert("Producto marcado como vendido 😎");
+            async function marcarVendido(tipo, id) {
+                const token = localStorage.getItem("token");
+                const confirmar = confirm("¿Seguro que quieres marcarlo como vendido? Esto lo quitará de la vista pública.");
+
+                if (confirmar) {
+                    const res = await fetch(`https://ventas-backend-wj4v.onrender.com/marcar-vendido/${tipo}/${id}`, {
+                        method: "PUT",
+                        headers: { "Authorization": `Bearer ${token}` }
+                    });
+                    if (res.ok) {
+                        alert("Producto actualizado 😎");
+                        location.reload(); // Recargamos para ver los cambios
+                    }
+                }
             }
 
-            async function reponer(id){
-                const nuevaCantidad = prompt("¿Cuánto stock agregas?");
-                        
-                await fetch(`http://localhost:3000/reponer/${id}`, {
-                    method: "PUT",
-                    headers: { "Content-Type": "application/json" },
-                    body: JSON.stringify({ cantidad: nuevaCantidad })
-                });
-            
-                alert("Stock actualizado 💪");
+            async function reponerStock(tipo, id) {
+                const token = localStorage.getItem("token");
+                const nuevaCantidad = prompt("¿Cuántas unidades vas a agregar?");
+    
+                if (nuevaCantidad && !isNaN(nuevaCantidad)) {
+                    const res = await fetch(`https://ventas-backend-wj4v.onrender.com/reponer/${tipo}/${id}`, {
+                        method: "PUT",
+                        headers: { 
+                            "Content-Type": "application/json",
+                            "Authorization": `Bearer ${token}`
+                        },
+                        body: JSON.stringify({ cantidad: nuevaCantidad })
+                    });
+                    
+                    if (res.ok) {
+                        alert("Stock actualizado 💪");
+                        location.reload();
+                    }
+                } else {
+                    alert("Cantidad no válida");
+                }
             }
 
             function salir() {
