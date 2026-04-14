@@ -168,31 +168,38 @@
             }
 
             // Función para mostrar los productos (debes llamarla al cargar la página)
-            async function renderizarProductosAdmin(productos, tipo) {
-                const contenedor = document.getElementById("contenedor-productos"); // Asegúrate de tener este ID en tu HTML
-                contenedor.innerHTML = "";
-            
-                productos.forEach(prod => {
-                    const estaAgotado = prod.cantidad === 0;
+async function renderizarProductosAdmin(productos, tipo) {
+    const contenedor = document.getElementById("contenedor-productos");
+    contenedor.innerHTML = "";
 
-                    contenedor.innerHTML += `
-                        <div class="producto-card" style="border: 1px solid #ccc; padding: 10px; margin: 10px;">
-                            <h3>${prod.nombre}</h3>
-                            <p>Stock actual: ${prod.cantidad}</p>
+    productos.forEach(prod => {
+        const estaAgotado = prod.cantidad === 0;
 
-                            ${estaAgotado ? `
-                                <div style="background: #fff3f3; padding: 10px; border-radius: 5px;">
-                                    <p style="color:red;">⚠️ <strong>¡PRODUCTO AGOTADO!</strong></p>
-                                    <button onclick="marcarVendido('${tipo}', '${prod._id}')" style="background: #ff4444; color: white;">Vendido (Eliminar)</button>
-                                    <button onclick="reponerStock('${tipo}', '${prod._id}')" style="background: #44bb44; color: white;">Reponer Stock</button>
-                                </div>
-                            ` : `
-                                <p style="color: green;">✅ Disponible</p>
-                            `}
-                        </div>
-                    `;
-                });
-            }
+        contenedor.innerHTML += `
+            <div class="producto-card" style="border: 1px solid #ccc; padding: 15px; margin: 10px; border-radius: 8px;">
+                <h3>${prod.nombre}</h3>
+                <p><strong>Stock actual:</strong> ${prod.cantidad}</p>
+
+                ${estaAgotado ? `
+                    <div style="background: #fff3f3; padding: 10px; border-radius: 5px; border: 1px solid #ffcccc;">
+                        <p style="color:red;">⚠️ <strong>¡PRODUCTO AGOTADO!</strong></p>
+                        <button onclick="marcarVendido('${tipo}', '${prod._id}')" style="background: #ff4444; color: white; padding: 5px 10px; cursor: pointer;">Dar de baja (Vendido)</button>
+                        <button onclick="reponerStock('${tipo}', '${prod._id}')" style="background: #44bb44; color: white; padding: 5px 10px; cursor: pointer;">Reponer Stock</button>
+                    </div>
+                ` : `
+                    <div style="background: #f0f9ff; padding: 10px; border-radius: 5px; border: 1px solid #bae6fd;">
+                        <p style="color: #0369a1;">✅ Disponible</p>
+                        <label>Cantidad a descontar:</label>
+                        <input type="number" min="1" max="${prod.cantidad}" id="venta-${prod._id}" value="1" style="width: 50px;">
+                        <button onclick="vender('${tipo}', '${prod._id}', ${prod.cantidad})" style="background: #0ea5e9; color: white; border: none; padding: 5px 10px; border-radius: 4px; cursor: pointer;">
+                            💸 Registrar Venta
+                        </button>
+                    </div>
+                `}
+            </div>
+        `;
+    });
+}
 
             //bloque flotante
             /*html += `
@@ -208,34 +215,31 @@
             </div>
             `;*/
 
-            async function vender(id, stockActual){
+            async function vender(tipo, id, stockActual) {
+    const input = document.getElementById(`venta-${id}`);
+    const cantidadVenta = Number(input.value);
 
-                const input = document.getElementById(`venta-${id}`);
-                const cantidadVenta = Number(input.value);
+    if (cantidadVenta <= 0 || cantidadVenta > stockActual) {
+        alert("Cantidad no válida o superior al stock disponible");
+        return;
+    }
 
-                if(cantidadVenta <= 0){
-                    alert("No puedes vender 0 😑");
-                    return;
-                }
-            
-                if(cantidadVenta > stockActual){
-                    alert("Te estás pasando, crack 😏");
-                    return;
-                }
-            
-                await fetch(`https://ventas-backend-wj4v.onrender.com/vender/${id}`, {
-                //await fetch(`http://localhost:3000/vender/${id}`, {
-                    method: "PUT",
-                    headers: { 
-                        "Content-Type": "application/json",
-                        "Authorization": `Bearer ${localStorage.getItem("token")}`
-                    },
-                    body: JSON.stringify({ cantidadVendida: cantidadVenta })
-                });
-            
-                alert("Venta registrada 💸");
-                location.reload();
-            }
+    const res = await fetch(`https://ventas-backend-wj4v.onrender.com/vender/${tipo}/${id}`, {
+        method: "PUT",
+        headers: { 
+            "Content-Type": "application/json",
+            "Authorization": `Bearer ${localStorage.getItem("token")}`
+        },
+        body: JSON.stringify({ cantidadVendida: cantidadVenta })
+    });
+
+    if (res.ok) {
+        alert("¡Venta registrada con éxito! 💸");
+        location.reload();
+    } else {
+        alert("Error al registrar la venta");
+    }
+}
 
             async function marcarVendido(tipo, id) {
                 const token = localStorage.getItem("token");
