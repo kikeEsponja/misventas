@@ -282,9 +282,15 @@
 
             async function cargarMisProductos(){
                 const res = await fetch("https://ventas-backend-wj4v.onrender.com/productos-usados");
+                const res2 = await fetch("https://ventas-backend-wj4v.onrender.com/productos-nuevos");
+                const res3 = await fetch("https://ventas-backend-wj4v.onrender.com/productos-servicios");
                 const data = await res.json();
+                const data2 = await res2.json();
+                const data3 = await res3.json();
 
                 renderizarProductosAdmin(data, "productos-usados");
+                renderizarProductosAdmin(data2, "productos-nuevos");
+                renderizarProductosAdmin(data3, "productos-servicios");
             }
 
             cargarMisProductos();
