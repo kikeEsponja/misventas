@@ -281,7 +281,7 @@
             }
 
             //creamos una función para cargar los productos al iniciar la página que renderice los tres tipos de productos (nuevos, usados y servicios) y los muestre en el panel de administrador. Esta función se llamará al cargar la página.
-            function cargarProductosAdmin() {
+            /*function cargarProductosAdmin() {
                 const token = localStorage.getItem("token");
                 if (!token) {
                     alert("Debes iniciar sesión para acceder al panel de administrador");
@@ -306,7 +306,9 @@
                 });
             }
 
-            cargarProductosAdmin();
+            cargarProductosAdmin();*/
+
+            renderizarProductosAdmin([], "usados", [], "nuevos", [], "servicios"); // Llamamos con un array vacío para mostrar el contenedor aunque no haya productos (puedes eliminar esto una vez que implementes la carga real)
 
             function salir() {
                 localStorage.removeItem("token");
