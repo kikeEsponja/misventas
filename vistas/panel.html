@@ -145,7 +145,8 @@
                             altura: Number(altura.value)
                         },
                         imagen: urlsImagenes, // 👈 BOOM 💥
-                        vendedor: "Nombre visible",
+                        vendedor: `${token.substring(0,5)}...`, // Solo mostramos parte del token como "nombre visible"
+                        descripcion: descripcion.value,
                         direcc: `../vistas/${tipoSeleccionado}.html`
                     })
                 });
