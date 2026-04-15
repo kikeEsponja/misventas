@@ -103,10 +103,14 @@
             }*/
 
             // Nueva versión de crearProducto que maneja múltiples imágenes y es más modular.
+            const nombreGuardado = localStorage.getItem("nombreVendedor");
+            if(nombreGuardado) {
+                document.getElementById("bienvenida").innerText = `Hola, ${nombreGuardado} 👋`;
+            }
             async function crearProducto(){
+                const token = localStorage.getItem("token");
                 const nombre = localStorage.getItem("nombreVendedor") || "Vendedor Anónimo";
 
-                const token = localStorage.getItem("token");
                 //const tipoSeleccionado = estado.value; 
                 const tipoSeleccionado = document.getElementById("estado").value;
 
@@ -147,7 +151,7 @@
                             altura: Number(altura.value)
                         },
                         imagen: urlsImagenes, // 👈 BOOM 💥
-                        vendedor: nombre, 
+                        vendedor: localStorage.getItem("nombreVendedor") || "Vendedor Anónimo", 
                         descripcion: descripcion.value,
                         direcc: `../vistas/${tipoSeleccionado}.html`
                     })
