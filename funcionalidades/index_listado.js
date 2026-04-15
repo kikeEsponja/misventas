@@ -123,7 +123,7 @@ const mostrarProductos = (listaArray) => {
             <div class="agregar-wsp">
                 <!--<button onclick="contactar('${prod.telefono}')">Contactar</button>-->
                 <button class="add-car agregar_al_carro_item bg-primary bi bi-cart" data-id="${prod._id}" ${esVendido ? 'disabled' : ''}></button>
-                <a title="social-icon" target="_blank" href="${esVendido ? '#' : prod.vendedor}" class="${esVendido ? 'wsp-vend' : ''}"><i class="bi bi-whatsapp"></i></a>
+                <a title="social-icon" target="_blank" href="${esVendido ? '#' : prod.telefono}" class="${esVendido ? 'wsp-vend' : ''}"><i class="bi bi-whatsapp"></i></a>
                 <strong class="${esVendido ? '' : 'mobile_desap'} bg-danger text-light">VENDIDO</strong>
             </div>
         </div>
