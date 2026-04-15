@@ -139,6 +139,11 @@
                         precio: Number(precio.value),
                         condicion: tipoSeleccionado,
                         estado: "disponible",
+                        ubicacion: {
+                            localidad: localidad.value,
+                            calle: calle.value,
+                            altura: Number(altura.value)
+                        },
                         imagen: urlsImagenes, // 👈 BOOM 💥
                         vendedor: "Nombre visible",
                         direcc: `../vistas/${tipoSeleccionado}.html`
