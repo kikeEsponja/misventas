@@ -252,14 +252,16 @@ function cargarProductosAdmin() {
                     return;
                 }
 
-                const res = await fetch(`https://ventas-backend-wj4v.onrender.com/vender/:${id}`, {
+                const res = await fetch(`https://ventas-backend-wj4v.onrender.com/vender/${tipo}/${id}`, {
                     method: "PUT",
-                    headers: {
+                    headers: { 
                         "Content-Type": "application/json",
                         "Authorization": `Bearer ${localStorage.getItem("token")}`
                     },
                     body: JSON.stringify({ cantidadVendida: cantidadVenta })
                 });
+
+                const data = await res.json();
 
                 if (res.ok) {
                     alert("¡Venta registrada con éxito! 💸");
