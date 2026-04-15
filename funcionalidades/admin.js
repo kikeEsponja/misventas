@@ -30,7 +30,7 @@ function render(productos, tipo){
         <div style="border:1px solid #ccc; margin:10px; padding:10px;">
             <h3>${p.nombre}</h3>
             <p>Precio: ${p.precio}</p>
-            <p>Vendedor: ${prod.vendedor}</p>
+            <p>Vendedor: ${p.vendedor}</p>
 
             <button onclick="aprobar('${tipo}','${p._id}')">✅ Aprobar</button>
             <button onclick="rechazar('${tipo}','${p._id}')">❌ Rechazar</button>
