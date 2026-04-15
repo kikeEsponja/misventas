@@ -105,7 +105,7 @@
             // Nueva versión de crearProducto que maneja múltiples imágenes y es más modular.
             const nombreGuardado = localStorage.getItem("nombreVendedor");
             if(nombreGuardado) {
-                document.getElementById("bienvenida").innerText = `Hola, ${nombreGuardado} 👋`;
+                document.getElementById("nombre").innerText = ` ${nombreGuardado} 👋`;
             }
             async function crearProducto(){
                 const token = localStorage.getItem("token");
