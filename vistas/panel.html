@@ -252,7 +252,7 @@ function cargarProductosAdmin() {
                     return;
                 }
 
-                const res = await fetch(`https://ventas-backend-wj4v.onrender.com/vender/${tipo}/${id}`, {
+                const res = await fetch(`https://ventas-backend-wj4v.onrender.com/vender/:${tipo}/:${id}`, {
                     method: "PUT",
                     headers: { 
                         "Content-Type": "application/json",
