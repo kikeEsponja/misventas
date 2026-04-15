@@ -8,6 +8,7 @@
     <body>
         <main>
             <h1>Panel de administrador</h1>
+            <p>Bienvenido <span id="nombre"></span></p>
             <h2>Nuevo producto</h2>
             <!-- PARTE NUEVA DE CREAR PRODUCTO-->
             <input id="titulo" placeholder="Título">
@@ -103,6 +104,7 @@
 
             // Nueva versión de crearProducto que maneja múltiples imágenes y es más modular.
             async function crearProducto(){
+                const nombre = document.getElementById("nombre").textContent || "Vendedor Anónimo";
 
                 const token = localStorage.getItem("token");
                 //const tipoSeleccionado = estado.value; 
@@ -145,7 +147,7 @@
                             altura: Number(altura.value)
                         },
                         imagen: urlsImagenes, // 👈 BOOM 💥
-                        vendedor: `${token.substring(0,5)}...`, // Solo mostramos parte del token como "nombre visible"
+                        vendedor: `${nombre}...`, 
                         descripcion: descripcion.value,
                         direcc: `../vistas/${tipoSeleccionado}.html`
                     })
