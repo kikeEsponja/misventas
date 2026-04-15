@@ -105,12 +105,23 @@
                     })
                 });
         
-                const data = await res.json();
+                /*const data = await res.json();
         
                 if(res.ok && data.token){
                     localStorage.setItem("token", data.token);
                     location.href="panel.html";
                 }else{
+                    alert("Correo o contraseña incorrectos");
+                }*/
+
+                const data = await res.json();
+                            
+                if(res.ok && data.token){
+                    localStorage.setItem("token", data.token);
+                    // Guardamos el nombre para usarlo en otras páginas
+                    localStorage.setItem("nombreVendedor", data.nombre); 
+                    location.href="panel.html";
+                } else {
                     alert("Correo o contraseña incorrectos");
                 }
             });

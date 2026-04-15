@@ -104,7 +104,7 @@
 
             // Nueva versión de crearProducto que maneja múltiples imágenes y es más modular.
             async function crearProducto(){
-                const nombre = document.getElementById("nombre").textContent || "Vendedor Anónimo";
+                const nombre = localStorage.getItem("nombreVendedor") || "Vendedor Anónimo";
 
                 const token = localStorage.getItem("token");
                 //const tipoSeleccionado = estado.value; 
