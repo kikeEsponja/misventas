@@ -254,10 +254,10 @@ function cargarProductosAdmin() {
 
                 const res = await fetch(`https://ventas-backend-wj4v.onrender.com/vender/${tipo}/${id}`, {
                     method: "PUT",
-                    /*headers: { 
+                    headers: { 
                         "Content-Type": "application/json",
                         "Authorization": `Bearer ${localStorage.getItem("token")}`
-                    },*/
+                    },
                     body: JSON.stringify({ cantidadVendida: cantidadVenta })
                 });
 
@@ -324,7 +324,7 @@ function cargarProductosAdmin() {
                     }).then(res => res.json()),
                     fetch("https://ventas-backend-wj4v.onrender.com/productos-servicios", {
                     }).then(res => res.json())
-                ]).then(([usados, servicios, nuevos]) => {
+                ]).then(([nuevo, usados, servicio]) => {
                     renderizarProductosAdmin(nuevos, "nuevo");
                     renderizarProductosAdmin(usados, "usados");
                     renderizarProductosAdmin(servicios, "servicio");
