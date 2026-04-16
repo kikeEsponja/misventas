@@ -62,8 +62,8 @@ function formatoMoneda(valor, codigoPais, codigoMoneda){
 function mostrarProductos(prod){
     const esVendido = prod.condicion?.includes('VENDIDO');
     const config = divisaPorPais[pais] || { locale : 'en-US', currency: 'USD'};
-    
-    
+    const res = await fetch(`https://ventas-backend-wj4v.onrender.com/productos-${tipo}?pais=${pais}`);
+    productos = await res.json();
     
     let html = `
         <div class="boton_mmgv product">
