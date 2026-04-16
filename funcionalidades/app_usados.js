@@ -106,6 +106,10 @@ function mostrarProductos(prod){
     });
 }
 
+function contactar(tel){
+    window.location.href = `https://wa.me/${tel}`;
+}
+
 function mostrarCarrusel(prod){
     if(!prod.imagen || prod.imagen.length === 0){
         item.innerHTML = `<p>Sin imágenes</p>`;
