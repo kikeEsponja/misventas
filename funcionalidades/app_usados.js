@@ -1,6 +1,23 @@
 let detalles = document.getElementById('detalles');
 let item = document.getElementById('item');
 
+const divisaPorPais = {
+	'AR': { locale: 'es-Ar', currency: 'ARS' },
+	'CL': { locale: 'es-CL', currency: 'CLP' },
+	'US': { locale: 'en-US', currency: 'USD' },
+	'ES': { locale: 'es-ES', currency: 'EUR' },
+	'VE': { locale: 'es-VE', currency: 'VES' },
+    'BR': { locale: 'pt-BR', currency: 'BRL'},
+    'PE': { locale: 'es-PE', currency: 'PEN'},
+    'BO': { locale: 'es-BO', currency: 'BOB'},
+    'CA': { locale: 'en-CA', currency: 'CAD'},
+    'CO': { locale: 'es-CO', currency: 'COP'},
+    'CR': { locale: 'es-CR', currency: 'CRC'},
+    'CU': { locale: 'es-CU', currency: 'CUP'},
+    'DO': { locale: 'es-DO', currency: 'DOP'},
+    'EC': { locale: 'es-EC', currency: 'USD'},
+}
+
 window.addEventListener('pageshow', () => {
     cargarProductos();
 });
@@ -23,6 +40,9 @@ async function cargarProductos(){
 cargarProductos();
 
 function mostrarProductos(prod){
+    const esVendido = prod.condicion?.includes('VENDIDO');
+    const config = divisaPorPais[pais] || { locale : 'en-US', currency: 'USD'};
+    
     let html = `
         <div class="boton_mmgv product">
             <h4>${prod.nombre}</h4>
@@ -39,7 +59,10 @@ function mostrarProductos(prod){
             <div class="agregar-wsp">
                 <!--<button class="add-car btn btn-primary agregar_al_carro_item" data-id="${prod._id}">Agregar al carro</button>-->
                 <button class="btn btn-success agregar_al_carro_item" id="ir_carrito">Ir al carrito</button>
-                <button class="bi bi-whatsapp" id="contacto"></button>
+                <!--<button class="bi bi-whatsapp" id="contacto"></button>-->
+                <a title="social-icon" target="_blank" href="${esVendido ? '#' : `https://wa.me/${prod.vendedorId?.telefono}?text=Hola,%20estoy%20interesado%20en%20contactarte`}" class="${esVendido ? 'wsp-vend' : ''}">
+                    <i class="bi bi-whatsapp"></i>
+                </a>
                 <button class="btn btn-warning" id="volver">Volver</button>
             </div>
         </div>
