@@ -62,6 +62,8 @@ function formatoMoneda(valor, codigoPais, codigoMoneda){
 function mostrarProductos(prod){
     const esVendido = prod.condicion?.includes('VENDIDO');
     const config = divisaPorPais[pais] || { locale : 'en-US', currency: 'USD'};
+    //telefono del vendedor: prod.vendedorId?.telefono || 'Sin teléfono';
+    const telefonoVendedor = prod.vendedorId?.telefono || 'Sin teléfono';
     
     let html = `
         <div class="boton_mmgv product">
@@ -104,10 +106,6 @@ function mostrarProductos(prod){
     volver.addEventListener('click', () =>{
         window.history.back();
     });
-}
-
-function contactar(tel){
-    window.location.href = `https://wa.me/${tel}`;
 }
 
 function mostrarCarrusel(prod){
