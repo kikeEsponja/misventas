@@ -62,8 +62,8 @@ function formatoMoneda(valor, codigoPais, codigoMoneda){
 function mostrarProductos(prod){
     const esVendido = prod.condicion?.includes('VENDIDO');
     const config = divisaPorPais[pais] || { locale : 'en-US', currency: 'USD'};
-    const res = await fetch(`https://ventas-backend-wj4v.onrender.com/productos-${tipo}?pais=${pais}`);
-    productos = await res.json();
+    
+    
     
     let html = `
         <div class="boton_mmgv product">
@@ -82,7 +82,7 @@ function mostrarProductos(prod){
                 <!--<button class="add-car btn btn-primary agregar_al_carro_item" data-id="${prod._id}">Agregar al carro</button>-->
                 <button class="btn btn-success agregar_al_carro_item" id="ir_carrito">Ir al carrito</button>
                 <!--<button class="bi bi-whatsapp" id="contacto"></button>-->
-                <a title="social-icon" target="_blank" href="${esVendido ? '#' : `https://wa.me/${prod.vendedorId.telefono}?text=Hola,%20estoy%20interesado%20en%20contactarte`}" class="${esVendido ? 'wsp-vend' : ''}">
+                <a title="social-icon" target="_blank" href="${esVendido ? '#' : `https://wa.me/${prod.vendedorId?.telefono}?text=Hola,%20estoy%20interesado%20en%20contactarte`}" class="${esVendido ? 'wsp-vend' : ''}">
                     <i class="bi bi-whatsapp"></i>
                 </a>
                 <button class="btn btn-warning" id="volver">Volver</button>
