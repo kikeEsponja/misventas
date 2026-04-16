@@ -40,6 +40,25 @@ async function cargarProductos(){
     
 cargarProductos();
 
+function formatoMoneda(valor, codigoPais, codigoMoneda){
+    try{
+        if(typeof valor !== 'number' || isNaN(valor)){
+            throw new Error('El valor debe ser un número válido');
+        }
+        if(typeof codigoPais !== 'string' || typeof codigoMoneda !== 'string'){
+            throw new Error('los valores deben ser cadenas');
+        }
+
+        return new Intl.NumberFormat(codigoPais, {
+            style: 'currency',
+            currency: codigoMoneda
+        }).format(valor);
+    }catch(error){
+        console.error('Error al formatear moneda: ', error.message);
+        return null;
+    }
+}
+
 function mostrarProductos(prod){
     const esVendido = prod.condicion?.includes('VENDIDO');
     const config = divisaPorPais[pais] || { locale : 'en-US', currency: 'USD'};
@@ -50,7 +69,7 @@ function mostrarProductos(prod){
             <h5>Marca:</h5><p> ${prod.marca}</p>
             <div>
                 <h6 class="precio_online">PRECIO</h6>
-                <h2>${prod.precio}</h2>
+                <h2>${formatoMoneda(prod.precio, config.locale, config.currency)}</h2>
             </div>
             <p>Condición: ${prod.condicion}</p>
             <p>Cantidad disponible: ${prod.cantidad}</p>
