@@ -1,5 +1,6 @@
 let detalles = document.getElementById('detalles');
 let item = document.getElementById('item');
+const pais = localStorage.getItem('pais');
 
 const divisaPorPais = {
 	'AR': { locale: 'es-Ar', currency: 'ARS' },
