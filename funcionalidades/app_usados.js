@@ -48,6 +48,9 @@ function mostrarProductos(prod){
 
     let nombreProducto = document.getElementById('producto');
     nombreProducto.textContent = prod.nombre;
+
+    let descripcion = document.getElementById('descripcion');
+    descripcion.textContent = prod.descripcion;
         
     let irCarrito = document.getElementById('ir_carrito');
     irCarrito.addEventListener('click', () =>{
