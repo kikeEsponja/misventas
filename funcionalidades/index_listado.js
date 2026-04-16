@@ -5,9 +5,16 @@ const divisaPorPais = {
 	'CL': { locale: 'es-CL', currency: 'CLP' },
 	'US': { locale: 'en-US', currency: 'USD' },
 	'ES': { locale: 'es-ES', currency: 'EUR' },
-	'VE': { locale: 'es-VE', currency: 'Ves' },
+	'VE': { locale: 'es-VE', currency: 'VES' },
     'BR': { locale: 'pt-BR', currency: 'BRL'},
     'PE': { locale: 'es-PE', currency: 'PEN'},
+    'BO': { locale: 'es-BO', currency: 'BOB'},
+    'CA': { locale: 'en-CA', currency: 'CAD'},
+    'CO': { locale: 'es-CO', currency: 'COP'},
+    'CR': { locale: 'es-CR', currency: 'CRC'},
+    'CU': { locale: 'es-CU', currency: 'CUP'},
+    'DO': { locale: 'es-DO', currency: 'DOP'},
+    'EC': { locale: 'es-EC', currency: 'USD'},
 }
 
 if(!pais || !tipo){
