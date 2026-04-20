@@ -335,11 +335,11 @@ function cargarProductosAdmin() {
                 }
 
                 Promise.all([
-                    fetch("https://ventas-backend-wj4v.onrender.com/mis-productos/productos-nuevos", {
+                    fetch("https://ventas-backend-wj4v.onrender.com/mis-productos/:productos-nuevos", {
                     }).then(res => res.json()),
-                    fetch("https://ventas-backend-wj4v.onrender.com/mis-productos/productos-usados", {
+                    fetch("https://ventas-backend-wj4v.onrender.com/mis-productos/:productos-usados", {
                     }).then(res => res.json()),
-                    fetch("https://ventas-backend-wj4v.onrender.com/mis-productos/productos-servicios", {
+                    fetch("https://ventas-backend-wj4v.onrender.com/mis-productos/:productos-servicios", {
                     }).then(res => res.json())
                 ]).then(([nuevos, usados, servicios]) => {
                     renderizarProductosAdmin(nuevos, "productos-nuevos");
