@@ -335,16 +335,16 @@ function cargarProductosAdmin() {
                 }
 
                 Promise.all([
-                    fetch(`https://ventas-backend-wj4v.onrender.com/mis-productos/:${tipo}`, {
+                    fetch(`https://ventas-backend-wj4v.onrender.com/mis-productos/productos-nuevos`, {
                     }).then(res => res.json()),
-                    fetch(`https://ventas-backend-wj4v.onrender.com/mis-productos/:${tipo}`, {
+                    fetch(`https://ventas-backend-wj4v.onrender.com/mis-productos/productos-usados`, {
                     }).then(res => res.json()),
-                    fetch(`https://ventas-backend-wj4v.onrender.com/mis-productos/:${tipo}`, {
+                    fetch(`https://ventas-backend-wj4v.onrender.com/mis-productos/productos-servicios`, {
                     }).then(res => res.json())
                 ]).then(([nuevos, usados, servicios]) => {
-                    renderizarProductosAdmin(nuevos, "productos-nuevos");
-                    renderizarProductosAdmin(usados, "productos-usados");
-                    renderizarProductosAdmin(servicios, "productos-servicios");
+                    renderizarProductosAdmin(nuevos, "nuevo");
+                    renderizarProductosAdmin(usados, "usados");
+                    renderizarProductosAdmin(servicios, "servicio");
                 }).catch(error => {
                     console.error("Error al cargar productos:", error);
                     alert("Hubo un error al cargar los productos. Intenta recargar la página.");
