@@ -1,145 +1,239 @@
-const pais = localStorage.getItem('pais');
-const tipo = localStorage.getItem('tipo');
-const divisaPorPais = {
-	'AR': { locale: 'es-Ar', currency: 'ARS' },
-	'CL': { locale: 'es-CL', currency: 'CLP' },
-	'US': { locale: 'en-US', currency: 'USD' },
-	'ES': { locale: 'es-ES', currency: 'EUR' },
-	'VE': { locale: 'es-VE', currency: 'Ves' },
-    'BR': { locale: 'pt-BR', currency: 'BRL'},
-    'PE': { locale: 'es-PE', currency: 'PEN'},
-}
+            const nombreGuardado = localStorage.getItem("nombreVendedor");
+            const telefonoGuardado = localStorage.getItem("telefonoVendedor");
+            if(nombreGuardado) {
+                document.getElementById("nombre").innerText = ` ${nombreGuardado} 👋`;
+            }
+            async function crearProducto(){
+                const token = localStorage.getItem("token");
+                const nombre = localStorage.getItem("nombreVendedor") || "Vendedor Anónimo";
+                const telefono = localStorage.getItem("telefonoVendedor") || "Sin teléfono";
 
-if(!pais || !tipo){
-    alert('EEEEKK, Fuera!');
-    window.location.href = '../index.html';
-}
+                //const tipoSeleccionado = estado.value; 
+                const tipoSeleccionado = document.getElementById("estado").value;
 
-let productos = [];
+                const endpointMap = {
+                    nuevo: "productos-nuevos",
+                    usado: "productos-usados",
+                    servicio: "productos-servicios"
+                };
+            
+                const endpoint = endpointMap[tipoSeleccionado];
+            
+                const files = document.getElementById("imagenes").files;
+            
+                if(files.length === 0){
+                    alert("Sube al menos una imagen, artista 🎨");
+                    return;
+                }
 
-window.addEventListener('pageshow', () =>{
-    cargarProductos();
-});
+                // 🔥 subir imágenes
+                const urlsImagenes = await subirImagenes(files);
 
-const contenedor = document.getElementById('lista-productos');
-const loader = document.getElementById('loader');
-const buscadorArt = document.querySelector('#buscador_art');
-const buscadorZon = document.querySelector('#buscador_zon');
+                const res = await fetch(`https://ventas-backend-wj4v.onrender.com/${endpoint}`, {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                        "Authorization": `Bearer ${token}`
+                    },
+                    body: JSON.stringify({
+                        nombre: titulo.value,
+                        marca: marca.value,
+                        cantidad: Number(cantidad.value),
+                        precio: Number(precio.value),
+                        condicion: tipoSeleccionado,
+                        estado: "disponible",
+                        ubicacion: {
+                            localidad: localidad.value,
+                            calle: calle.value,
+                            altura: Number(altura.value)
+                        },
+                        imagen: urlsImagenes, // 👈 BOOM 💥
+                        vendedor: localStorage.getItem("nombreVendedor") || "Vendedor Anónimo",
+                        telefono: localStorage.getItem("telefonoVendedor") || "Sin teléfono",
+                        descripcion: descripcion.value,
+                        direcc: `../vistas/${tipoSeleccionado}.html`
+                    })
+                });
 
-let titulo = document.getElementById('titulo');
-if(tipo === 'nuevos'){
-    titulo.textContent = 'NUEVOS';
-}else if(tipo === 'usados'){
-    titulo.textContent = 'USADOS';
-}else{
-    titulo.textContent = 'SERVICIOS';
-}
+                const data = await res.json();
+                alert("Producto creado con éxito 😎");
+            }
 
-async function cargarProductos(){
-    try{
-        loader.style.display = 'block';
-        const res = await fetch(`http://localhost:3000/productos-${tipo}?pais=${pais}`);
-        productos = await res.json();
+            async function subirImagenes(files){
+                const urls = [];
 
-        console.log("Productos cargados:", productos);
-        mostrarProductos(productos);
-        localStorage.setItem('productos', JSON.stringify(productos));
-    }catch (error){
-        console.error('Error cargando productos: ', error);
-    }finally{
-        loader.style.display = 'none';
+                for(let file of files){
+                    const formData = new FormData();
+                    formData.append("imagen", file);
+                
+                    const res = await fetch("https://ventas-backend-wj4v.onrender.com/subir-imagen", {
+                        method: "POST",
+                        body: formData
+                    });
+                
+                    const data = await res.json();
+                    urls.push(data.url);
+                }
+                return urls;
+            }
+
+
+async function renderizarProductosAdmin(productos, tipo, limpiar = false) {
+    const contenedor = document.getElementById("contenedor-productos");
+    
+    // Solo borramos si explícitamente lo pedimos (usualmente en la primera carga)
+    if (limpiar) {
+        contenedor.innerHTML = "";
     }
+
+    productos.forEach(prod => {
+        const estaAgotado = prod.cantidad === 0;
+        // Usamos += para ir sumando los bloques de productos
+        contenedor.innerHTML += `
+            <div class="producto-card" style="border: 1px solid #ccc; padding: 10px; margin: 10px;">
+                <h3>${prod.nombre} (${tipo})</h3>
+                <p>Stock actual: ${prod.cantidad}</p>
+                ${estaAgotado ? `
+                    <div style="background: #fff3f3; padding: 10px; border-radius: 5px;">
+                        <p style="color:red;">⚠️ <strong>¡PRODUCTO AGOTADO!</strong></p>
+                        <button onclick="marcarVendido('${tipo}', '${prod._id}')">Vendido</button>
+                        <button onclick="reponerStock('${tipo}', '${prod._id}')">Reponer</button>
+                    </div>
+                ` : `
+                    <p style="color: green;">✅ Disponible</p>
+                    <input type="number" id="venta-${prod._id}" value="1" min="1" max="${prod.cantidad}">
+                    <button onclick="vender('${tipo}', '${prod._id}', ${prod.cantidad})">💸 Vender</button>
+                `}
+            </div>
+        `;
+    });
 }
 
-function formatoMoneda(valor, codigoPais, codigoMoneda){
-    try{
-        if(typeof valor !== 'number' || isNaN(valor)){
-            throw new Error('El valor debe ser un número válido');
-        }
-        if(typeof codigoPais !== 'string' || typeof codigoMoneda !== 'string'){
-            throw new Error('los valores deben ser cadenas');
-        }
-
-        return new Intl.NumberFormat(codigoPais, {
-            style: 'currency',
-            currency: codigoMoneda
-        }).format(valor);
-    }catch(error){
-        console.error('Error al formatear moneda: ', error.message);
-        return null;
-    }
-}
-
-const mostrarProductos = (listaArray) => {
-    loader.style.display = 'none';
-
-    let html = '';
-
-    const listaContenedor = document.querySelector('#contenedor-productos');
-
-    if(listaArray.length === 0){
-        listaContenedor.innerHTML = '<h3>No se encontraron productos en esa zona</h3>';
+function cargarProductosAdmin() {
+    const token = localStorage.getItem("token");
+    if (!token) {
+        location.href = "login.html";
         return;
     }
 
-    listaArray.forEach(prod =>{
-        const esVendido = prod.condicion?.includes('VENDIDO'); //Quité el toLowerCase y lo reemplacé por un "?" porque algunos vendedores escriben "Vendido" con mayúscula inicial, y así cubrimos ambos casos. Si quieres ser aún más exhaustivo, podríamos usar una expresión regular para detectar "vendido" sin importar mayúsculas o minúsculas. Por ejemplo: /vendido/i.test(prod.condicion) que también detectaría "VENdido", "VENdIDO", etc. Pero creo que con el includes y el toUpperCase ya estamos bastante cubiertos para la mayoría de los casos comunes.
-        const config = divisaPorPais[pais] || { locale : 'en-US', currency: 'USD'};
+    // El contenedor se limpia una sola vez al inicio del proceso
+    document.getElementById("contenedor-productos").innerHTML = "Cargando productos...";
 
-        let imagenPortada = '';
+    Promise.all([
+        fetch("https://ventas-backend-wj4v.onrender.com/productos-nuevos").then(res => res.json()), // Indice 0
+        fetch("https://ventas-backend-wj4v.onrender.com/productos-usados").then(res => res.json()),  // Indice 1
+        fetch("https://ventas-backend-wj4v.onrender.com/productos-servicios").then(res => res.json()) // Indice 2
+    ]).then(([nuevos, usados, servicios]) => {
+        // Limpiamos el mensaje de "Cargando..."
+        const contenedor = document.getElementById("contenedor-productos");
+        contenedor.innerHTML = "";
 
-        if(Array.isArray(prod.imagen)){
-            imagenPortada = prod.imagen.length > 0 ? prod.imagen[0] : 'imgagenes/empty.webp';
-        }else{
-            imagenPortada = prod.imagen ? prod.imagen : 'imagenes/empty.webp';
-        }
-        html += `
-        <div class="boton_mmgv">
-            <a href="${prod.direcc}?id=${prod._id}" onclick="registrarVisita('${prod._id}', '${prod.direcc}?id=${prod._id}')"><img src="${imagenPortada}" alt="${prod.nombre}"></a>
-            <h4>${prod.nombre}</h4>
-            <h5>Ubicación: </h5><p>${prod.ubicacion?.localidad || 'Sin ubicación'}</p>
-            <div class="precio bg-warning">
-                <h2>${formatoMoneda(prod.precio, config.locale, config.currency)}</h2>
-            </div>
-            <p>Cantidad: ${prod.cantidad}</p>
-            <small>Visitas: ${prod.visitas}</small>
-            <hr>
-            <div class="agregar-wsp">
-                <!--<button onclick="contactar('${prod.telefono}')">Contactar</button>-->
-                <button class="add-car agregar_al_carro_item bg-primary bi bi-cart" data-id="${prod._id}" ${esVendido ? 'disabled' : ''}></button>
-                <a title="social-icon" target="_blank" href="${esVendido ? '#' : prod.vendedor}" class="${esVendido ? 'wsp-vend' : ''}"><i class="bi bi-whatsapp"></i></a>
-                <strong class="${esVendido ? '' : 'mobile_desap'} bg-danger text-light">VENDIDO</strong>
-            </div>
-        </div>
-        `;
+        // Renderizamos uno tras otro sin limpiar el contenedor entre llamadas
+        renderizarProductosAdmin(nuevos, "productos-nuevos", false);
+        renderizarProductosAdmin(usados, "productos-usados", false);
+        renderizarProductosAdmin(servicios, "productos-servicios", false);
+        
+    }).catch(error => {
+        console.error("Error al cargar productos:", error);
     });
-    listaContenedor.innerHTML = html;
-};
-
-buscadorArt.addEventListener('keyup', filtrarProductos);
-buscadorZon.addEventListener('keyup', filtrarProductos);
-
-function contactar(tel){
-    window.location.href = `https://wa.me/${tel}`;
 }
 
-async function registrarVisita(id, url){
-    try{
-        const res = await fetch(`http://localhost:3000/productos-${tipo}/visita/${id}`, { method: 'POST' });
-        const data = await res.json();
+            async function vender(tipo, id, stockActual) {
+                const input = document.getElementById(`venta-${id}`);
+                const cantidadVenta = Number(input.value);
 
-        if(data.ok){
-            const producto = productos.find(p => p._id === id);
-            if(producto){
-                producto.visitas = data.visitas;
-                mostrarProductos(productos);
+                if (cantidadVenta <= 0 || cantidadVenta > stockActual) {
+                    alert("Cantidad no válida o superior al stock disponible");
+                    return;
+                }
+
+                const res = await fetch(`https://ventas-backend-wj4v.onrender.com/vender/${tipo}/${id}`, {
+                    method: "PUT",
+                    headers: { 
+                        "Content-Type": "application/json",
+                        "Authorization": `Bearer ${localStorage.getItem("token")}`
+                    },
+                    body: JSON.stringify({ cantidadVendida: cantidadVenta })
+                });
+
+                const data = await res.json();
+
+                if (res.ok) {
+                    alert("¡Venta registrada con éxito! 💸");
+                    location.reload();
+                } else {
+                    alert("Error al registrar la venta");
+                }
             }
-        }
-        window.open(url, '_self');
 
-    }catch(error){
-        console.error('Error al registrar visita', error);
-    }
-}
+            async function marcarVendido(tipo, id) {
+                const token = localStorage.getItem("token");
+                const confirmar = confirm("¿Seguro que quieres marcarlo como vendido? Esto lo quitará de la vista pública.");
 
-cargarProductos();
+                if (confirmar) {
+                    const res = await fetch(`https://ventas-backend-wj4v.onrender.com/marcar-vendido/${tipo}/${id}`, {
+                        method: "PUT",
+                        headers: { "Authorization": `Bearer ${token}` }
+                    });
+                    if (res.ok) {
+                        alert("Producto actualizado 😎");
+                        location.reload(); // Recargamos para ver los cambios
+                    }
+                }
+            }
+
+            async function reponerStock(tipo, id) {
+                const token = localStorage.getItem("token");
+                const nuevaCantidad = prompt("¿Cuántas unidades vas a agregar?");
+    
+                if (nuevaCantidad && !isNaN(nuevaCantidad)) {
+                    const res = await fetch(`https://ventas-backend-wj4v.onrender.com/reponer/${tipo}/${id}`, {
+                        method: "PUT",
+                        headers: { 
+                            "Content-Type": "application/json",
+                            "Authorization": `Bearer ${token}`
+                        },
+                        body: JSON.stringify({ cantidad: nuevaCantidad })
+                    });
+                    
+                    if (res.ok) {
+                        alert("Stock actualizado 💪");
+                        location.reload();
+                    }
+                } else {
+                    alert("Cantidad no válida");
+                }
+            }
+
+            //creamos una función para cargar los productos al iniciar la página que renderice los tres tipos de productos (nuevos, usados y servicios) y los muestre en el panel de administrador. Esta función se llamará al cargar la página.
+            function cargarProductosVend() {
+                const token = localStorage.getItem("token");
+                if (!token) {
+                    alert("Debes iniciar sesión para acceder al panel de administrador");
+                    location.href = "login.html";
+                    return;
+                }
+
+                Promise.all([
+                    fetch("https://ventas-backend-wj4v.onrender.com/productos-nuevos", {
+                    }).then(res => res.json()),
+                    fetch("https://ventas-backend-wj4v.onrender.com/productos-usados", {
+                    }).then(res => res.json()),
+                    fetch("https://ventas-backend-wj4v.onrender.com/productos-servicios", {
+                    }).then(res => res.json())
+                ]).then(([nuevos, usados, servicios]) => {
+                    renderizarProductosAdmin(nuevos, "nuevo");
+                    renderizarProductosAdmin(usados, "usados");
+                    renderizarProductosAdmin(servicios, "servicio");
+                }).catch(error => {
+                    console.error("Error al cargar productos:", error);
+                    alert("Hubo un error al cargar los productos. Intenta recargar la página.");
+                });
+            }
+
+            cargarProductosVend();
+
+            function salir() {
+                localStorage.removeItem("token");
+                location.href = "login.html";
+            }
