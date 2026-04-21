@@ -112,8 +112,25 @@
                 });
 
                 const data = await res.json();
-                alert(data.message || "Registro completado");
-                location.href="login.html";
+                if (res.status === 409) {
+                    // 🛑 Caso: El correo ya existe
+                    alert("¡Epa! ✋ " + data.mensaje);
+        
+                    // Opcional: Limpiar solo el campo de email y poner el foco ahí
+                    const emailInput = document.getElementById("email");
+                    emailInput.value = "";
+                    emailInput.focus();
+                    return; // Detenemos la ejecución aquí
+                }
+
+                if (res.ok) {
+                    // ✅ Caso: Registro exitoso
+                    alert("¡Registro Completado! 🎉");
+                    window.location.href = "login.html";
+                } else {
+                    // ❌ Caso: Otros errores (500, etc)
+                    alert("Hubo un problema: " + data.mensaje);
+                }
             });
         </script>
     </body>

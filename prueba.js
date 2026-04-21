@@ -1,239 +1,481 @@
-            const nombreGuardado = localStorage.getItem("nombreVendedor");
-            const telefonoGuardado = localStorage.getItem("telefonoVendedor");
-            if(nombreGuardado) {
-                document.getElementById("nombre").innerText = ` ${nombreGuardado} 👋`;
-            }
-            async function crearProducto(){
-                const token = localStorage.getItem("token");
-                const nombre = localStorage.getItem("nombreVendedor") || "Vendedor Anónimo";
-                const telefono = localStorage.getItem("telefonoVendedor") || "Sin teléfono";
+import express from "express";
+import mongoose from "mongoose";
+import cors from "cors";
+import dotenv from "dotenv";
+import { MercadoPagoConfig, Preference } from 'mercadopago';
+import jwt from 'jsonwebtoken';
+import bcrypt from 'bcrypt';
+import { v2 as cloudinary } from 'cloudinary';
+import { CloudinaryStorage } from 'multer-storage-cloudinary';
+import multer from 'multer';
 
-                //const tipoSeleccionado = estado.value; 
-                const tipoSeleccionado = document.getElementById("estado").value;
+dotenv.config();
+//console.log("🔍 URI de Mongo:", process.env.MONGO_URI);
+const app = express();
 
-                const endpointMap = {
-                    nuevo: "productos-nuevos",
-                    usado: "productos-usados",
-                    servicio: "productos-servicios"
-                };
-            
-                const endpoint = endpointMap[tipoSeleccionado];
-            
-                const files = document.getElementById("imagenes").files;
-            
-                if(files.length === 0){
-                    alert("Sube al menos una imagen, artista 🎨");
-                    return;
-                }
+cloudinary.config({
+	cloud_name: process.env.CLOUD_NAME,
+	api_key: process.env.API_KEY,
+	api_secret: process.env.API_SECRET
+});
 
-                // 🔥 subir imágenes
-                const urlsImagenes = await subirImagenes(files);
+const storage = new CloudinaryStorage({
+	cloudinary: cloudinary,
+	params: {
+		folder: 'productos',
+		allowed_formats: ['jpg', 'png', 'jpeg', 'webp']
+	}
+});
 
-                const res = await fetch(`https://ventas-backend-wj4v.onrender.com/${endpoint}`, {
-                    method: "POST",
-                    headers: {
-                        "Content-Type": "application/json",
-                        "Authorization": `Bearer ${token}`
-                    },
-                    body: JSON.stringify({
-                        nombre: titulo.value,
-                        marca: marca.value,
-                        cantidad: Number(cantidad.value),
-                        precio: Number(precio.value),
-                        condicion: tipoSeleccionado,
-                        estado: "disponible",
-                        ubicacion: {
-                            localidad: localidad.value,
-                            calle: calle.value,
-                            altura: Number(altura.value)
-                        },
-                        imagen: urlsImagenes, // 👈 BOOM 💥
-                        vendedor: localStorage.getItem("nombreVendedor") || "Vendedor Anónimo",
-                        telefono: localStorage.getItem("telefonoVendedor") || "Sin teléfono",
-                        descripcion: descripcion.value,
-                        direcc: `../vistas/${tipoSeleccionado}.html`
-                    })
-                });
+const upload = multer({ storage });
 
-                const data = await res.json();
-                alert("Producto creado con éxito 😎");
-            }
+app.use(cors());
+app.use(express.json());
 
-            async function subirImagenes(files){
-                const urls = [];
+mongoose.connect(process.env.MONGO_URI)
+  .then(() => console.log("✅ Conectado a MongoDB"))
+  .catch(err => console.error("❌ Error de conexión:", err));
 
-                for(let file of files){
-                    const formData = new FormData();
-                    formData.append("imagen", file);
-                
-                    const res = await fetch("https://ventas-backend-wj4v.onrender.com/subir-imagen", {
-                        method: "POST",
-                        body: formData
-                    });
-                
-                    const data = await res.json();
-                    urls.push(data.url);
-                }
-                return urls;
-            }
+const ProductoSchema = new mongoose.Schema({
+	fecha: { type: Date, default: Date.now },
+	nombre: String,
+	descripcion: String,
+	direcc: String,
+	marca: String,
+	precio: Number,
+	condicion: String,
+	estado: { type: String, default: "disponible" },
+	// valores: disponible | vendido | pausado
+	imagen: Array,
+	cantidad: Number,
+	visitas: { type: Number, default: 0 },
+	ubicacion: {
+		localidad: { type: String, default: '' },
+		calle: { type: String, default: '' },
+		altura: { type: Number, default: 0 }
+	},
+	aprobado: { type: Boolean, default: false },
+	vendedor: String,
+	telefono: String,
+	vendedorId: { type: mongoose.Schema.Types.ObjectId, ref: 'vendedores', required: true },
+});
+
+const VendedorSchema = new mongoose.Schema({
+	nombre: String,
+	telefono: String,
+	email: String,
+	password: String,
+
+	pais: String,
+	ciudad: String,
+	moneda: String,
+
+	activo: { type: Boolean, default: true },
+});
 
 
-async function renderizarProductosAdmin(productos, tipo, limpiar = false) {
-    const contenedor = document.getElementById("contenedor-productos");
-    
-    // Solo borramos si explícitamente lo pedimos (usualmente en la primera carga)
-    if (limpiar) {
-        contenedor.innerHTML = "";
-    }
+app.post('/subir-imagen', upload.single('imagen'), (req, res) => {
+	try{
+		res.json({ url: req.file.path }); // 🔥 URL de Cloudinary
+	}catch(error){
+		res.status(500).json({ error: 'Error subiendo imagen' });
+	}
+});
 
-    productos.forEach(prod => {
-        const estaAgotado = prod.cantidad === 0;
-        // Usamos += para ir sumando los bloques de productos
-        contenedor.innerHTML += `
-            <div class="producto-card" style="border: 1px solid #ccc; padding: 10px; margin: 10px;">
-                <h3>${prod.nombre} (${tipo})</h3>
-                <p>Stock actual: ${prod.cantidad}</p>
-                ${estaAgotado ? `
-                    <div style="background: #fff3f3; padding: 10px; border-radius: 5px;">
-                        <p style="color:red;">⚠️ <strong>¡PRODUCTO AGOTADO!</strong></p>
-                        <button onclick="marcarVendido('${tipo}', '${prod._id}')">Vendido</button>
-                        <button onclick="reponerStock('${tipo}', '${prod._id}')">Reponer</button>
-                    </div>
-                ` : `
-                    <p style="color: green;">✅ Disponible</p>
-                    <input type="number" id="venta-${prod._id}" value="1" min="1" max="${prod.cantidad}">
-                    <button onclick="vender('${tipo}', '${prod._id}', ${prod.cantidad})">💸 Vender</button>
-                `}
-            </div>
-        `;
-    });
+app.post("/registro-vendedor", async (req,res)=>{
+	try{
+		const { ciudad, pais, nombre, phone, email, password } = req.body;
+		const existe = await Vendedor.findOne({ email });
+		if(existe){
+			return res.status(400).json({ mensaje:"Email ya registrado" });
+		}
+
+		const hash = await bcrypt.hash(password,10);
+		const nuevoVendedor = new Vendedor({
+			nombre,
+			telefono: phone,
+			email,
+			password: hash,
+			ciudad,
+			pais,
+		});
+		await nuevoVendedor.save();
+		res.json({ mensaje:"Usuario creado" });
+	}catch(error){
+		console.error(error);
+		res.status(500).json({ mensaje:"Error al registrar" });
+	}
+});
+
+app.post("/login-vendedor", async (req,res)=>{
+	try {
+		const { email, password } = req.body;
+		const vendedor = await Vendedor.findOne({ email });
+		
+		if(!vendedor) return res.status(404).json({ mensaje:"Usuario no encontrado" });
+
+		const valido = await bcrypt.compare(password, vendedor.password);
+		if(!valido) return res.status(401).json({ mensaje:"Contraseña incorrecta" });
+
+		const token = jwt.sign({ id: vendedor._id }, process.env.JWT_SECRET, { expiresIn:"7d" });
+
+		// Enviamos el nombre de vuelta junto con el token
+		res.json({ token, nombre: vendedor.nombre }); 
+	} catch(error) {
+		res.status(500).json({ mensaje:"Error en login" });
+	}
+});
+
+const Vendedor = mongoose.model('vendedores', VendedorSchema);
+const ProductoNuevo = mongoose.model("nuevos", ProductoSchema);
+const ProductoUsado = mongoose.model("usados", ProductoSchema);
+const ProductoServicio = mongoose.model("servicios", ProductoSchema);
+
+const client = new MercadoPagoConfig({
+	accessToken: process.env.MP_ACCESS_TOKEN
+});
+
+const protegerRuta = (req, res, next) =>{
+	const token = req.headers['authorization'];
+
+	if(!token){
+		return res.status(403).json({ mesaje: 'NO TIENES PERMISO (Token faltante)' });
+	}
+
+	try{
+		const verificado = jwt.verify(token, process.env.JWT_SECRET);
+		req.user = verificado;
+		next();
+	}catch(error){
+		res.status(401).json({ mensaje: 'Token inválido o expirado' });
+	}
+};
+
+function auth(req, res, next){
+	const header = req.headers.authorization;
+
+	if(!header){
+		return res.status(401).json({ error: "No autorizado" });
+	}
+
+	const token = header.split(" ")[1];
+
+	try{
+		const decoded = jwt.verify(token, process.env.JWT_SECRET);
+		req.usuario = decoded;
+		next();
+	}catch(error){
+		return res.status(401).json({ error: "Token inválido" });
+	}
 }
 
-function cargarProductosAdmin() {
-    const token = localStorage.getItem("token");
-    if (!token) {
-        location.href = "login.html";
-        return;
+function crearRutas(tipo, Modelo){
+	app.get(`/${tipo}`, async (req, res) =>{
+		try{
+			const { pais } = req.query;
+
+			let filtro = { aprobado: true, estado: "disponible" };
+
+			if(req.query.aprobado !== undefined){
+				filtro.aprobado = req.query.aprobado === 'true';
+			} else {
+				filtro.aprobado = true; // por defecto solo visibles
+			}
+
+			if(pais){
+				const vendedores = await Vendedor.find({ pais }).select('_id');
+				filtro.vendedorId = { $in: vendedores };
+			}
+
+			const productos = await Modelo.find(filtro).sort({ fecha: -1 });
+			res.json(productos);
+			
+		}catch (error){
+			res.status(500).json({ error: `Error al obtener ${tipo}`});
+		}
+	});
+
+	app.get(`/${tipo}/:id`, async (req, res) => {
+		try{
+			const producto = await Modelo.findById(req.params.id);
+			res.json(producto);
+		}catch(error){
+			console.error(`Error en /${tipo}:`, error);
+			res.status(500).json({ error: `Error al obtener ${tipo}`});
+		}
+	});
+
+app.get('/mis-productos/:tipo', auth, async (req, res) => {
+    try{
+        const { tipo } = req.params;
+
+        const modelos = {
+            "productos-nuevos": ProductoNuevo,
+            "productos-usados": ProductoUsado,
+            "productos-servicios": ProductoServicio
+        };
+
+        const Modelo = modelos[tipo];
+
+        if(!Modelo){
+            return res.status(400).json({ error: "Tipo inválido" });
+        }
+
+        const productos = await Modelo.find({
+            vendedorId: req.usuario.id
+        }).sort({ fecha: -1 });
+
+        res.json(productos);
+
+    }catch(error){
+        res.status(500).json({ error: "Error al obtener productos" });
     }
+});
 
-    // El contenedor se limpia una sola vez al inicio del proceso
-    document.getElementById("contenedor-productos").innerHTML = "Cargando productos...";
+	app.post(`/${tipo}`, auth, async (req,res)=>{
+		try{
+			const producto = new Modelo({
+				...req.body,
+				vendedorId: req.usuario?.id || null
+			});
 
-    Promise.all([
-        fetch("https://ventas-backend-wj4v.onrender.com/productos-nuevos").then(res => res.json()), // Indice 0
-        fetch("https://ventas-backend-wj4v.onrender.com/productos-usados").then(res => res.json()),  // Indice 1
-        fetch("https://ventas-backend-wj4v.onrender.com/productos-servicios").then(res => res.json()) // Indice 2
-    ]).then(([nuevos, usados, servicios]) => {
-        // Limpiamos el mensaje de "Cargando..."
-        const contenedor = document.getElementById("contenedor-productos");
-        contenedor.innerHTML = "";
+			await producto.save();
 
-        // Renderizamos uno tras otro sin limpiar el contenedor entre llamadas
-        renderizarProductosAdmin(nuevos, "productos-nuevos", false);
-        renderizarProductosAdmin(usados, "productos-usados", false);
-        renderizarProductosAdmin(servicios, "productos-servicios", false);
-        
-    }).catch(error => {
-        console.error("Error al cargar productos:", error);
-    });
+			res.json({ message: "producto creado" });
+
+		}catch(error){
+			console.error(error);
+			res.status(500).json({ error: "Error al crear producto" });
+		}
+	});
+
+	app.post('/acceso', (req, res) => {
+		const { pass } = req.body;
+
+		if(pass === process.env.PASSWORD){
+			const token = jwt.sign({ admin: true }, process.env.JWT_SECRET, { expiresIn: '1h' });
+
+			res.json({ ok:true, token });
+		}else{
+			res.status(401).json({ ok: false, mensaje: 'Password incorrecto' });
+		}
+	});
+
+	app.post(`/${tipo}/visita/:id`, async (req, res) => {
+		try{
+			const { id } = req.params;
+			const producto = await Modelo.findByIdAndUpdate(id, { $inc: { visitas: 1 } });
+			res.json({ ok: true, visitas: producto.visitas });
+		}catch(error){
+			console.error("Error al registrar visita:", error);
+			res.status(500).json({ error: "no se pudo registrar la visita" });
+		}
+	});
 }
 
-            async function vender(tipo, id, stockActual) {
-                const input = document.getElementById(`venta-${id}`);
-                const cantidadVenta = Number(input.value);
+app.put('/aprobar-producto/:tipo/:id', auth, async (req, res) => {
+	try{
+		const { tipo, id } = req.params;
 
-                if (cantidadVenta <= 0 || cantidadVenta > stockActual) {
-                    alert("Cantidad no válida o superior al stock disponible");
-                    return;
-                }
+		const modelos = {
+			"nuevo": ProductoNuevo,
+			"usado": ProductoUsado,
+			"servicio": ProductoServicio,
+			"productos-nuevos": ProductoNuevo,
+			"productos-usados": ProductoUsado,
+			"productos-servicios": ProductoServicio
+		};
 
-                const res = await fetch(`https://ventas-backend-wj4v.onrender.com/vender/${tipo}/${id}`, {
-                    method: "PUT",
-                    headers: { 
-                        "Content-Type": "application/json",
-                        "Authorization": `Bearer ${localStorage.getItem("token")}`
-                    },
-                    body: JSON.stringify({ cantidadVendida: cantidadVenta })
-                });
+		const Modelo = modelos[tipo];
 
-                const data = await res.json();
+		if(!Modelo){
+			return res.status(400).json({ error: "Tipo inválido" });
+		}
 
-                if (res.ok) {
-                    alert("¡Venta registrada con éxito! 💸");
-                    location.reload();
-                } else {
-                    alert("Error al registrar la venta");
-                }
-            }
+		await Modelo.findByIdAndUpdate(id, { aprobado: true });
 
-            async function marcarVendido(tipo, id) {
-                const token = localStorage.getItem("token");
-                const confirmar = confirm("¿Seguro que quieres marcarlo como vendido? Esto lo quitará de la vista pública.");
+		res.json({ ok: true, mensaje: "Producto aprobado" });
 
-                if (confirmar) {
-                    const res = await fetch(`https://ventas-backend-wj4v.onrender.com/marcar-vendido/${tipo}/${id}`, {
-                        method: "PUT",
-                        headers: { "Authorization": `Bearer ${token}` }
-                    });
-                    if (res.ok) {
-                        alert("Producto actualizado 😎");
-                        location.reload(); // Recargamos para ver los cambios
-                    }
-                }
-            }
+	}catch(error){
+		console.error(error);
+		res.status(500).json({ error: "Error al aprobar" });
+	}
+});
 
-            async function reponerStock(tipo, id) {
-                const token = localStorage.getItem("token");
-                const nuevaCantidad = prompt("¿Cuántas unidades vas a agregar?");
-    
-                if (nuevaCantidad && !isNaN(nuevaCantidad)) {
-                    const res = await fetch(`https://ventas-backend-wj4v.onrender.com/reponer/${tipo}/${id}`, {
-                        method: "PUT",
-                        headers: { 
-                            "Content-Type": "application/json",
-                            "Authorization": `Bearer ${token}`
-                        },
-                        body: JSON.stringify({ cantidad: nuevaCantidad })
-                    });
-                    
-                    if (res.ok) {
-                        alert("Stock actualizado 💪");
-                        location.reload();
-                    }
-                } else {
-                    alert("Cantidad no válida");
-                }
-            }
+app.put('/rechazar-producto/:tipo/:id', auth, async (req, res) => {
+	try{
+		const { tipo, id } = req.params;
 
-            //creamos una función para cargar los productos al iniciar la página que renderice los tres tipos de productos (nuevos, usados y servicios) y los muestre en el panel de administrador. Esta función se llamará al cargar la página.
-            function cargarProductosVend() {
-                const token = localStorage.getItem("token");
-                if (!token) {
-                    alert("Debes iniciar sesión para acceder al panel de administrador");
-                    location.href = "login.html";
-                    return;
-                }
+		const modelos = {
+			"nuevo": ProductoNuevo,
+			"usado": ProductoUsado,
+			"servicio": ProductoServicio,
+			"productos-nuevos": ProductoNuevo,
+			"productos-usados": ProductoUsado,
+			"productos-servicios": ProductoServicio
+		};
 
-                Promise.all([
-                    fetch("https://ventas-backend-wj4v.onrender.com/productos-nuevos", {
-                    }).then(res => res.json()),
-                    fetch("https://ventas-backend-wj4v.onrender.com/productos-usados", {
-                    }).then(res => res.json()),
-                    fetch("https://ventas-backend-wj4v.onrender.com/productos-servicios", {
-                    }).then(res => res.json())
-                ]).then(([nuevos, usados, servicios]) => {
-                    renderizarProductosAdmin(nuevos, "nuevo");
-                    renderizarProductosAdmin(usados, "usados");
-                    renderizarProductosAdmin(servicios, "servicio");
-                }).catch(error => {
-                    console.error("Error al cargar productos:", error);
-                    alert("Hubo un error al cargar los productos. Intenta recargar la página.");
-                });
-            }
+		const Modelo = modelos[tipo];
 
-            cargarProductosVend();
+		await Modelo.findByIdAndUpdate(id, {
+			aprobado: false,
+			rechazado: true
+		});
 
-            function salir() {
-                localStorage.removeItem("token");
-                location.href = "login.html";
-            }
+		res.json({ ok: true });
+
+	}catch(error){
+		res.status(500).json({ error: "Error al rechazar" });
+	}
+});
+
+app.put('/vender/:tipo/:id', auth, async (req, res) => {
+	try{
+		const { tipo, id } = req.params;
+		const { cantidadVendida } = req.body;
+
+		const modelos = {
+			"nuevo": ProductoNuevo,
+			"usado": ProductoUsado,
+			"servicio": ProductoServicio,
+			"productos-nuevos": ProductoNuevo,
+			"productos-usados": ProductoUsado,
+			"productos-servicios": ProductoServicio
+		};
+
+		const Modelo = modelos[tipo];
+
+		if(!Modelo){
+			return res.status(400).json({ error: "Tipo inválido" });
+		}
+
+		const producto = await Modelo.findById(id);
+
+		if(!producto){
+			return res.status(404).json({ error: "Producto no encontrado" });
+		}
+
+		if(producto.cantidad < cantidadVendida){
+			return res.status(400).json({ error: "Stock insuficiente" });
+		}
+
+		producto.cantidad -= cantidadVendida;
+
+		if(producto.cantidad === 0){
+			producto.estado = "sin_stock";
+		}
+
+		await producto.save();
+
+		res.json({ ok: true });
+
+	}catch(error){
+		console.error(error);
+		res.status(500).json({ error: "Error en venta" });
+	}
+	console.log("TIPO RECIBIDO:", tipo);
+});
+
+// Ruta genérica para marcar como vendido o agotar stock
+app.put('/marcar-vendido/:tipo/:id', auth, async (req, res) => {
+	try {
+		const { tipo, id } = req.params;
+		const modelos = {
+			"nuevo": ProductoNuevo,
+			"usado": ProductoUsado,
+			"servicio": ProductoServicio,
+			"productos-nuevos": ProductoNuevo,
+			"productos-usados": ProductoUsado,
+			"productos-servicios": ProductoServicio
+		};
+
+		const Modelo = modelos[tipo];
+		if (!Modelo) return res.status(400).json({ error: "Tipo inválido" });
+
+		// Al marcar como vendido, ponemos cantidad en 0 y cambiamos el estado
+		await Modelo.findByIdAndUpdate(id, { 
+			estado: "vendido",
+			cantidad: 0 
+		});
+
+		res.json({ ok: true, mensaje: "Producto marcado como vendido" });
+	} catch (error) {
+		res.status(500).json({ error: "Error al actualizar estado" });
+	}
+});
+
+// Ruta genérica para reponer stock
+app.put('/reponer/:tipo/:id', auth, async (req, res) => {
+	try {
+		const { tipo, id } = req.params;
+		const { cantidad } = req.body;
+		const modelos = {
+			"nuevo": ProductoNuevo,
+			"usado": ProductoUsado,
+			"servicio": ProductoServicio,
+			"productos-nuevos": ProductoNuevo,
+			"productos-usados": ProductoUsado,
+			"productos-servicios": ProductoServicio
+		};
+
+		const Modelo = modelos[tipo];
+		if (!Modelo) return res.status(400).json({ error: "Tipo inválido" });
+
+		await Modelo.findByIdAndUpdate(id, { 
+			cantidad: Number(cantidad),
+			estado: "disponible" 
+		});
+
+		res.json({ ok: true, mensaje: "Stock actualizado" });
+	} catch (error) {
+		res.status(500).json({ error: "Error al reponer stock" });
+	}
+});
+
+crearRutas("productos-nuevos", ProductoNuevo);
+crearRutas("productos-usados", ProductoUsado);
+crearRutas("productos-servicios", ProductoServicio);
+
+app.get("/", (req, res) => {
+	res.send("Servidor funcionando correctamente");
+});
+
+app.get((req, res) => {
+	res.status(404).sendFile(__dirname + '/src/html/404.html');
+});
+
+app.post('/crear_preferencia', async (req, res) => {
+	try{
+		const { carrito } = req.body;
+
+		if(!carrito || carrito.length === 0){
+			return res.status(400).json({ error: 'Carrito vacío' });
+		}
+
+		const items = carrito.map(item => ({
+			title: item.nombre,
+			quantity: item.cantidad,
+			unit_price: item.precio,
+		}));
+
+		const preference = await new Preference(client).create({
+			body: {
+				items,
+				back_urls: {
+					success: 'https://appdeventas.netlify.app/exito',
+					failure: 'https://appdeventas.netlify.app/error',
+				},
+				auto_return: 'approved'
+			},
+		});
+
+		res.json({ id: preference.id });
+		
+	} catch (error) {
+		console.error('Error creando preferencia: ', error);
+		res.status(500).json({ error: 'No se pudo crear la preferencia' });
+	}
+});
+
+const PORT = process.env.PORT || 3000;
+app.listen(PORT, () => console.log(`Servidor activo en puerto ${PORT}`));
