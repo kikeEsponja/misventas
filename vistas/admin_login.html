@@ -1,38 +1,38 @@
 <!DOCTYPE html>
 <html>
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Acceso Admin</title>
-</head>
-<body>
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Acceso Admin</title>
+    </head>
+    <body>
 
-<h2>Acceso Estebandido 😎</h2>
+    <h2>Acceso Administrador 😎</h2>
 
-<input type="password" id="pass" placeholder="Contraseña">
-<button onclick="login()">Entrar</button>
+    <input type="password" id="pass" placeholder="Contraseña">
+    <button onclick="login()">Entrar</button>
 
-<script>
-async function login(){
-    const pass = document.getElementById('pass').value;
+    <script>
+    async function login(){
+        const pass = document.getElementById('pass').value;
 
-    //const res = await fetch('http://localhost:3000/acceso', {
-    const res = await fetch('https://ventas-backend-wj4v.onrender.com/acceso', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ pass })
-    });
+        //const res = await fetch('http://localhost:3000/acceso', {
+        const res = await fetch('https://ventas-backend-wj4v.onrender.com/acceso', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ pass })
+        });
 
-    const data = await res.json();
-
-    if(data.ok){
-        localStorage.setItem('token', data.token);
-        window.location.href = 'admin.html';
-    }else{
-        alert('Contraseña incorrecta');
+        const data = await res.json();
+        
+        if(data.ok){
+            localStorage.setItem('token', data.token);
+            window.location.href = 'admin.html';
+        }else{
+            alert('Contraseña incorrecta');
+        }
     }
-}
-</script>
-
-</body>
+    </script>
+    
+    </body>
 </html>
