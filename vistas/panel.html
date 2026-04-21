@@ -226,9 +226,15 @@ function cargarProductosAdmin() {
     document.getElementById("contenedor-productos").innerHTML = "Cargando productos...";
 
     Promise.all([
-        fetch("https://ventas-backend-wj4v.onrender.com/productos-nuevos").then(res => res.json()), // Indice 0
-        fetch("https://ventas-backend-wj4v.onrender.com/productos-usados").then(res => res.json()),  // Indice 1
-        fetch("https://ventas-backend-wj4v.onrender.com/productos-servicios").then(res => res.json()) // Indice 2
+        fetch("https://ventas-backend-wj4v.onrender.com/mis-productos/productos-nuevos", {
+            headers: { "Authorization": `Bearer ${token}` }
+        }),
+        fetch("https://ventas-backend-wj4v.onrender.com/mis-productos/productos-usados", {
+            headers: { "Authorization": `Bearer ${token}` }
+        }),
+        fetch("https://ventas-backend-wj4v.onrender.com/mis-productos/productos-servicios", {
+            headers: { "Authorization": `Bearer ${token}` }
+        }),
     ]).then(([nuevos, usados, servicios]) => {
         // Limpiamos el mensaje de "Cargando..."
         const contenedor = document.getElementById("contenedor-productos");
