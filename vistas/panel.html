@@ -215,7 +215,7 @@ async function renderizarProductosAdmin(productos, tipo, limpiar = false) {
     });
 }
 
-/*function cargarProductosAdmin() {
+function cargarProductosAdmin() {
     const token = localStorage.getItem("token");
     if (!token) {
         location.href = "login.html";
@@ -248,7 +248,7 @@ async function renderizarProductosAdmin(productos, tipo, limpiar = false) {
     }).catch(error => {
         console.error("Error al cargar productos:", error);
     });
-}*/
+}
 
             //bloque flotante
             /*html += `
@@ -332,7 +332,7 @@ async function renderizarProductosAdmin(productos, tipo, limpiar = false) {
             }
 
             //creamos una función para cargar los productos al iniciar la página que renderice los tres tipos de productos (nuevos, usados y servicios) y los muestre en el panel de administrador. Esta función se llamará al cargar la página.
-            function cargarProductosAdmin() {
+            /*function cargarProductosAdmin() {
                 const token = localStorage.getItem("token");
                 if (!token) {
                     alert("Debes iniciar sesión para acceder al panel de administrador");
@@ -357,7 +357,7 @@ async function renderizarProductosAdmin(productos, tipo, limpiar = false) {
                 });
             }
 
-            cargarProductosAdmin();
+            cargarProductosAdmin();*/
 
             function salir() {
                 localStorage.removeItem("token");
