@@ -227,34 +227,32 @@ function cargarProductosAdmin() {
         return;
     }
 
-    // El contenedor se limpia una sola vez al inicio del proceso
     document.getElementById("contenedor-productos").innerHTML = "Cargando productos...";
 
     Promise.all([
         fetch("https://ventas-backend-wj4v.onrender.com/mis-productos/productos-nuevos", {
             headers: { "Authorization": `Bearer ${token}` }
-        }),
+        }).then(res => res.json()), // 🔥 AGREGAR ESTO: Convierte respuesta a JSON
+        
         fetch("https://ventas-backend-wj4v.onrender.com/mis-productos/productos-usados", {
             headers: { "Authorization": `Bearer ${token}` }
-        }),
+        }).then(res => res.json()), // 🔥 AGREGAR ESTO
+        
         fetch("https://ventas-backend-wj4v.onrender.com/mis-productos/productos-servicios", {
             headers: { "Authorization": `Bearer ${token}` }
-        }),
+        }).then(res => res.json()), // 🔥 AGREGAR ESTO
     ]).then(([nuevos, usados, servicios]) => {
-        // Limpiamos el mensaje de "Cargando..."
         const contenedor = document.getElementById("contenedor-productos");
         contenedor.innerHTML = "";
 
-        // Renderizamos uno tras otro sin limpiar el contenedor entre llamadas
-        //renderizarProductosAdmin(nuevos, "productos-nuevos", false);
-        //renderizarProductosAdmin(usados, "productos-usados", false);
-        //renderizarProductosAdmin(servicios, "productos-servicios", false);
-        renderizarProductosAdmin(nuevos, "nuevo", false);
-        renderizarProductosAdmin(usados, "usados", false);
-        renderizarProductosAdmin(servicios, "servicios", false);
+        // Ahora 'nuevos', 'usados' y 'servicios' ya son ARRAYS de datos
+        renderizarProductosAdmin(nuevos, "Nuevo", false);
+        renderizarProductosAdmin(usados, "Usado", false);
+        renderizarProductosAdmin(servicios, "Servicio", false);
         
     }).catch(error => {
         console.error("Error al cargar productos:", error);
+        document.getElementById("contenedor-productos").innerHTML = "Error al cargar los productos.";
     });
 }
 
