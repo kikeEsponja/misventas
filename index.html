@@ -207,6 +207,21 @@
     <div class="boton_admin">
         <button class="btn btn-danger" onclick="irAdmin()">Admin</button>
     </div>
+    <div id="notificacion-admin" style="display: inline-block; position: relative;">
+        <span>Administrar Productos</span>
+        <span id="punto-notificacion" style="
+            display: none;
+            position: absolute;
+            top: -5px;
+            right: -10px;
+            width: 12px;
+            height: 12px;
+            background-color: #ff4d4d; /* Rojo vibrante */
+            border-radius: 50%;
+            border: 2px solid white;
+            box-shadow: 0 0 5px rgba(0,0,0,0.2);
+        "></span>
+    </div>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js" integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI" crossorigin="anonymous"></script>
     <script>
         /*let cart = document.getElementById('carrito');
@@ -264,6 +279,36 @@
         function irAdmin(){
             window.location.href = "./vistas/admin_login.html";
         }
+        async function verificarPendientes() {
+            const token = localStorage.getItem("token");
+            if (!token) return;
+
+            try {
+                const res = await fetch("https://ventas-backend-wj4v.onrender.com/conteo-pendientes", {
+                    headers: { "Authorization": `Bearer ${token}` }
+                });
+                const data = await res.json();
+            
+                const punto = document.getElementById("punto-notificacion");
+
+                if (data.total > 0) {
+                    punto.style.display = "block"; // ¡Aparece el puntito rojo!
+                    // Opcional: podrías cambiar el color a verde si no hay nada, 
+                    // pero el rojo es mejor para llamar la atención sobre tareas pendientes.
+                    console.log(`Tienes ${data.total} productos esperando aprobación.`);
+                } else {
+                    punto.style.display = "none";
+                }
+            } catch (error) {
+                console.error("No se pudo verificar pendientes:", error);
+            }
+        }
+
+        // Ejecutar al cargar
+        verificarPendientes();
+
+        // Opcional: Chequear cada 5 minutos automáticamente
+        setInterval(verificarPendientes, 300000);
     </script>
 </body>
 </html>
