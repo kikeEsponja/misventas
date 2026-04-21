@@ -192,6 +192,11 @@ async function renderizarProductosAdmin(productos, tipo, limpiar = false) {
         contenedor.innerHTML = "";
     }
 
+    if (!Array.isArray(productos)) {
+        console.error(`Error: Se esperaba un array para ${tipo} pero se recibió:`, productos);
+        return; 
+    }
+
     productos.forEach(prod => {
         const estaAgotado = prod.cantidad === 0;
         // Usamos += para ir sumando los bloques de productos
