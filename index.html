@@ -317,7 +317,8 @@
                     // pero el rojo es mejor para llamar la atención sobre tareas pendientes.
                     console.log(`Tienes ${data.total} productos esperando aprobación.`);
                 } else {
-                    punto.style.display = "none";
+                    punto.style.display = "block";
+                    punto.style.backgroundColor = "#444"; // Cambia a un gris oscuro para indicar que no hay pendientes
                 }
             } catch (error) {
                 console.error("No se pudo verificar pendientes:", error);
