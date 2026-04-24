@@ -60,13 +60,11 @@
                     <h1 class="text-light"> PUNTOMARKET </h1>
                     <div id="notificacion-admin" style="display: inline-block; position: relative;">
                         <span id="punto-notificacion" style="
-                            display: none;
                             position: absolute;
                             top: -10px;
                             right: -10rem;
                             width: 12px;
                             height: 12px;
-                            background-color: #ff4d4d; /* Rojo vibrante */
                             border-radius: 50%;
                             border: 2px solid white;
                             box-shadow: 0 0 5px rgba(0,0,0,0.2);
@@ -313,6 +311,7 @@
 
                 if (data.total > 0) {
                     punto.style.display = "block"; // ¡Aparece el puntito rojo!
+                    punto.style.backgroundColor = "#ff4d4d"; // Rojo vibrante
                     // Opcional: podrías cambiar el color a verde si no hay nada, 
                     // pero el rojo es mejor para llamar la atención sobre tareas pendientes.
                     console.log(`Tienes ${data.total} productos esperando aprobación.`);
