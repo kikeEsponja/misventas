@@ -308,12 +308,14 @@
                 const data = await res.json();
             
                 const punto = document.getElementById("punto-notificacion");
-
+                let nuevoPendiente = document.createElement("p");
                 if (data.total > 0) {
                     punto.style.display = "block"; // ¡Aparece el puntito rojo!
                     punto.style.backgroundColor = "#ff4d4d"; // Rojo vibrante
+                    nuevoPendiente.textContent = `X`;
                     // Opcional: podrías cambiar el color a verde si no hay nada, 
                     // pero el rojo es mejor para llamar la atención sobre tareas pendientes.
+                    punto.appendChild(nuevoPendiente);
                     console.log(`Tienes ${data.total} productos esperando aprobación.`);
                 } else {
                     punto.style.display = "block";
