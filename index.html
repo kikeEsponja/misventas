@@ -61,6 +61,7 @@
                     <div id="notificacion-admin" style="display: inline-block; position: relative;">
                         <span id="punto-notificacion" style="
                             position: absolute;
+                            background-color: #ff4d4d; /* Rojo vibrante */
                             top: -10px;
                             right: -10rem;
                             width: 12px;
@@ -311,7 +312,7 @@
 
                 if (data.total > 0) {
                     punto.style.display = "block"; // ¡Aparece el puntito rojo!
-                    punto.style.background = "#ff4d4d"; // Rojo vibrante
+                    punto.style.backgroundColor = "#ff4d4d"; // Rojo vibrante
                     // Opcional: podrías cambiar el color a verde si no hay nada, 
                     // pero el rojo es mejor para llamar la atención sobre tareas pendientes.
                     console.log(`Tienes ${data.total} productos esperando aprobación.`);
