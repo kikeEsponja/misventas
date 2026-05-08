@@ -142,6 +142,13 @@
                         method: "POST",
                         body: formData
                     });
+                    
+                    if(!res.ok){
+                    const texto = await res.text();
+                        console.error(texto);
+                        throw new Error("Error subiendo imagen");
+                    }
+
                     const data = await res.json();
                     if(data.url) urls.push(data.url);
                 }
