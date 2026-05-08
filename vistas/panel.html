@@ -27,7 +27,7 @@
             <button onclick="crearProducto()">Guardar</button>
             <button onclick="salir()">Salir</button>
         </main>
-        <div id="contenedor-productos"></div>
+        <div id="contenedor-productos">contenedor</div>
         <script>
             const nombreGuardado = localStorage.getItem("nombreVendedor");
             const telefonoGuardado = localStorage.getItem("telefonoVendedor");
@@ -53,39 +53,39 @@
 
                 if(window.productoEditando){
 
-    const { tipo, id } = window.productoEditando;
+                const { tipo, id } = window.productoEditando;
 
-    const res = await fetch(`https://ventas-backend-wj4v.onrender.com/editar/${tipo}/${id}`, {
-        method: "PUT",
-        headers:{
-            "Content-Type":"application/json",
-            "Authorization": `Bearer ${token}`
-        },
-        body: JSON.stringify({
-            nombre: titulo.value,
-            marca: marca.value,
-            cantidad: Number(cantidad.value),
-            precio: Number(precio.value),
-            descripcion: descripcion.value,
+                const res = await fetch(`https://ventas-backend-wj4v.onrender.com/editar/${tipo}/${id}`, {
+                    method: "PUT",
+                    headers:{
+                        "Content-Type":"application/json",
+                        "Authorization": `Bearer ${token}`
+                    },
+                    body: JSON.stringify({
+                        nombre: titulo.value,
+                        marca: marca.value,
+                        cantidad: Number(cantidad.value),
+                        precio: Number(precio.value),
+                            descripcion: descripcion.value,
 
-            ubicacion: {
-                localidad: localidad.value,
-                calle: calle.value,
-                altura: Number(altura.value)
-            }
-        })
-    });
-
-    if(res.ok){
-        alert("Producto actualizado 😎");
-        window.productoEditando = null;
-        location.reload();
-    }else{
-        alert("Error al actualizar");
-    }
-
-    return;
-}
+                            ubicacion: {
+                                localidad: localidad.value,
+                                calle: calle.value,
+                                altura: Number(altura.value)
+                            }
+                        })
+                    });
+                
+                    if(res.ok){
+                        alert("Producto actualizado 😎");
+                        window.productoEditando = null;
+                        location.reload();
+                    }else{
+                        alert("Error al actualizar");
+                    }
+                
+                    return;
+                }
             
                 const files = document.getElementById("imagenes").files;
             
