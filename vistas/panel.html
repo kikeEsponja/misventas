@@ -55,6 +55,14 @@
 
                 const { tipo, id } = window.productoEditando;
 
+                let urlsImagenes = [];
+
+                const files = document.getElementById("imagenes").files;
+
+                if(files.length > 0){
+                    urlsImagenes = await subirImagenes(files);
+                }
+
                 const res = await fetch(`https://ventas-backend-wj4v.onrender.com/editar/${tipo}/${id}`, {
                     method: "PUT",
                     headers:{
@@ -64,6 +72,7 @@
                     body: JSON.stringify({
                         nombre: titulo.value,
                         marca: marca.value,
+                        imagen: urlsImagenes,
                         cantidad: Number(cantidad.value),
                         precio: Number(precio.value),
                             descripcion: descripcion.value,
@@ -299,10 +308,15 @@
                 precio.value = prod.precio;
                 cantidad.value = prod.cantidad;
                 descripcion.value = prod.descripcion;
+                window.imagenesActuales = prod.imagen || [];
 
                 localidad.value = prod.ubicacion?.localidad || '';
                 calle.value = prod.ubicacion?.calle || '';
                 altura.value = prod.ubicacion?.altura || 0;
+
+                imagen: urlsImagenes.length > 0
+                    ? urlsImagenes
+                    : window.imagenesActuales,
 
                 // guardamos referencia
                 window.productoEditando = { tipo, id };
