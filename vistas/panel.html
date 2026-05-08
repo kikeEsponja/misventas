@@ -75,13 +75,15 @@
                         imagen: urlsImagenes,
                         cantidad: Number(cantidad.value),
                         precio: Number(precio.value),
-                            descripcion: descripcion.value,
-
-                            ubicacion: {
-                                localidad: localidad.value,
-                                calle: calle.value,
-                                altura: Number(altura.value)
-                            }
+                        descripcion: descripcion.value,
+                        ubicacion: {
+                            localidad: localidad.value,
+                            calle: calle.value,
+                            altura: Number(altura.value)
+                        },
+                        imagen: urlsImagenes.length > 0
+                            ? urlsImagenes
+                            : window.imagenesActuales,
                         })
                     });
                 
@@ -301,10 +303,6 @@
             async function editarProducto(tipo, id){
                 const res = await fetch(`https://ventas-backend-wj4v.onrender.com/${tipo}/${id}`);
                 const prod = await res.json();
-
-                imagen: urlsImagenes.length > 0
-                    ? urlsImagenes
-                    : window.imagenesActuales,
 
                 // llenar formulario
                 titulo.value = prod.nombre;
