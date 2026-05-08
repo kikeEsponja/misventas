@@ -68,69 +68,106 @@
             }
 
             // 2. Función principal: Decide si crea o edita
-            async function crearOEditarProducto() {
-                const tipoKey = document.getElementById("estado").value;
-                const endpoint = endpointMap[tipoKey];
-                const files = document.getElementById("imagenes").files;
-                
-                let urlsImagenes = [];
-                if(files.length > 0) {
-                    urlsImagenes = await subirImagenes(files);
-                }
+async function crearOEditarProducto(){
 
-                const payload = {
-                    nombre: document.getElementById("titulo").value,
-                    marca: document.getElementById("marca").value,
-                    cantidad: Number(document.getElementById("cantidad").value),
-                    precio: Number(document.getElementById("precio").value),
-                    condicion: tipoKey,
-                    descripcion: document.getElementById("descripcion").value,
-                    ubicacion: {
-                        localidad: document.getElementById("localidad").value,
-                        calle: document.getElementById("calle").value,
-                        altura: Number(document.getElementById("altura").value)
-                    },
-                    imagen: urlsImagenes.length > 0 ? urlsImagenes : (window.imagenesActuales || [])
-                };
+    const token = localStorage.getItem("token");
 
-                // Lógica de EDICIÓN
-                if(window.productoEditando) {
-                    const { tipo, id } = window.productoEditando;
-                    const res = await fetch(`https://ventas-backend-wj4v.onrender.com/editar/${tipo}/${id}`, {
-                        method: "PUT",
-                        headers: { "Content-Type": "application/json", "Authorization": `Bearer ${token}` },
-                        body: JSON.stringify(payload)
-                    });
-                    
-                    if(res.ok) {
-                        alert("Producto actualizado 😎");
-                        location.reload();
-                    } else {
-                        alert("Error al actualizar");
-                    }
-                    return;
-                }
+    const files = document.getElementById("imagenes").files;
 
-                // Lógica de CREACIÓN
-                if(urlsImagenes.length === 0) return alert("Sube al menos una imagen, artista 🎨");
+    // 👇 EXISTE PARA TODO
+    let urlsImagenes = [];
 
-                const res = await fetch(`https://ventas-backend-wj4v.onrender.com/${endpoint}`, {
-                    method: "POST",
-                    headers: { "Content-Type": "application/json", "Authorization": `Bearer ${token}` },
-                    body: JSON.stringify({
-                        ...payload,
-                        estado: "disponible",
-                        vendedor: localStorage.getItem("nombreVendedor") || "Anónimo",
-                        telefono: localStorage.getItem("telefonoVendedor") || "Sin teléfono",
-                        direcc: `../vistas/${tipoKey}.html`
-                    })
-                });
+    // 👇 subir si hay imágenes nuevas
+    if(files.length > 0){
+        urlsImagenes = await subirImagenes(files);
+    }
 
-                if(res.ok) {
-                    alert("Producto creado con éxito 😎");
-                    location.reload();
-                }
-            }
+    // =====================================
+    // EDITAR
+    // =====================================
+    if(window.productoEditando){
+
+        const { tipo, id } = window.productoEditando;
+
+        const res = await fetch(`https://ventas-backend-wj4v.onrender.com/editar/${tipo}/${id}`, {
+            method: "PUT",
+            headers:{
+                "Content-Type":"application/json",
+                "Authorization": `Bearer ${token}`
+            },
+            body: JSON.stringify({
+                nombre: titulo.value,
+                marca: marca.value,
+                cantidad: Number(cantidad.value),
+                precio: Number(precio.value),
+                descripcion: descripcion.value,
+
+                ubicacion:{
+                    localidad: localidad.value,
+                    calle: calle.value,
+                    altura: Number(altura.value)
+                },
+
+                imagen: urlsImagenes.length > 0
+                    ? urlsImagenes
+                    : window.imagenesActuales
+            })
+        });
+
+        if(res.ok){
+            alert("Producto actualizado 😎");
+            window.productoEditando = null;
+            location.reload();
+        }else{
+            alert("Error al actualizar");
+        }
+
+        return;
+    }
+
+    // =====================================
+    // CREAR NUEVO
+    // =====================================
+
+    const tipoSeleccionado = estado.value;
+
+    const endpointMap = {
+        nuevo: "productos-nuevos",
+        usado: "productos-usados",
+        servicio: "productos-servicios"
+    };
+
+    const endpoint = endpointMap[tipoSeleccionado];
+
+    const res = await fetch(`https://ventas-backend-wj4v.onrender.com/${endpoint}`, {
+        method:"POST",
+        headers:{
+            "Content-Type":"application/json",
+            "Authorization": `Bearer ${token}`
+        },
+        body: JSON.stringify({
+            nombre: titulo.value,
+            marca: marca.value,
+            cantidad: Number(cantidad.value),
+            precio: Number(precio.value),
+            condicion: tipoSeleccionado,
+            descripcion: descripcion.value,
+
+            ubicacion:{
+                localidad: localidad.value,
+                calle: calle.value,
+                altura: Number(altura.value)
+            },
+
+            imagen: urlsImagenes
+        })
+    });
+
+    if(res.ok){
+        alert("Producto creado 😎");
+        location.reload();
+    }
+}
 
             // 3. Subida de imágenes
             async function subirImagenes(files) {
