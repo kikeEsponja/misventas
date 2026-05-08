@@ -24,7 +24,7 @@
             <input id="calle" placeholder="Calle">
             <input id="localidad" placeholder="Localidad">
             <input id="altura" placeholder="Altura">
-            <button onclick="crearProducto()">Guardar Artículos</button>
+            <button onclick="crearProducto()">Guardar</button>
             <button onclick="salir()">Salir</button>
         </main>
         <div id="contenedor-productos">contenedor</div>
@@ -313,10 +313,6 @@
                 localidad.value = prod.ubicacion?.localidad || '';
                 calle.value = prod.ubicacion?.calle || '';
                 altura.value = prod.ubicacion?.altura || 0;
-
-                imagen: urlsImagenes.length > 0
-                    ? urlsImagenes
-                    : window.imagenesActuales,
 
                 // guardamos referencia
                 window.productoEditando = { tipo, id };
