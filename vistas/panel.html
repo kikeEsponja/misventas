@@ -24,7 +24,7 @@
             <input id="calle" placeholder="Calle">
             <input id="localidad" placeholder="Localidad">
             <input id="altura" placeholder="Altura">
-            <button onclick="crearProducto()">Guardar Artículo</button>
+            <button onclick="crearProducto()">Guardar Artículos</button>
             <button onclick="salir()">Salir</button>
         </main>
         <div id="contenedor-productos">contenedor</div>
@@ -216,9 +216,9 @@
                     contenedor.innerHTML = "";
                 
                     // Ahora 'nuevos', 'usados' y 'servicios' ya son ARRAYS de datos
-                    renderizarProductosAdmin(nuevos, "Nuevo", false);
-                    renderizarProductosAdmin(usados, "Usado", false);
-                    renderizarProductosAdmin(servicios, "Servicio", false);
+                    //renderizarProductosAdmin(nuevos, "Nuevo", false);
+                    //renderizarProductosAdmin(usados, "Usado", false);
+                    //renderizarProductosAdmin(servicios, "Servicio", false);
                     renderizarProductosAdmin(nuevos, "productos-nuevos", false);
                     renderizarProductosAdmin(usados, "productos-usados", false);
                     renderizarProductosAdmin(servicios, "productos-servicios", false);
