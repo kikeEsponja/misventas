@@ -24,7 +24,7 @@
             <input id="calle" placeholder="Calle">
             <input id="localidad" placeholder="Localidad">
             <input id="altura" placeholder="Altura">
-            <button onclick="crearProducto()">Guardar</button>
+            <button onclick="crearProducto()">Guardar arts</button>
             <button onclick="salir()">Salir</button>
         </main>
         <div id="contenedor-productos">contenedor</div>
@@ -301,6 +301,10 @@
             async function editarProducto(tipo, id){
                 const res = await fetch(`https://ventas-backend-wj4v.onrender.com/${tipo}/${id}`);
                 const prod = await res.json();
+
+                imagen: urlsImagenes.length > 0
+                    ? urlsImagenes
+                    : window.imagenesActuales,
 
                 // llenar formulario
                 titulo.value = prod.nombre;
