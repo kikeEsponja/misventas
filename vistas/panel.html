@@ -35,39 +35,7 @@
             if(nombreGuardado) {
                 document.getElementById("nombre").innerText = ` ${nombreGuardado} 👋`;
             }
-            // SI ESTAMOS EDITANDO
-    if (window.productoEditando) {
-        const { endpoint, id } = window.productoEditando;
-        
-        const res = await fetch(`https://ventas-backend-wj4v.onrender.com/editar/${endpoint}/${id}`, {
-            method: "PUT",
-            headers: {
-                "Content-Type": "application/json",
-                "Authorization": `Bearer ${token}`
-            },
-            body: JSON.stringify({
-                nombre: document.getElementById("titulo").value,
-                marca: document.getElementById("marca").value,
-                precio: Number(document.getElementById("precio").value),
-                cantidad: Number(document.getElementById("cantidad").value),
-                descripcion: document.getElementById("descripcion").value,
-                ubicacion: {
-                    localidad: document.getElementById("localidad").value,
-                    calle: document.getElementById("calle").value,
-                    altura: Number(document.getElementById("altura").value)
-                }
-            })
-        });
-
-        if (res.ok) {
-            alert("¡Producto actualizado con éxito! 😎");
-            window.productoEditando = null; // Limpiar estado de edición
-            location.reload();
-        } else {
-            alert("Error al actualizar");
-        }
-        return; // Salir para que no intente crear un producto nuevo abajo
-    }
+            
             async function crearProducto(){
                 const token = localStorage.getItem("token");
                 const nombre = localStorage.getItem("nombreVendedor") || "Vendedor Anónimo";
@@ -282,46 +250,54 @@
 
             cargarProductosAdmin();
 
-async function editarProducto(tipo, id) {
-    // 1. Mapear el tipo al endpoint correcto para que no de 404
-    const endpointMap = {
-        'Nuevo': "productos-nuevos",
-        'Usado': "productos-usados",
-        'Servicio': "productos-servicios"
-    };
+            async function editarProducto(tipo, id){
+                const res = await fetch(`https://ventas-backend-wj4v.onrender.com/${tipo}/${id}`);
+                const prod = await res.json();
 
-    const endpoint = endpointMap[tipo];
+                // llenar formulario
+                titulo.value = prod.nombre;
+                marca.value = prod.marca;
+                precio.value = prod.precio;
+                cantidad.value = prod.cantidad;
+                descripcion.value = prod.descripcion;
 
-    try {
-        // 2. Traer los datos del producto
-        const res = await fetch(`https://ventas-backend-wj4v.onrender.com/${endpoint}/${id}`);
-        
-        if (!res.ok) {
-            throw new Error("No se encontró el producto en el servidor");
-        }
+                localidad.value = prod.ubicacion?.localidad || '';
+                calle.value = prod.ubicacion?.calle || '';
+                altura.value = prod.ubicacion?.altura || 0;
 
-        const prod = await res.json();
+                // guardamos referencia
+                window.productoEditando = { tipo, id };
+                
+                if(window.productoEditando){
+                // ✏️ EDITAR
+                const { tipo, id } = window.productoEditando;
 
-        // 3. Llenar el formulario con los datos actuales
-        document.getElementById("titulo").value = prod.nombre;
-        document.getElementById("marca").value = prod.marca;
-        document.getElementById("precio").value = prod.precio;
-        document.getElementById("cantidad").value = prod.cantidad;
-        document.getElementById("descripcion").value = prod.descripcion;
-        document.getElementById("localidad").value = prod.ubicacion?.localidad || '';
-        document.getElementById("calle").value = prod.ubicacion?.calle || '';
-        document.getElementById("altura").value = prod.ubicacion?.altura || 0;
-
-        // 4. Guardar la referencia de qué estamos editando y mover el foco arriba
-        window.productoEditando = { endpoint, id };
-        window.scrollTo(0, 0);
-        alert("Modifica los campos y presiona 'Guardar' para aplicar los cambios.");
-
-    } catch (error) {
-        console.error("Error al obtener producto:", error);
-        alert("Error al cargar los datos del producto.");
-    }
-}
+                await fetch(`https://ventas-backend-wj4v.onrender.com/editar/${tipo}/${id}`, {
+                    method: "PUT",
+                    headers:{
+                        "Content-Type":"application/json",
+                        "Authorization": `Bearer ${token}`
+                    },
+                        body: JSON.stringify({
+                            nombre: titulo.value,
+                            marca: marca.value,
+                            precio: Number(precio.value),
+                            cantidad: Number(cantidad.value),
+                            descripcion: descripcion.value,
+                            ubicacion: {
+                                localidad: localidad.value,
+                                calle: calle.value,
+                                altura: Number(altura.value)
+                            }
+                        })
+                    });
+                
+                    alert("Producto actualizado 😎");
+                    window.productoEditando = null;
+                    location.reload();
+                    return;
+                }
+            }
 
             function salir() {
                 localStorage.removeItem("token");
