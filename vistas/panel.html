@@ -142,7 +142,7 @@
                         method: "POST",
                         body: formData
                     });
-                    
+
                     if(!res.ok){
                     const texto = await res.text();
                         console.error(texto);
@@ -236,6 +236,8 @@
             async function editarProducto(tipo, id) {
                 // Usamos el endpointMap para asegurarnos de que la URL sea la correcta
                 const endpoint = endpointMap[tipo];
+                console.log("NUEVAS:", urlsImagenes);
+                console.log("ACTUALES:", window.imagenesActuales);
                 const res = await fetch(`https://ventas-backend-wj4v.onrender.com/${endpoint}/${id}`);
                 const prod = await res.json();
 
