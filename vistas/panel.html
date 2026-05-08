@@ -50,6 +50,42 @@
                 };
             
                 const endpoint = endpointMap[tipoSeleccionado];
+
+                if(window.productoEditando){
+
+    const { tipo, id } = window.productoEditando;
+
+    const res = await fetch(`https://ventas-backend-wj4v.onrender.com/editar/${tipo}/${id}`, {
+        method: "PUT",
+        headers:{
+            "Content-Type":"application/json",
+            "Authorization": `Bearer ${token}`
+        },
+        body: JSON.stringify({
+            nombre: titulo.value,
+            marca: marca.value,
+            cantidad: Number(cantidad.value),
+            precio: Number(precio.value),
+            descripcion: descripcion.value,
+
+            ubicacion: {
+                localidad: localidad.value,
+                calle: calle.value,
+                altura: Number(altura.value)
+            }
+        })
+    });
+
+    if(res.ok){
+        alert("Producto actualizado 😎");
+        window.productoEditando = null;
+        location.reload();
+    }else{
+        alert("Error al actualizar");
+    }
+
+    return;
+}
             
                 const files = document.getElementById("imagenes").files;
             
@@ -174,6 +210,9 @@
                     renderizarProductosAdmin(nuevos, "Nuevo", false);
                     renderizarProductosAdmin(usados, "Usado", false);
                     renderizarProductosAdmin(servicios, "Servicio", false);
+                    renderizarProductosAdmin(nuevos, "productos-nuevos", false);
+                    renderizarProductosAdmin(usados, "productos-usados", false);
+                    renderizarProductosAdmin(servicios, "productos-servicios", false);
 
                 }).catch(error => {
                     console.error("Error al cargar productos:", error);
@@ -267,36 +306,6 @@
 
                 // guardamos referencia
                 window.productoEditando = { tipo, id };
-                
-                if(window.productoEditando){
-                // ✏️ EDITAR
-                const { tipo, id } = window.productoEditando;
-
-                await fetch(`https://ventas-backend-wj4v.onrender.com/editar/${tipo}/${id}`, {
-                    method: "PUT",
-                    headers:{
-                        "Content-Type":"application/json",
-                        "Authorization": `Bearer ${token}`
-                    },
-                        body: JSON.stringify({
-                            nombre: titulo.value,
-                            marca: marca.value,
-                            precio: Number(precio.value),
-                            cantidad: Number(cantidad.value),
-                            descripcion: descripcion.value,
-                            ubicacion: {
-                                localidad: localidad.value,
-                                calle: calle.value,
-                                altura: Number(altura.value)
-                            }
-                        })
-                    });
-                
-                    alert("Producto actualizado 😎");
-                    window.productoEditando = null;
-                    location.reload();
-                    return;
-                }
             }
 
             function salir() {
